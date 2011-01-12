@@ -1,16 +1,16 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "bccas/client/version"
+require "castanet/version"
 
 Gem::Specification.new do |s|
-  s.name        = "bccas-client"
-  s.version     = Bccas::Client::VERSION
+  s.name        = "castanet"
+  s.version     = Castanet::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["David Yip"]
   s.email       = ["yipdw@northwestern.edu"]
   s.homepage    = ""
   s.summary     = %q{A CAS client library}
-  s.description = %q{A CAS client library built for NUBIC's Ruby webapps}
+  s.description = %q{A small, snappy CAS 2.0 client library for Ruby applications}
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

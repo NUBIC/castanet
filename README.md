@@ -1,10 +1,9 @@
-bccas-client
-============
+Castanet: a small, snappy CAS client library
+============================================
 
-bccas-client is a CAS client library that is designed to not use any external
-dependencies.  It was built to eliminate bcsec's RubyCAS-Client dependency,
-which was blocking bcsec compatibility with ActiveSupport 3.0.
+Castanet is a [CAS 2.0](http://www.jasig.org/cas/protocol) client library.  It
+was built at the [Northwestern University Biomedical Informatics
+Center](http://www.nucats.northwestern.edu/clinical-research-resources/data-collection-biomedical-informatics-and-nubic/bioinformatics-overview.html)
+as a replacement for [RubyCAS-Client](https://github.com/gunark/rubycas-client) in internal software.
 
-bccas-client exports an interface that is compatible with RubyCAS-Client.
-
-bccas-client only implements CAS 2.0.
+Castanet does not support CAS 1.0.
