@@ -6,11 +6,11 @@ Gem::Specification.new do |s|
   s.name        = "bccas-client"
   s.version     = Bccas::Client::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
+  s.authors     = ["David Yip"]
+  s.email       = ["yipdw@northwestern.edu"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{A CAS client library}
+  s.description = %q{A CAS client library built for NUBIC's Ruby webapps}
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
