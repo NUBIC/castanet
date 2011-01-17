@@ -20,15 +20,7 @@ Gem::Specification.new do |s|
   [
     [ 'cucumber',       nil         ],
     [ 'rspec',          '~> 2.0'    ],
-    [ 'rubycas-server', nil         ],
-    [ 'yard',           nil         ],
-
-    # if this isn't specified, Bundler will drag in ActiveRecord 1.6.0 for
-    # RubyCAS-Server -- not really sure why
-    [ 'activerecord',   '~> 3.0'    ],
-
-    # RubyCAS-Server in Cucumber scenarios uses an SQLite3 database
-    [ 'sqlite3-ruby',   nil         ]
+    [ 'yard',           nil         ]
   ].each do |gem, version|
     s.add_development_dependency gem, version
   end
