@@ -1,13 +1,15 @@
-AfterConfiguration do
-  $server = Castanet::Cucumber::RubycasServer.new
+require File.join(File.dirname(__FILE__), 'udaeta')
 
-  $server.start
+AfterConfiguration do
+  $cas = Udaeta::Controller.new(51983, '/tmp/castanet-tests')
+
+  $cas.start
 end
 
 Before do
-  $server.purge!
+  $cas.purge
 end
 
 at_exit do
-  $server.stop
+  $cas.stop
 end

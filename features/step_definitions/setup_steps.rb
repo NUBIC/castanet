@@ -1,6 +1,6 @@
 Given /^the CAS server accepts the credentials$/ do |table|
   table.hashes.each do |credentials|
-    $server.accept!(credentials['username'], credentials['password'])
+    $cas.accept(credentials['username'], credentials['password'])
   end
 end
 
