@@ -1,7 +1,5 @@
-require 'bundler'
 require 'cucumber/rake/task'
-
-Bundler::GemHelper.install_tasks
+require 'rspec/core/rake_task'
 
 namespace :cucumber do
   Cucumber::Rake::Task.new(:ok) do |t|
@@ -15,3 +13,5 @@ namespace :cucumber do
   desc 'Run all features'
   task :all => [:ok, :wip]
 end
+
+RSpec::Core::RakeTask.new
