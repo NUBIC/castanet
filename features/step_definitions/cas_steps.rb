@@ -29,11 +29,11 @@ end
 Then /^that service ticket should be valid$/ do
   client = Castanet::Client.new(:cas_url => @cas.url)
 
-  client.ticket(@ticket).should be_valid
+  client.valid_ticket?(@ticket).should be_true
 end
 
 Then /^that service ticket should not be valid$/ do
   client = Castanet::Client.new(:cas_url => @cas.url)
 
-  client.ticket(@ticket).should_not be_valid
+  client.valid_ticket?(@ticket).should be_false
 end
