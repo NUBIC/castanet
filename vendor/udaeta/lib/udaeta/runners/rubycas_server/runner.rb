@@ -39,6 +39,8 @@ class Runner
         @server.stop
         send('stopped')
         break
+      when 'url' then
+        send("url #{@server.base_url}")
       else
         $stderr.puts "Unrecognized command #{data}"
       end

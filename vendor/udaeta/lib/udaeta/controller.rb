@@ -64,6 +64,15 @@ module Udaeta
       ack(/^started$/)
     end
 
+    ##
+    # Returns the base URL of the CAS server.
+    #
+    # @return [String]
+    def url
+      send('url')
+      ack(/^url .+$/)[3..-1]
+    end
+
     def stop
       send('stop')
       ack(/^stopped$/)
