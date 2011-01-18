@@ -8,15 +8,14 @@ Feature: Service ticket validation
     Given the CAS server accepts the credentials
       | username | password |
       | someone  | secret   |
-    And a CAS-protected application at "/app"
 
   Scenario: Service tickets issued by the CAS server are valid
     When a user logs into CAS as "someone" / "secret"
-    And visits the application at "/app"
+    And requests a service ticket
 
-    Then the user should be able to access the application
+    Then that service ticket should be valid
 
   Scenario: Service tickets not issued by the CAS server are invalid
-    When a user visits the application at "/app" using service ticket "ST-bad"
+    When the service ticket "ST-bad" is checked
 
-    Then the user should not be able to access the application
+    Then that service ticket should not be valid

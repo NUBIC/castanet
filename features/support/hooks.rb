@@ -1,11 +1,11 @@
 require 'udaeta/controller'
 
 Before do
-  $cas = Udaeta::Controller.new(51983, '/tmp/castanet-tests')
+  @cas = Udaeta::Controller.new(cas_port, tmpdir)
 
-  $cas.start
+  @cas.start
 end
 
 After do
-  $cas.stop
+  @cas.stop
 end
