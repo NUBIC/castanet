@@ -19,6 +19,8 @@ Gem::Specification.new do |s|
 
   [
     [ 'cucumber',       nil         ],
+    [ 'mechanize',      nil         ],
+    [ 'rack',           nil         ],
     [ 'rspec',          '~> 2.0'    ],
     [ 'yard',           nil         ]
   ].each do |gem, version|
