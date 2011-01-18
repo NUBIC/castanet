@@ -1,7 +1,7 @@
-require 'udaeta/controller'
+require 'udaeta'
 
 Before do
-  @cas = Udaeta::Controller.new(cas_port, tmpdir)
+  @cas = Udaeta::Servers::RubycasServer.new(cas_port, tmpdir)
 
   @cas.start
 end
