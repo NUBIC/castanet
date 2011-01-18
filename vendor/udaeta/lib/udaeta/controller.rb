@@ -50,7 +50,7 @@ module Udaeta
     # @return void
     def accept(username, password)
       send("register #{username} #{password}")
-      ack("registered #{username} #{password}")
+      ack(/^registered #{username} #{password}$/)
     end
 
     ##
@@ -61,12 +61,12 @@ module Udaeta
       start_rubycas_server
       connect_to_fifo
 
-      ack('started')
+      ack(/^started$/)
     end
 
     def stop
       send('stop')
-      ack('stopped')
+      ack(/^stopped$/)
     end
 
     private
@@ -112,9 +112,15 @@ module Udaeta
       @pipe_to_cas.puts(message)
     end
 
-    def ack(message)
+    ##
+    # Blocks execution of the current thread until a message of form `form` is
+    # received on the pipe from the CAS runner.
+    #
+    # @param [Regexp] form the expected form of the message
+    # @return [String] the string from the CAS server
+    def ack(form)
       while data = @pipe_from_cas.gets
-        break if data.strip == message
+        break data.strip if data.strip =~ form
       end
     end
   end
