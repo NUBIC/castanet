@@ -7,12 +7,14 @@ require 'fileutils'
 # It is named after José de Udaeta (1919-2009), a dancer, choreographer, and
 # castanet soloist.  (And, therefore, a man who could really stress
 # castanets.)
-#
-# CAS servers in Udaeta are augmented with two components: the _controller_,
-# which starts, stops, and configures servers, and the _wrapper_, which
-# performs all setup and teardown work.  The controller runs in the same
-# process as its consumer, and the wrapper runs in a different process.
 module Udaeta
+  ##
+  # CAS servers in Udaeta are augmented with two components: the _controller_,
+  # which starts, stops, and configures servers, and the _runner_, which
+  # performs all setup and teardown work.  The controller runs in the same
+  # process as its consumer, and the runner runs in a different process.
+  #
+  # The {#accept}, {#start}, {#stop}, and {#url} methods are synchronous.
   class Controller
     include FileUtils
 
@@ -73,6 +75,10 @@ module Udaeta
       ack(/^url .+$/)[3..-1]
     end
 
+    ##
+    # Stops a RubyCAS-Server instance.
+    #
+    # @return void
     def stop
       send('stop')
       ack(/^stopped$/)
