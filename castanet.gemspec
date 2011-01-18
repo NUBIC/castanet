@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   [
+    [ 'autotest',       nil         ],
     [ 'cucumber',       nil         ],
     [ 'mechanize',      nil         ],
     [ 'rack',           nil         ],
