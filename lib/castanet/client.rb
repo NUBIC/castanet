@@ -33,8 +33,14 @@ module Castanet
       self.cas_url = settings[:cas_url]
     end
 
-    def valid_ticket?(ticket)
-      ticket_validator.valid?(ticket)
+    ##
+    # Returns whether or not `ticket` is a valid service ticket for `service`.
+    #
+    # @param [String] ticket a service ticket
+    # @param [String] service a service URL
+    # @return [Boolean]
+    def valid_ticket?(ticket, service)
+      ticket_validator.valid?(ticket, service)
     end
   end
 end

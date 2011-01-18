@@ -24,6 +24,7 @@ module Castanet
       describe 'given a service ticket' do
         let(:validator) { mock }
         let(:ticket) { 'ST-1foo' }
+        let(:service) { 'https://service.example.edu' }
 
         before do
           client.cas_url = 'https://cas.example.edu'
@@ -31,15 +32,15 @@ module Castanet
         end
 
         it 'returns true if the ticket is valid' do
-          validator.should_receive(:valid?).with(ticket).and_return(true)
+          validator.should_receive(:valid?).with(ticket, service).and_return(true)
 
-          client.valid_ticket?(ticket).should be_true
+          client.valid_ticket?(ticket, service).should be_true
         end
 
         it 'returns false if the ticket is invalid' do
-          validator.should_receive(:valid?).with(ticket).and_return(false)
+          validator.should_receive(:valid?).with(ticket, service).and_return(false)
 
-          client.valid_ticket?(ticket).should be_false
+          client.valid_ticket?(ticket, service).should be_false
         end
       end
     end
