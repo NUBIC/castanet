@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), %w(.. udaeta))
+require 'udaeta'
 
 ##
 # CAS servers in Udaeta are augmented with two components: the _runner_,

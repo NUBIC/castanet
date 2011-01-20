@@ -1,9 +1,8 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), %w(.. .. vendor udaeta lib)))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), %w(.. .. lib)))
+$LOAD_PATH.unshift(File.expand_path('../../../vendor/udaeta/lib', __FILE__))
 
 require 'castanet'
 
-require File.join(File.dirname(__FILE__), 'world')
+require File.expand_path('../world', __FILE__)
 
 World do
   Castanet::Cucumber::World.new

@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), %w(.. servers))
+require 'udaeta'
 
 module Udaeta::Servers
   ##
