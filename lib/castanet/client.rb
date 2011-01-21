@@ -58,7 +58,7 @@ module Castanet
     # @see #cas_url
     # @return [String]
     def service_validate_url
-      URI.join(cas_url, 'serviceValidate').normalize.to_s
+      URI.join(cas_url, 'serviceValidate').to_s
     end
 
     ##

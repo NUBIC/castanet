@@ -40,12 +40,6 @@ module Castanet
 
         client.service_validate_url.should == 'https://cas.example.edu/cas/serviceValidate'
       end
-
-      it 'normalizes the generated URL' do
-        client.cas_url = 'hTTps://cas.example.edu/cas/'
-
-        client.service_validate_url.should == 'https://cas.example.edu/cas/serviceValidate'
-      end
     end
 
     describe '#valid_ticket?' do
