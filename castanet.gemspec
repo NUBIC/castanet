@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
     [ 'mechanize',      nil         ],
     [ 'rack',           nil         ],
     [ 'rspec',          '~> 2.0'    ],
+    [ 'webmock',        nil         ],
     [ 'yard',           nil         ]
   ].each do |gem, version|
     s.add_development_dependency gem, version
