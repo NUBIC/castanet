@@ -17,9 +17,14 @@ When /^a user logs into CAS as "([^"]*)" \/ "([^"]*)"$/ do |username, password|
 end
 
 When /^(?:a user )?requests a service ticket for "([^"]*)"$/ do |service|
+  # CAS servers will redirect to the requested service if they're able to issue
+  # a service ticket for said service.  We don't want to Mechanize to follow
+  # redirects because our scenarios use domains reserved for testing purposes.
+  agent.redirect_ok = false
+
   get URI.join(@cas.url, "/login?service=#{Rack::Utils.escape(service)}").tap { |x| puts x }
 
-  @ticket = Rack::Utils.parse_query(URI.parse(page.uri.to_s).query)['ticket']
+  @ticket = Rack::Utils.parse_query(URI.parse(page.response['location']).query)['ticket']
 end
 
 When /^the service ticket "([^"]*)" is checked for "([^"]*)"$/ do |ticket, service|
