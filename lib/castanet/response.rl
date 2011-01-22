@@ -6,19 +6,21 @@ require 'castanet'
   action buffer { buffer << data.slice(p, 1).pack('c') }
   action saveUsername { r.username = buffer; buffer = '' }
   action saveFailureCode { r.failure_code = buffer; buffer = '' }
+  action saveFailureReason { r.failure_reason = buffer.strip; buffer = '' }
   action savePgtIou { r.pgt_iou = buffer; buffer = '' }
 
   quote = '"' | "'";
+  xmlContent = any -- [<&];
 
   serviceResponseStart         = "<cas:serviceResponse xmlns:cas=" quote "http://www.yale.edu/tp/cas" quote ">";
 
   code = ( ( upper | '_' ) @buffer )+ %saveFailureCode;
-  reason = any -- [<>];
+  reason = ( xmlContent @buffer )+ %saveFailureReason;
 
   authenticationFailureStart   = "<cas:authenticationFailure code=" quote code quote ">";
   authenticationSuccessStart   = "<cas:authenticationSuccess>";
 
-  user                         = "<cas:user>" ( ( any -- [<>] ) @buffer )+ %saveUsername "</cas:user>";
+  user                         = "<cas:user>" ( xmlContent @buffer )+ %saveUsername "</cas:user>";
 
   authenticationFailureEnd     = "</cas:authenticationFailure>";
   authenticationSuccessEnd     = "</cas:authenticationSuccess>";
@@ -27,7 +29,7 @@ require 'castanet'
   action setAuthenticated { r.authenticated = true; eof = -1 }
 
   ok_cas_st = ( serviceResponseStart space* authenticationSuccessStart space* user space* authenticationSuccessEnd space* serviceResponseEnd ) @setAuthenticated;
-  failed_cas_st = ( serviceResponseStart space* authenticationFailureStart space* reason space* authenticationFailureEnd space* serviceResponseEnd );
+  failed_cas_st = ( serviceResponseStart space* authenticationFailureStart reason authenticationFailureEnd space* serviceResponseEnd );
   cas_st = ok_cas_st | failed_cas_st;
 
   main := cas_st;
@@ -48,6 +50,12 @@ module Castanet
     #
     # @return [String, nil]
     attr_accessor :failure_code
+
+    ##
+    # The reason given by the CAS server for authentication failure.
+    #
+    # @return [String, nil]
+    attr_accessor :failure_reason
 
     ##
     # The PGT IOU returned from a serviceValidate request.

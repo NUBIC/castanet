@@ -41,6 +41,10 @@ module Castanet
         it 'returns the failure code' do
           response.failure_code.should == 'INVALID_TICKET'
         end
+
+        it 'returns the reason for authentication failure' do
+          response.failure_reason.should == 'Ticket ST-1856339-aA5Yuvrxzpv8Tau1cYQ7 not recognized'
+        end
       end
     end
   end
