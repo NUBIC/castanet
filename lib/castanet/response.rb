@@ -3,7 +3,7 @@
 require 'castanet'
 
 
-# line 36 "lib/castanet/response.rl"
+# line 73 "lib/castanet/response.rl"
 
 
 module Castanet
@@ -29,14 +29,6 @@ module Castanet
     attr_accessor :failure_reason
 
     ##
-    # The PGT IOU returned from a serviceValidate request.
-    #
-    # This information is only present on authentication success.
-    #
-    # @return [String, nil]
-    attr_accessor :pgt_iou
-
-    ##
     # The name of the owner of the validated service or proxy ticket.
     #
     # This information is only present on authentication success.
@@ -55,18 +47,18 @@ module Castanet
       eof = nil
 
       
-# line 59 "lib/castanet/response.rb"
+# line 51 "lib/castanet/response.rb"
 begin
 	p ||= 0
 	pe ||= data.length
 	cs = parser_start
 end
 
-# line 87 "lib/castanet/response.rl"
+# line 116 "lib/castanet/response.rl"
 
       new.tap do |r|
         
-# line 70 "lib/castanet/response.rb"
+# line 62 "lib/castanet/response.rb"
 begin
 	_klen, _trans, _keys, _acts, _nacts = nil
 	_goto_level = 0
@@ -147,26 +139,26 @@ begin
 			_acts += 1
 			case _parser_actions[_acts - 1]
 when 0 then
-# line 6 "lib/castanet/response.rl"
+# line 9 "lib/castanet/response.rl"
 		begin
- buffer << data.slice(p, 1).pack('c') 		end
+ buffer << data[p] 		end
 when 1 then
-# line 7 "lib/castanet/response.rl"
+# line 10 "lib/castanet/response.rl"
 		begin
  r.username = buffer; buffer = '' 		end
 when 2 then
-# line 8 "lib/castanet/response.rl"
+# line 11 "lib/castanet/response.rl"
 		begin
  r.failure_code = buffer; buffer = '' 		end
 when 3 then
-# line 9 "lib/castanet/response.rl"
+# line 12 "lib/castanet/response.rl"
 		begin
  r.failure_reason = buffer.strip; buffer = '' 		end
 when 4 then
-# line 29 "lib/castanet/response.rl"
+# line 13 "lib/castanet/response.rl"
 		begin
  r.authenticated = true; eof = -1 		end
-# line 170 "lib/castanet/response.rb"
+# line 162 "lib/castanet/response.rb"
 			end # action switch
 		end
 	end
@@ -193,7 +185,7 @@ when 4 then
 	end
 	end
 
-# line 90 "lib/castanet/response.rl"
+# line 119 "lib/castanet/response.rl"
       end
     end
 
@@ -202,7 +194,7 @@ when 4 then
     end
 
     
-# line 206 "lib/castanet/response.rb"
+# line 198 "lib/castanet/response.rb"
 class << self
 	attr_accessor :_parser_actions
 	private :_parser_actions, :_parser_actions=
@@ -548,6 +540,6 @@ end
 self.parser_en_main = 1;
 
 
-# line 98 "lib/castanet/response.rl"
+# line 127 "lib/castanet/response.rl"
   end
 end
