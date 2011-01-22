@@ -32,14 +32,14 @@ module Castanet
               <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
                   <cas:authenticationSuccess>
                       <cas:user>username</cas:user>
-                      <cas:proxyGrantingTicket>PGTIOU-84678-8a9d...</cas:proxyGrantingTicket>
+                      <cas:proxyGrantingTicket>PGTIOU-84678-8a9d</cas:proxyGrantingTicket>
                   </cas:authenticationSuccess>
               </cas:serviceResponse>
             })
           end
 
           it 'returns the PGT IOU' do
-            response.pgt_iou.should == 'PGTIOU-84678-8a9d...'
+            response.pgt_iou.should == 'PGTIOU-84678-8a9d'
           end
         end
       end

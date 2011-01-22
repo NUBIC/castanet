@@ -19,13 +19,19 @@ require 'castanet'
   quote       = '"' | "'";
   xmlContent  = any -- [<&];
 
+  # CAS definitions
+  # ---------------
+  
+  # Section 3.7
+  ticketCharacter = 'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '-';
+
   # Leaf tags
   # ---------
 
   code    = ( ( upper | '_' ) @buffer )+ %saveFailureCode;
   reason  = ( xmlContent @buffer )+ %saveFailureReason;
   pgtIou  = "<cas:proxyGrantingTicket>"
-            ( ( "PGTIOU-" $buffer ) ( xmlContent @buffer )+ ) %savePgtIou
+            ( ticketCharacter @buffer ){,256} %savePgtIou
             "</cas:proxyGrantingTicket>";
   user    = "<cas:user>" ( xmlContent @buffer )+ %saveUsername "</cas:user>";
 
