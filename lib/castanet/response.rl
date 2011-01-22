@@ -7,7 +7,6 @@ require 'castanet'
   action saveUsername { r.username = buffer; buffer = '' }
   action saveFailureCode { r.failure_code = buffer; buffer = '' }
   action saveFailureReason { r.failure_reason = buffer.strip; buffer = '' }
-  action savePgtIou { r.pgt_iou = buffer; buffer = '' }
 
   quote = '"' | "'";
   xmlContent = any -- [<&];
@@ -56,14 +55,6 @@ module Castanet
     #
     # @return [String, nil]
     attr_accessor :failure_reason
-
-    ##
-    # The PGT IOU returned from a serviceValidate request.
-    #
-    # This information is only present on authentication success.
-    #
-    # @return [String, nil]
-    attr_accessor :pgt_iou
 
     ##
     # The name of the owner of the validated service or proxy ticket.
