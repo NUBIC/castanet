@@ -1,4 +1,3 @@
-@wip
 Feature: Service ticket validation
   To enforce user authentication in their applications
   Application developers
