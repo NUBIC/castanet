@@ -10,6 +10,7 @@ require 'castanet'
   action saveUsername { r.username = buffer; buffer = '' }
   action saveFailureCode { r.failure_code = buffer; buffer = '' }
   action saveFailureReason { r.failure_reason = buffer.strip; buffer = '' }
+  action savePgtIou { r.pgt_iou = buffer; buffer = '' }
   action setAuthenticated { r.authenticated = true; eof = -1 }
 
   # XML definitions
@@ -23,6 +24,9 @@ require 'castanet'
 
   code    = ( ( upper | '_' ) @buffer )+ %saveFailureCode;
   reason  = ( xmlContent @buffer )+ %saveFailureReason;
+  pgtIou  = "<cas:proxyGrantingTicket>"
+            ( ( "PGTIOU-" $buffer ) ( xmlContent @buffer )+ ) %savePgtIou
+            "</cas:proxyGrantingTicket>";
   user    = "<cas:user>" ( xmlContent @buffer )+ %saveUsername "</cas:user>";
 
   # Non-leaf tags
@@ -54,6 +58,8 @@ require 'castanet'
                     authenticationSuccessStart
                     space*
                     user
+                    space*
+                    pgtIou?
                     space*
                     authenticationSuccessEnd
                     space*
@@ -93,6 +99,12 @@ module Castanet
     #
     # @return [String, nil]
     attr_accessor :failure_reason
+
+    ##
+    # The PGT IOU returned by an authentication success message.
+    #
+    # @return [String, nil]
+    attr_accessor :pgt_iou
 
     ##
     # The name of the owner of the validated service or proxy ticket.

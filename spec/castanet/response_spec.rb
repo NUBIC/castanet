@@ -21,6 +21,27 @@ module Castanet
         it 'returns the username' do
           response.username.should == 'username'
         end
+
+        it 'returns a nil PGT IOU' do
+          response.pgt_iou.should be_nil
+        end
+
+        describe 'when a PGT IOU is given' do
+          let(:response) do
+            Response.from_cas(%Q{
+              <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+                  <cas:authenticationSuccess>
+                      <cas:user>username</cas:user>
+                      <cas:proxyGrantingTicket>PGTIOU-84678-8a9d...</cas:proxyGrantingTicket>
+                  </cas:authenticationSuccess>
+              </cas:serviceResponse>
+            })
+          end
+
+          it 'returns the PGT IOU' do
+            response.pgt_iou.should == 'PGTIOU-84678-8a9d...'
+          end
+        end
       end
 
       describe 'on serviceValidate failure' do
