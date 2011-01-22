@@ -43,20 +43,18 @@ module Castanet
     end
 
     describe '#valid_ticket?' do
-      let(:validator) { mock }
       let(:ticket) { 'ST-1foo' }
       let(:service) { 'https://service.example.edu/' }
       let(:cas_response) { '' }
 
       before do
         client.cas_url = 'https://cas.example.edu/'
-        client.ticket_validator = validator
 
         stub_request(:any, /.*/)
       end
 
       it 'sends the ticket and service URL to the CAS server' do
-        validator.stub(:valid?)
+        Response.stub(:from_cas => stub.as_null_object)
 
         client.valid_ticket?(ticket, service)
 
@@ -67,7 +65,7 @@ module Castanet
 
       describe 'if the proxy callback URL is given' do
         before do
-          validator.stub(:valid?)
+          Response.stub(:from_cas => stub.as_null_object)
         end
 
         it 'sends the proxy callback URL to the CAS server' do
@@ -86,25 +84,25 @@ module Castanet
           stub_request(:get, client.service_validate_url).to_return(:body => cas_response)
         end
 
-        it 'is true if the ticket is valid' do
-          validator.should_receive(:valid?).with(cas_response).and_return(true)
-
-          client.valid_ticket?(ticket, service).should be_true
-        end
-
-        it 'is false if the ticket is invalid' do
-          validator.should_receive(:valid?).with(cas_response).and_return(false)
+        it 'is false if CAS authentication fails' do
+          Response.should_receive(:from_cas).with(cas_response).and_return(stub(:authenticated? => false, :pgt_iou => nil))
 
           client.valid_ticket?(ticket, service).should be_false
         end
 
-        it 'includes a proxy-granting ticket if the validator returns one' do
-          validator.should_receive(:valid?).with(cas_response).and_return([true, 'PGT-1foo'])
+        it 'is true if CAS authentication succeeds' do
+          Response.should_receive(:from_cas).with(cas_response).and_return(stub(:authenticated? => true, :pgt_iou => nil))
 
-          ok, pgt = client.valid_ticket?(ticket, service)
+          client.valid_ticket?(ticket, service).should be_true
+        end
+
+        it 'includes a proxy-granting ticket IOU if the parser returns one' do
+          Response.should_receive(:from_cas).with(cas_response).and_return(stub(:authenticated? => true, :pgt_iou => 'PGTIOU-1foo'))
+
+          ok, pgt_iou = client.valid_ticket?(ticket, service)
 
           ok.should be_true
-          pgt.should == 'PGT-1foo'
+          pgt_iou.should == 'PGTIOU-1foo'
         end
       end
     end

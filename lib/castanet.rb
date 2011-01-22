@@ -1,4 +1,4 @@
 module Castanet
-  autoload :Client,           'castanet/client'
-  autoload :TicketValidator,  'castanet/ticket_validator'
+  autoload :Client,   'castanet/client'
+  autoload :Response, 'castanet/response'
 end

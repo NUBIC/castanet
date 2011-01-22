@@ -17,16 +17,6 @@ module Castanet
   # `ticket` is the service ticket to validate.  `service` is the service URL.
   class Client
     ##
-    # The ticket validator to use.
-    #
-    # The default validator is sufficient for most purposes; however, if you
-    # need to do testing against {Client}, you may find it useful to be able to
-    # control the behavior of the validator.
-    #
-    # @return [TicketValidator]
-    attr_accessor :ticket_validator
-
-    ##
     # The CAS server's URL.
     #
     # The URL must be terminated with a trailing slash if it contains a non-root
@@ -84,8 +74,13 @@ module Castanet
 
       http.start do |h|
         cas_response = h.get(uri.to_s)
+        result = Response.from_cas(cas_response.body)
 
-        ticket_validator.valid?(cas_response.body)
+        if result.authenticated? && result.pgt_iou
+          [result.authenticated?, result.pgt_iou]
+        else
+          result.authenticated?
+        end
       end
     end
 
