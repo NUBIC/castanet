@@ -9,7 +9,7 @@
   pgtIou  = "<cas:proxyGrantingTicket>"
             ( ticketCharacter @buffer ){,256}
             "</cas:proxyGrantingTicket>" %savePgtIou;
-  user    = "<cas:user>" ( xmlContent @buffer )+ %saveUsername "</cas:user>";
+  user    = "<cas:user>" ( xmlContent @buffer )+ "</cas:user>" %saveUsername;
 
   # Non-leaf tags
   # -------------
