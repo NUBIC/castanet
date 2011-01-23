@@ -12,9 +12,9 @@ Feature: Service ticket validation
     When a user logs into CAS as "someone" / "secret"
     And requests a service ticket for "https://service.example.edu"
 
-    Then that service ticket should be valid for "https://service.example.edu"
+    Then that service ticket should be valid
 
   Scenario: Service tickets not issued by the CAS server are invalid
     When the service ticket "ST-bad" is checked for "https://service.example.edu"
 
-    Then that service ticket should not be valid for "https://service.example.edu"
+    Then that service ticket should not be valid
