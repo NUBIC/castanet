@@ -12,9 +12,9 @@ module Castanet
     # Whether or not this response passed CAS authentication.
     #
     # @return [Boolean]
-    attr_accessor :authenticated
+    attr_accessor :valid
 
-    alias_method :authenticated?, :authenticated
+    alias_method :valid?, :valid
 
     ##
     # The failure code returned on authentication failure.
@@ -167,7 +167,7 @@ when 4 then
 when 5 then
 # line 14 "lib/castanet/response.rl"
 		begin
- r.authenticated = true; eof = -1 		end
+ r.valid = true; eof = -1 		end
 # line 172 "lib/castanet/response.rb"
 			end # action switch
 		end
@@ -200,7 +200,7 @@ when 5 then
     end
 
     def initialize
-      self.authenticated = false
+      self.valid = false
     end
 
     

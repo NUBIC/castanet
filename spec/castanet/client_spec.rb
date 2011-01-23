@@ -2,35 +2,24 @@ require File.join(File.dirname(__FILE__), %w(.. spec_helper))
 
 module Castanet
   describe Client do
-    let(:client) { Client.new }
+    let(:client) do
+      Class.new do
+        include Client
 
-    describe '#initialize' do
-      it "sets the CAS server's URL" do
-        client = Client.new(:cas_url => 'https://cas.example.edu/')
-
-        client.cas_url.should == 'https://cas.example.edu/'
-      end
-
-      it 'sets the proxy callback URL' do
-        client = Client.new(:proxy_callback_url => 'https://cas.example.edu/proxy/')
-
-        client.proxy_callback_url.should == 'https://cas.example.edu/proxy/'
-      end
+        attr_accessor :cas_url
+        attr_accessor :proxy_callback_url
+      end.new
     end
 
-    describe '#cas_url=' do
-      it 'stores the given URL' do
-        client.cas_url = 'https://cas.example.edu/cas/'
-
-        client.cas_url.should == 'https://cas.example.edu/cas/'
-      end
+    before do
+      client.cas_url = 'https://cas.example.edu/'
     end
 
-    describe '#proxy_callback_url=' do
-      it 'stores the given URL' do
-        client.proxy_callback_url = 'https://cas.example.edu/proxy/'
+    describe '#cas_url' do
+      it 'raises if it has not been overridden' do
+        client = Object.new.extend(Client)
 
-        client.proxy_callback_url.should == 'https://cas.example.edu/proxy/'
+        lambda { client.cas_url }.should raise_error /cas server url must be set/i
       end
     end
 
@@ -42,52 +31,21 @@ module Castanet
       end
     end
 
-    describe '#valid_service_ticket?' do
-      let(:ticket) { 'ST-1foo' }
-      let(:service) { 'https://service.example.edu/' }
-      let(:cas_response) { '' }
+    describe '#service_ticket' do
+      let(:service) { 'https://service.example.edu' }
+      let(:ticket) { client.service_ticket('ST-1foo', service) }
 
-      before do
-        client.cas_url = 'https://cas.example.edu/'
-
-        stub_request(:any, /.*/)
+      it "sets the ticket's service validate URL" do
+        ticket.service_validate_url.should == client.service_validate_url
       end
 
-      it 'sends the ticket and service URL to the CAS server' do
-        Response.stub(:from_cas => stub.as_null_object)
-
-        client.valid_service_ticket?(ticket, service)
-
-        a_request(:get, 'https://cas.example.edu/serviceValidate').
-          with(:query => { 'ticket' => ticket, 'service' => service }).
-          should have_been_made.once
-      end
-
-      describe 'if the proxy callback URL is given' do
+      describe 'if a proxy callback URL is given' do
         before do
-          Response.stub(:from_cas => stub.as_null_object)
+          client.proxy_callback_url = 'https://cas.example.edu/callback/'
         end
 
-        it 'sends the proxy callback URL to the CAS server' do
-          client.proxy_callback_url = 'https://cas.example.edu/proxy/'
-
-          client.valid_service_ticket?(ticket, service)
-
-          a_request(:get, 'https://cas.example.edu/serviceValidate').
-            with(:query => { 'ticket' => ticket, 'service' => service, 'pgtUrl' => client.proxy_callback_url }).
-            should have_been_made.once
-        end
-      end
-
-      describe 'return value' do
-        before do
-          stub_request(:get, client.service_validate_url).to_return(:body => cas_response)
-        end
-
-        it 'returns the parsed response' do
-          Response.should_receive(:from_cas).with(cas_response).and_return(Response.new)
-
-          client.valid_service_ticket?(ticket, service).should be_is_a(Response)
+        it "sets the ticket's proxy callback URL" do
+          ticket.proxy_callback_url.should == client.proxy_callback_url
         end
       end
     end

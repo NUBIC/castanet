@@ -10,6 +10,10 @@ module Castanet::Cucumber
       51983
     end
 
+    def cas_url
+      @cas.url
+    end
+
     def spawned_servers
       @servers ||= []
     end

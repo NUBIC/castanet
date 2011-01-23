@@ -8,12 +8,11 @@ Given /^the CAS server accepts the credentials$/ do |table|
 end
 
 Given /^a proxy callback$/ do
-  pending # express the regexp above with the code you wish you had
+  pending
 end
 
 Given /^a valid service ticket for "([^"]*)"$/ do |service|
-  When "a user requests a service ticket for #{service}"
-  Then "that service ticket should be valid for #{service}"
+  pending
 end
 
 When /^a user logs into CAS as "([^"]*)" \/ "([^"]*)"$/ do |username, password|
@@ -33,25 +32,31 @@ When /^(?:a user )?requests a service ticket for "([^"]*)"$/ do |service|
 
   get URI.join(@cas.url, "/login?service=#{Rack::Utils.escape(service)}").tap { |x| puts x }
 
-  @ticket = Rack::Utils.parse_query(URI.parse(page.response['location']).query)['ticket']
+  @st = Rack::Utils.parse_query(URI.parse(page.response['location']).query)['ticket']
 end
 
 When /^that user requests a proxy ticket for "([^"]*)"$/ do |service|
-  @ticket = proxy_ticket_for(service, @pgt)
+  pending
 end
 
 When /^the service ticket "([^"]*)" is checked for "([^"]*)"$/ do |ticket, service|
-  @ticket = ticket
-end
-
-Then /^that service ticket should be valid for "([^"]*)"$/ do |service|
-  service_ticket(@ticket).for(service).should be_valid
-end
-
-Then /^that service ticket should not be valid for "([^"]*)"$/ do |service|
-  service_ticket(@ticket).for(service).should_not be_valid
+  @st = ticket
 end
 
 Then /^that proxy ticket should be valid for "([^"]*)"$/ do |service|
-  proxy_ticket(@ticket).for(service).should be_valid
+  pending
+end
+
+Then /^that service ticket should be valid for "([^"]*)"$/ do |service|
+  ticket = service_ticket(@st, service)
+
+  ticket.present!
+  ticket.should be_valid
+end
+
+Then /^that service ticket should not be valid for "([^"]*)"$/ do |service|
+  ticket = service_ticket(@st, service)
+
+  ticket.present!
+  ticket.should_not be_valid
 end

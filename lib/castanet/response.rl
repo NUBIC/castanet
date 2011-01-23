@@ -11,7 +11,7 @@ require 'castanet'
   action saveFailureCode { r.failure_code = buffer; buffer = '' }
   action saveFailureReason { r.failure_reason = buffer.strip; buffer = '' }
   action savePgtIou { r.pgt_iou = buffer; buffer = '' }
-  action setAuthenticated { r.authenticated = true; eof = -1 }
+  action setAuthenticated { r.valid = true; eof = -1 }
 
   # XML definitions
   # ---------------
@@ -90,9 +90,9 @@ module Castanet
     # Whether or not this response passed CAS authentication.
     #
     # @return [Boolean]
-    attr_accessor :authenticated
+    attr_accessor :valid
 
-    alias_method :authenticated?, :authenticated
+    alias_method :valid?, :valid
 
     ##
     # The failure code returned on authentication failure.
@@ -138,7 +138,7 @@ module Castanet
     end
 
     def initialize
-      self.authenticated = false
+      self.valid = false
     end
 
     %% write data;

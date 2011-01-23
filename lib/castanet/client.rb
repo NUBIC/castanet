@@ -7,35 +7,41 @@ module Castanet
   ##
   # A CAS client.
   #
-  # @see http://www.jasig.org/cas/protocol CAS protocol
+  # Classes that mix in this module must override {#cas_url}.  If CAS proxying
+  # is desired, classes must further override {#proxy_callback_url}.
   #
   # Validating a service ticket
   # ===========================
   #
-  #     client.valid_ticket?(ticket, service_url)  # => truthy or false
+  #     service_ticket('ST-1foo').for('https://service.example.edu').valid?
   #
-  # `ticket` is the service ticket to validate.  `service` is the service URL.
-  class Client
+  # @see http://www.jasig.org/cas/protocol CAS protocol
+  module Client
     ##
     # The CAS server's URL.
+    #
+    # You must override this method so that it returns a URL to your CAS server.
+    # If you do not, an error will be raised.
     #
     # The URL must be terminated with a trailing slash if it contains a non-root
     # mount point.
     #
     # @see http://www.ietf.org/rfc/rfc3986.txt RFC 3986 (URI syntax)
-    # @return [String, nil]
-    attr_accessor :cas_url
+    # @return [String] the CAS server URL
+    # @raises [RuntimeError] if it has not been set.
+    def cas_url
+      raise RuntimeError, 'The CAS server URL must be set'
+    end
 
     ##
     # The URL of the proxy callback.
     #
+    # The default value of this is `nil`, which will disable CAS proxying.  To
+    # use CAS proxying, provide a valid URL to a CAS proxy callback.
+    #
     # @see http://www.jasig.org/cas/protocol CAS protocol, section 2.5.4
     # @return [String, nil]
-    attr_accessor :proxy_callback_url
-
-    def initialize(settings = {})
-      self.cas_url = settings[:cas_url]
-      self.proxy_callback_url = settings[:proxy_callback_url]
+    def proxy_callback_url
     end
 
     ##
@@ -52,44 +58,20 @@ module Castanet
     end
 
     ##
-    # Sends the given service ticket and service URL to the CAS server's
-    # `serviceValidate` action and returns the response.  See {Response} for
-    # details on interpreting the response.
+    # Prepares a {ServiceTicket} for the ticket `ticket` and the service URL
+    # `service`.
     #
-    # @see http://www.jasig.org/cas/protocol CAS protocol sections 2.5 (service
-    #   ticket validation) and 2.5.4 (CAS proxy callback mechanism)
-    # @return [Response]
-    def valid_service_ticket?(ticket, service)
-      uri = URI.parse(service_validate_url).tap do |u|
-        u.query = validation_parameters(ticket, service)
-      end
-
-      http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = (uri.scheme == 'https')
-      end
-
-      http.start do |h|
-        cas_response = h.get(uri.to_s)
-
-        Response.from_cas(cas_response.body)
-      end
-    end
-
-    private
-
-    ##
-    # Builds a query string for use with the `serviceValidate` service.
+    # The prepared {ServiceTicket} can be presented for validation at a later
+    # time.
     #
-    # @see http://www.jasig.org/cas/protocol CAS protocol, section 2.5.1
-    # @param [String] ticket a service ticket
+    # @param [String] ticket text of a service ticket
     # @param [String] service a service URL
-    # @return [String] a query component of a URI
-    def validation_parameters(ticket, service)
-      [
-        [ 'ticket',   ticket ],
-        [ 'service',  service ],
-        [ 'pgtUrl',   proxy_callback_url ]
-      ].reject { |_, v| !v }.map { |x, y| URI.encode(x) + '=' + URI.encode(y) }.join('&')
+    # @return [ServiceTicket]
+    def service_ticket(ticket, service)
+      ServiceTicket.new(ticket, service).tap do |st|
+        st.service_validate_url = service_validate_url
+        st.proxy_callback_url = proxy_callback_url
+      end
     end
   end
 end
