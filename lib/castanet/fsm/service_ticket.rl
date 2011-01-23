@@ -7,8 +7,8 @@
   code    = ( ( upper | '_' ) @buffer )+ %saveFailureCode;
   reason  = ( xmlContent @buffer )+ %saveFailureReason;
   pgtIou  = "<cas:proxyGrantingTicket>"
-            ( ticketCharacter @buffer ){,256} %savePgtIou
-            "</cas:proxyGrantingTicket>";
+            ( ticketCharacter @buffer ){,256}
+            "</cas:proxyGrantingTicket>" %savePgtIou;
   user    = "<cas:user>" ( xmlContent @buffer )+ %saveUsername "</cas:user>";
 
   # Non-leaf tags
