@@ -84,25 +84,10 @@ module Castanet
           stub_request(:get, client.service_validate_url).to_return(:body => cas_response)
         end
 
-        it 'is false if CAS authentication fails' do
-          Response.should_receive(:from_cas).with(cas_response).and_return(stub(:authenticated? => false, :pgt_iou => nil))
+        it 'returns the parsed response' do
+          Response.should_receive(:from_cas).with(cas_response).and_return(Response.new)
 
-          client.valid_service_ticket?(ticket, service).should be_false
-        end
-
-        it 'is true if CAS authentication succeeds' do
-          Response.should_receive(:from_cas).with(cas_response).and_return(stub(:authenticated? => true, :pgt_iou => nil))
-
-          client.valid_service_ticket?(ticket, service).should be_true
-        end
-
-        it 'includes a proxy-granting ticket IOU if the parser returns one' do
-          Response.should_receive(:from_cas).with(cas_response).and_return(stub(:authenticated? => true, :pgt_iou => 'PGTIOU-1foo'))
-
-          ok, pgt_iou = client.valid_service_ticket?(ticket, service)
-
-          ok.should be_true
-          pgt_iou.should == 'PGTIOU-1foo'
+          client.valid_service_ticket?(ticket, service).should be_is_a(Response)
         end
       end
     end

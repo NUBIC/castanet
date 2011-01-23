@@ -52,21 +52,13 @@ module Castanet
     end
 
     ##
-    # Returns whether or not `ticket` is a valid service ticket for `service`.
-    #
-    # If {#proxy_callback_url} was set and is accepted by the CAS server, then
-    # this method returns an array containing `true` and the PGT IOU as a
-    # String.
+    # Sends the given service ticket and service URL to the CAS server's
+    # `serviceValidate` action and returns the response.  See {Response} for
+    # details on interpreting the response.
     #
     # @see http://www.jasig.org/cas/protocol CAS protocol sections 2.5 (service
     #   ticket validation) and 2.5.4 (CAS proxy callback mechanism)
-    #
-    # @param [String] ticket a service ticket
-    # @param [String] service a service URL
-    # @return [Boolean] true if the service ticket is valid, false if the
-    #   service ticket was invalid
-    # @return [[true, String]] if the service ticket is valid and
-    #   {#proxy_callback_url} was set
+    # @return [Response]
     def valid_service_ticket?(ticket, service)
       uri = URI.parse(service_validate_url).tap do |u|
         u.query = validation_parameters(ticket, service)
@@ -78,13 +70,8 @@ module Castanet
 
       http.start do |h|
         cas_response = h.get(uri.to_s)
-        result = Response.from_cas(cas_response.body)
 
-        if result.authenticated? && result.pgt_iou
-          [result.authenticated?, result.pgt_iou]
-        else
-          result.authenticated?
-        end
+        Response.from_cas(cas_response.body)
       end
     end
 

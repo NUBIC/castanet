@@ -45,13 +45,15 @@ When /^the service ticket "([^"]*)" is checked for "([^"]*)"$/ do |ticket, servi
 end
 
 Then /^that service ticket should be valid for "([^"]*)"$/ do |service|
-  @ok, @pgt = @client.valid_service_ticket?(@ticket, service)
+  response = @client.valid_service_ticket?(@ticket, service)
 
-  @ok.should be_true
+  response.should be_authenticated
 end
 
 Then /^that service ticket should not be valid for "([^"]*)"$/ do |service|
-  @client.valid_service_ticket?(@ticket, service).should be_false
+  response = @client.valid_service_ticket?(@ticket, service)
+
+  response.should_not be_authenticated
 end
 
 Then /^that proxy ticket should be valid for "([^"]*)"$/ do |service|
