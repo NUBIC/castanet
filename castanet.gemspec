@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
     [ 'cucumber',       nil         ],
     [ 'mechanize',      nil         ],
     [ 'rack',           nil         ],
+    [ 'rdiscount',      nil         ],
     [ 'rspec',          '~> 2.0'    ],
     [ 'webmock',        nil         ],
     [ 'yard',           nil         ]

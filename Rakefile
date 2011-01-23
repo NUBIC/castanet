@@ -1,5 +1,6 @@
 require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
+require 'yard'
 
 load File.join(File.dirname(__FILE__),
                %w(vendor udaeta lib udaeta tasks udaeta.rake))
@@ -21,4 +22,12 @@ namespace :cucumber do
   task :wip => 'udaeta:check_dependencies'
 end
 
-RSpec::Core::RakeTask.new
+namespace :yard do
+  desc 'Run the YARD server'
+  task :auto do
+    sh "bundle exec yard server --reload"
+  end
+
+  desc 'Generate YARD documentation'
+  YARD::Rake::YardocTask.new('once')
+end
