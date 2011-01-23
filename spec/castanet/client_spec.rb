@@ -42,7 +42,7 @@ module Castanet
       end
     end
 
-    describe '#valid_ticket?' do
+    describe '#valid_service_ticket?' do
       let(:ticket) { 'ST-1foo' }
       let(:service) { 'https://service.example.edu/' }
       let(:cas_response) { '' }
@@ -56,7 +56,7 @@ module Castanet
       it 'sends the ticket and service URL to the CAS server' do
         Response.stub(:from_cas => stub.as_null_object)
 
-        client.valid_ticket?(ticket, service)
+        client.valid_service_ticket?(ticket, service)
 
         a_request(:get, 'https://cas.example.edu/serviceValidate').
           with(:query => { 'ticket' => ticket, 'service' => service }).
@@ -71,7 +71,7 @@ module Castanet
         it 'sends the proxy callback URL to the CAS server' do
           client.proxy_callback_url = 'https://cas.example.edu/proxy/'
 
-          client.valid_ticket?(ticket, service)
+          client.valid_service_ticket?(ticket, service)
 
           a_request(:get, 'https://cas.example.edu/serviceValidate').
             with(:query => { 'ticket' => ticket, 'service' => service, 'pgtUrl' => client.proxy_callback_url }).
@@ -87,19 +87,19 @@ module Castanet
         it 'is false if CAS authentication fails' do
           Response.should_receive(:from_cas).with(cas_response).and_return(stub(:authenticated? => false, :pgt_iou => nil))
 
-          client.valid_ticket?(ticket, service).should be_false
+          client.valid_service_ticket?(ticket, service).should be_false
         end
 
         it 'is true if CAS authentication succeeds' do
           Response.should_receive(:from_cas).with(cas_response).and_return(stub(:authenticated? => true, :pgt_iou => nil))
 
-          client.valid_ticket?(ticket, service).should be_true
+          client.valid_service_ticket?(ticket, service).should be_true
         end
 
         it 'includes a proxy-granting ticket IOU if the parser returns one' do
           Response.should_receive(:from_cas).with(cas_response).and_return(stub(:authenticated? => true, :pgt_iou => 'PGTIOU-1foo'))
 
-          ok, pgt_iou = client.valid_ticket?(ticket, service)
+          ok, pgt_iou = client.valid_service_ticket?(ticket, service)
 
           ok.should be_true
           pgt_iou.should == 'PGTIOU-1foo'

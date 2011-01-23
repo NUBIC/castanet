@@ -63,7 +63,7 @@ module Castanet
     # @return [Boolean] if the service ticket is valid
     # @return [[true, String]] if the service ticket is valid and a PGT was
     #   supplied
-    def valid_ticket?(ticket, service)
+    def valid_service_ticket?(ticket, service)
       uri = URI.parse(service_validate_url).tap do |u|
         u.query = validation_parameters(ticket, service)
       end

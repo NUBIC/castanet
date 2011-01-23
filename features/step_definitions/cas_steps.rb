@@ -7,6 +7,10 @@ Given /^the CAS server accepts the credentials$/ do |table|
   end
 end
 
+Given /^a proxy callback$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
 When /^a user logs into CAS as "([^"]*)" \/ "([^"]*)"$/ do |username, password|
   get @cas.url
   login_form = page.forms.first
@@ -27,18 +31,29 @@ When /^(?:a user )?requests a service ticket for "([^"]*)"$/ do |service|
   @ticket = Rack::Utils.parse_query(URI.parse(page.response['location']).query)['ticket']
 end
 
+Given /^a valid service ticket for "([^"]*)"$/ do |service|
+  When "a user requests a service ticket for #{service}"
+  Then "that service ticket should be valid for #{service}"
+end
+
+When /^that user requests a proxy ticket for "([^"]*)"$/ do |service|
+  @ticket.request_proxy_ticket(service, @pgt)
+end
+
 When /^the service ticket "([^"]*)" is checked for "([^"]*)"$/ do |ticket, service|
   @ticket = ticket
 end
 
 Then /^that service ticket should be valid for "([^"]*)"$/ do |service|
-  client = Castanet::Client.new(:cas_url => @cas.url)
+  @ok, @pgt = @client.valid_service_ticket?(@ticket, service)
 
-  client.valid_ticket?(@ticket, service).should be_true
+  @ok.should be_true
 end
 
 Then /^that service ticket should not be valid for "([^"]*)"$/ do |service|
-  client = Castanet::Client.new(:cas_url => @cas.url)
+  @client.valid_service_ticket?(@ticket, service).should be_false
+end
 
-  client.valid_ticket?(@ticket, service).should be_false
+Then /^that proxy ticket should be valid for "([^"]*)"$/ do |service|
+  @client.valid_proxy_ticket?(@ticket, service).should be_false
 end
