@@ -10,10 +10,16 @@ module Castanet
   # Classes that mix in this module must override {#cas_url}.  If CAS proxying
   # is desired, classes must further override {#proxy_callback_url}.
   #
-  # Validating a service ticket
-  # ===========================
+  # Examples
+  # ========
   #
-  #     service_ticket('ST-1foo').for('https://service.example.edu').valid?
+  # Presenting a service ticket
+  # ---------------------------
+  #
+  #     ticket = service_ticket('ST-1foo', 'https://service.example.edu')
+  #     ticket.present!
+  #
+  #     ticket.valid? # => true or false
   #
   # @see http://www.jasig.org/cas/protocol CAS protocol
   module Client
