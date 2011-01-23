@@ -5,6 +5,8 @@ require 'yard'
 load File.join(File.dirname(__FILE__),
                %w(vendor udaeta lib udaeta tasks udaeta.rake))
 
+RSpec::Core::RakeTask.new
+
 namespace :cucumber do
   Cucumber::Rake::Task.new(:ok) do |t|
     t.profile = :default
