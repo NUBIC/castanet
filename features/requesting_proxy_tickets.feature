@@ -12,4 +12,4 @@ Feature: Requesting proxy tickets
 
     When that user requests a proxy ticket for "https://proxied.example.edu"
 
-    Then that proxy ticket should be valid for "https://proxied.example.edu"
+    Then that proxy ticket should be valid

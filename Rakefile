@@ -17,7 +17,7 @@ namespace :cucumber do
   end
 
   desc 'Run all features'
-  task :all => [:ok, :wip]
+  task :all => ['cucumber:ok', 'cucumber:wip']
 
   task :all => 'udaeta:check_dependencies'
   task :ok => 'udaeta:check_dependencies'
