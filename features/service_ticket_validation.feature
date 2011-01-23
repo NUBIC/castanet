@@ -18,3 +18,10 @@ Feature: Service ticket validation
     When the service ticket "ST-bad" is checked for "https://service.example.edu"
 
     Then that service ticket should not be valid
+
+  Scenario: Service tickets issued for one service but presented for another are invalid
+    When a user logs into CAS as "someone" / "secret"
+    And requests a service ticket for "https://service.example.edu"
+    But presents the service ticket to "https://other.example.edu"
+
+    Then that service ticket should not be valid
