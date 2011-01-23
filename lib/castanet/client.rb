@@ -44,7 +44,7 @@ module Castanet
     # The service ticket validation endpoint is defined as {#cas_url} +
     # `"/serviceValidate"`.
     #
-    # @see CAS 2.0 protocol, section 2.5
+    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5
     # @see #cas_url
     # @return [String]
     def service_validate_url
@@ -52,17 +52,21 @@ module Castanet
     end
 
     ##
-    # Returns whether or not `ticket` is a valid service ticket for `service`,
-    # as determined by {#ticket_validator}.
+    # Returns whether or not `ticket` is a valid service ticket for `service`.
     #
-    # If {#ticket_validator} also returns a PGT, then this method returns an
-    # array of two arguments: `true` followed by the PGT as a String.
+    # If {#proxy_callback_url} was set and is accepted by the CAS server, then
+    # this method returns an array containing `true` and the PGT IOU as a
+    # String.
+    #
+    # @see http://www.jasig.org/cas/protocol CAS protocol sections 2.5 (service
+    #   ticket validation) and 2.5.4 (CAS proxy callback mechanism)
     #
     # @param [String] ticket a service ticket
     # @param [String] service a service URL
-    # @return [Boolean] if the service ticket is valid
-    # @return [[true, String]] if the service ticket is valid and a PGT was
-    #   supplied
+    # @return [Boolean] true if the service ticket is valid, false if the
+    #   service ticket was invalid
+    # @return [[true, String]] if the service ticket is valid and
+    #   {#proxy_callback_url} was set
     def valid_service_ticket?(ticket, service)
       uri = URI.parse(service_validate_url).tap do |u|
         u.query = validation_parameters(ticket, service)
@@ -87,7 +91,7 @@ module Castanet
     private
 
     ##
-    # Builds a query string for use with serviceValidate.
+    # Builds a query string for use with the `serviceValidate` service.
     #
     # @see http://www.jasig.org/cas/protocol CAS protocol, section 2.5.1
     # @param [String] ticket a service ticket
