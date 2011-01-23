@@ -5,3 +5,5 @@ Gemfile.lock
 *.sw?
 .yardoc
 doc
+
+lib/castanet/response.rb

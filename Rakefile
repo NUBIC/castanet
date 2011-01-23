@@ -2,8 +2,8 @@ require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
 require 'yard'
 
-load File.join(File.dirname(__FILE__),
-               %w(vendor udaeta lib udaeta tasks udaeta.rake))
+load File.expand_path('../vendor/udaeta/lib/udaeta/tasks/udaeta.rake', __FILE__)
+load File.expand_path('../fsm.rake', __FILE__)
 
 RSpec::Core::RakeTask.new
 
