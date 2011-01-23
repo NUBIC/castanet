@@ -18,7 +18,7 @@ namespace :udaeta do
     # ---
 
     task :check_rvm do
-      `type rvm`
+      system 'sh -c "type rvm"'
 
       if $?.to_i != 0
         fail %Q{
