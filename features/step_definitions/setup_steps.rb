@@ -8,7 +8,7 @@ Given /^a proxy callback$/ do
   proxy_callback = Udaeta::Servers::ProxyCallback.new(proxy_callback_port, tmpdir)
   proxy_callback.start
 
-  spawned_servers << proxy_callback_url
+  spawned_servers << proxy_callback
 
   self.proxy_callback_url = proxy_callback.url
 end
