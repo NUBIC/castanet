@@ -91,7 +91,7 @@ module Castanet
     # @return void
     def present!
       uri = URI.parse(service_validate_url).tap do |u|
-        u.query = validation_parameters(ticket, service)
+        u.query = validation_parameters
       end
 
       http = Net::HTTP.new(uri.host, uri.port).tap do |h|
@@ -143,7 +143,7 @@ module Castanet
     # @param [String] ticket a service ticket
     # @param [String] service a service URL
     # @return [String] a query component of a URI
-    def validation_parameters(ticket, service)
+    def validation_parameters
       [
         [ 'ticket',   ticket ],
         [ 'service',  service ],
