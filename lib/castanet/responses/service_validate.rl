@@ -3,7 +3,6 @@ require 'castanet'
 %%{
   machine service_validate;
 
-  action buffer { buffer << fc }
   action save_username { r.username = buffer; buffer = '' }
   action save_failure_code { r.failure_code = buffer; buffer = '' }
   action save_failure_reason { r.failure_reason = buffer.strip; buffer = '' }
@@ -15,33 +14,25 @@ require 'castanet'
   # Leaf tags
   # ---------
 
-  code    = ( ( upper | '_' ) @buffer )+ %save_failure_code;
-  reason  = ( xml_content @buffer )+ %save_failure_reason;
   pgt_iou = "<cas:proxyGrantingTicket>"
-            ( ticket_character @buffer ){,256}
+            ticket @buffer
             "</cas:proxyGrantingTicket>" %save_pgt_iou;
-  user    = "<cas:user>" ( xml_content @buffer )+ "</cas:user>" %save_username;
+  user    = "<cas:user>"
+            char_data @buffer
+            "</cas:user>" %save_username;
 
   # Non-leaf tags
   # -------------
 
-  service_response_start          = "<cas:serviceResponse xmlns:cas="
-                                     quote
-                                     "http://www.yale.edu/tp/cas"
-                                     quote
-                                     ">";
-  service_response_end            = "</cas:serviceResponse>";
-
   authentication_failure_start    = "<cas:authenticationFailure code="
                                      quote
-                                     code
+                                     failure_code %save_failure_code
                                      quote
                                      ">";
   authentication_failure_end      = "</cas:authenticationFailure>";
 
   authentication_success_start    = "<cas:authenticationSuccess>";
   authentication_success_end      = "</cas:authenticationSuccess>";
-
 
   # Top-level elements
   # ------------------
@@ -61,7 +52,7 @@ require 'castanet'
   failed_cas_st     = ( service_response_start
                         space*
                         authentication_failure_start
-                        reason
+                        failure_reason %save_failure_reason
                         authentication_failure_end
                         space*
                         service_response_end );
