@@ -91,7 +91,6 @@ module Udaeta::Servers
     private
 
     def create_tmpdir
-      rm_rf tmpdir
       mkdir_p tmpdir
     end
 

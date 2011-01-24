@@ -1,9 +1,12 @@
+require 'fileutils'
+
 require File.join(File.dirname(__FILE__), 'cucumber')
 require File.join(File.dirname(__FILE__), 'mechanize_test')
 
 module Castanet::Cucumber
   class World
     include Castanet::Client
+    include FileUtils
     include MechanizeTest
 
     def cas_port
