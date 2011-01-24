@@ -1,3 +1,5 @@
+require 'uri'
+
 Given /^the CAS server accepts the credentials$/ do |table|
   table.hashes.each do |credentials|
     @cas.accept(credentials['username'], credentials['password'])
@@ -10,7 +12,8 @@ Given /^a proxy callback$/ do
 
   spawned_servers << proxy_callback
 
-  self.proxy_callback_url = proxy_callback.url
+  self.proxy_callback_url = URI.join(proxy_callback.url, '/receive_pgt').to_s
+  self.proxy_retrieval_url = URI.join(proxy_callback.url, '/retrieve_pgt').to_s
 end
 
 When /^a user logs into CAS as "([^"]*)" \/ "([^"]*)"$/ do |username, password|

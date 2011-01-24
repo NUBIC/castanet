@@ -77,6 +77,7 @@ module Castanet
       ServiceTicket.new(ticket, service).tap do |st|
         st.service_validate_url = service_validate_url
         st.proxy_callback_url = proxy_callback_url
+        st.proxy_retrieval_url = proxy_retrieval_url
       end
     end
   end

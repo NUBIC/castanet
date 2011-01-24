@@ -8,6 +8,7 @@ module Castanet
 
         attr_accessor :cas_url
         attr_accessor :proxy_callback_url
+        attr_accessor :proxy_retrieval_url
       end.new
     end
 
@@ -46,6 +47,16 @@ module Castanet
 
         it "sets the ticket's proxy callback URL" do
           ticket.proxy_callback_url.should == client.proxy_callback_url
+        end
+      end
+
+      describe 'if a proxy retrieval URL is given' do
+        before do
+          client.proxy_retrieval_url = 'https://cas.example.edu/callback/retrieve_pgt'
+        end
+
+        it "sets the ticket's proxy retrieval URL" do
+          ticket.proxy_retrieval_url.should == client.proxy_retrieval_url
         end
       end
     end

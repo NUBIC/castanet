@@ -12,6 +12,12 @@ module Castanet
     attr_accessor :proxy_callback_url
 
     ##
+    # The URL of the service to use for retrieving PGTs.
+    #
+    # @return [String, nil]
+    attr_accessor :proxy_retrieval_url
+
+    ##
     # The URL of the CAS server's serviceValidate service.
     #
     # @return [String, nil]

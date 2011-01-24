@@ -4,7 +4,8 @@ module Castanet
   describe ServiceTicket do
     let(:service) { 'https://service.example.edu/' }
     let(:ticket) { ServiceTicket.new('ST-1foo', service) }
-    let(:proxy_callback_url) { 'https://cas.example.edu/callback/' }
+    let(:proxy_callback_url) { 'https://cas.example.edu/callback/receive_pgt' }
+    let(:proxy_retrieval_url) { 'https://cas.example.edu/callback/retrieve_pgt' }
     let(:service_validate_url) { 'https://cas.example.edu/serviceValidate' }
 
     before do

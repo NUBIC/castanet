@@ -10,6 +10,7 @@ module Castanet::Cucumber
     include MechanizeTest
 
     attr_accessor :proxy_callback_url
+    attr_accessor :proxy_retrieval_url
 
     def cas_port
       51983
