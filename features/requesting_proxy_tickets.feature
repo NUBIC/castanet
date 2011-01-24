@@ -1,4 +1,3 @@
-@wip
 Feature: Requesting proxy tickets
   Background:
     Given the CAS server accepts the credentials
