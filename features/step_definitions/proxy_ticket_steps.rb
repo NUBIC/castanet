@@ -7,12 +7,12 @@ Given /^a valid service ticket for "([^"]*)"$/ do |service|
 end
 
 When /^that user requests a proxy ticket for "([^"]*)"$/ do |service|
-  pgt = @st.pgt
+  @st.retrieve_pgt!
 
-  @pt = proxy_ticket(pgt, service)
+  @pt = proxy_ticket(@st.pgt, service)
 end
 
-Then /^that proxy ticket should be valid$/ do |service|
+Then /^that proxy ticket should be valid$/ do
   @pt.present!
 
   @pt.should be_valid
