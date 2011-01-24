@@ -21,6 +21,32 @@ module Castanet
   #
   #     ticket.valid? # => true or false
   #
+  #
+  # Retrieving a proxy-granting ticket
+  # ----------------------------------
+  #
+  #     ticket = service_ticket(...)
+  #     ticket.present!
+  #     ticket.retrieve_pgt!    # PGT can be retrieved from ticket.pgt
+  #
+  #
+  # Requesting a proxy ticket
+  # -------------------------
+  #
+  #     ticket = proxy_ticket(pgt, service)  # returns a ProxyTicket
+  #
+  # {ProxyTicket}s can be coerced into Strings.
+  #
+  #
+  # Validating a proxy ticket
+  # -------------------------
+  #
+  #     ticket = proxy_ticket(pgt, service)
+  #     ticket.present!
+  #
+  #     ticket.valid? # => true or false
+  #   
+  #   
   # @see http://www.jasig.org/cas/protocol CAS protocol
   module Client
     ##
