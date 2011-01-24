@@ -4,6 +4,7 @@ require 'castanet'
 module Castanet
   class ServiceTicket
     extend Forwardable
+    include Responses
 
     ##
     # The proxy callback URL to use for service validation.
@@ -101,7 +102,7 @@ module Castanet
       http.start do |h|
         cas_response = h.get(uri.to_s)
 
-        @response = Response.from_cas(cas_response.body)
+        @response = parsed_service_validate_response(cas_response.body)
       end
     end
 

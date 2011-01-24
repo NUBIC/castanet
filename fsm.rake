@@ -1,5 +1,5 @@
 Machines = [
-'lib/castanet/response.rb'
+'lib/castanet/responses/service_validate.rb'
 ].map { |f| File.expand_path("../#{f}", __FILE__) }
 
 Machines.each do |machine|

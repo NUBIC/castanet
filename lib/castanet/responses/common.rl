@@ -1,5 +1,5 @@
 %%{
-  machine parser;
+  machine common;
 
   # XML definitions
   # ---------------
