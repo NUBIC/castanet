@@ -119,8 +119,8 @@ module Castanet
 
     def grant_parameters
       [
-        [ 'pgt',     pgt ],
-        [ 'service', service ]
+        [ 'pgt',           pgt ],
+        [ 'targetService', service ]
       ].map { |x, y| URI.encode(x) + '=' + URI.encode(y) }.join('&')
     end
 

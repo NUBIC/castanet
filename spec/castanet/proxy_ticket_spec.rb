@@ -48,7 +48,7 @@ module Castanet
         ticket.reify!
 
         a_request(:get, proxy_url).
-          with(:query => { 'pgt' => pgt, 'service' => service }).
+          with(:query => { 'pgt' => pgt, 'targetService' => service }).
           should have_been_made.once
       end
 
