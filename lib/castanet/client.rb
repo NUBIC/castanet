@@ -131,7 +131,12 @@ module Castanet
     # Given the PGT `pgt`, retrieves a proxy ticket for the service URL
     # `service`.
     #
+    # If a proxy ticket cannot be issued for any reason, this method raises a
+    # {ProxyTicketError} containing the failure code and reason returned by the
+    # CAS server.
+    #
     # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.7
+    # @see {ProxyTicket#reify!}
     # @return [ProxyTicket] the proxy ticket
     def proxy_ticket(pgt, service)
       ProxyTicket.new(pgt, service).tap do |st|

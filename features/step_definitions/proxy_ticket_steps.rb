@@ -15,6 +15,11 @@ When /^that user requests a proxy ticket for "([^"]*)"$/ do |service|
   @requested_service = service
 end
 
+When /^that user requests a proxy ticket for "([^"]*)" with a bad PGT$/ do |service|
+  @requested_service = service
+  @pgt = 'PGT-1bad'
+end
+
 Then /^that proxy ticket should be valid$/ do
   @st.retrieve_pgt!
 
@@ -29,6 +34,6 @@ Then /^the proxy ticket request should fail with "([^"]*)"$/ do |message|
   lambda do
     @st.retrieve_pgt!
 
-    proxy_ticket(@st.pgt, @requested_service)
+    proxy_ticket(@pgt || @st.pgt, @requested_service)
   end.should raise_error(Castanet::ProxyTicketError, /#{message}/)
 end

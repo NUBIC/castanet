@@ -20,3 +20,12 @@ Feature: Requesting proxy tickets
     When that user requests a proxy ticket for "https://proxied.example.edu"
 
     Then the proxy ticket request should fail with "proxy_retrieval_url is invalid"
+
+  Scenario: A proxy ticket cannot be issued from a bad PGT
+    Given a proxy callback
+    And a user logs into CAS as "someone" / "secret"
+    And a valid service ticket for "https://service.example.edu"
+
+    When that user requests a proxy ticket for "https://proxied.example.edu" with a bad PGT
+
+    Then the proxy ticket request should fail with "proxy ticket could not be issued"

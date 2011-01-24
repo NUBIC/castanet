@@ -80,9 +80,14 @@ module Castanet
     describe '#proxy_ticket' do
       let(:pgt) { 'PGT-1foo' }
       let(:service) { 'https://proxied.example.edu' }
-      let(:ticket) {client.proxy_ticket(pgt, service) }
+      let(:ticket) { client.proxy_ticket(pgt, service) }
 
       before do
+        # Disable the proxy ticket issuance check.
+        stub_ticket = ProxyTicket.new('', '')
+        stub_ticket.stub!(:issued? => true)
+        ProxyTicket.stub(:new => stub_ticket)
+
         stub_request(:any, /.*/)
       end
 

@@ -41,6 +41,8 @@ module Castanet
       before do
         stub_request(:any, /.*/)
 
+        ticket.stub(:issued? => true)
+
         ticket.proxy_url = proxy_url
       end
 
@@ -54,6 +56,12 @@ module Castanet
 
       it 'returns itself' do
         ticket.reify!.should == ticket
+      end
+
+      it 'raises if a ticket could not be issued' do
+        ticket.stub(:issued? => false)
+
+        lambda { ticket.reify! }.should raise_error(ProxyTicketError)
       end
     end
 
@@ -72,5 +80,30 @@ module Castanet
         ticket.should be_ok
       end
     end
+
+    describe '#issued?' do
+      it 'delegates to #proxy_response' do
+        ticket.proxy_response = stub(:ok? => true)
+
+        ticket.should be_issued
+      end
+    end
+
+    describe '#failure_code' do
+      it 'delegates to #proxy_response' do
+        ticket.proxy_response = stub(:failure_code => 'INVALID_TICKET')
+
+        ticket.failure_code.should == 'INVALID_TICKET'
+      end
+    end
+
+    describe '#failure_reason' do
+      it 'delegates to #proxy_response' do
+        ticket.proxy_response = stub(:failure_reason => 'Bad PGT')
+
+        ticket.failure_reason.should == 'Bad PGT'
+      end
+    end
+
   end
 end

@@ -51,7 +51,11 @@ module Castanet
 
     def_delegator :proxy_response, :ticket
 
+    def_delegator :proxy_response, :ok?, :issued?
+
     def_delegator :proxy_validate_response, :ok?
+
+    def_delegators :proxy_response, :failure_code, :failure_reason
 
     def initialize(pgt, service)
       @pgt = pgt
@@ -88,7 +92,11 @@ module Castanet
     end
 
     ##
-    # Retrieves a proxy ticket from {#proxy_url} and stores it in {#ticket}.
+    # Requests a proxy ticket from {#proxy_url} and stores it in {#ticket}.
+    #
+    # If a proxy ticket cannot be issued for any reason, this method raises a
+    # {ProxyTicketError} containing the failure code and reason returned by the
+    # CAS server.
     #
     # This method should only be run once per `ProxyTicket` instance.  It can be
     # run multiple times, but each invocation will overwrite {#ticket} with a
@@ -100,6 +108,7 @@ module Castanet
     # Also, if you're managing `ProxyTicket` instances manually for some reason,
     # you may find this method useful.
     #
+    # @raise [ProxyTicketError] if a proxy ticket cannot be issued
     # @return void
     def reify!
       uri = URI.parse(proxy_url).tap do |u|
@@ -114,6 +123,11 @@ module Castanet
         cas_response = h.get(uri.to_s)
 
         self.proxy_response = parsed_proxy_response(cas_response.body)
+
+        unless issued?
+          raise ProxyTicketError, "A proxy ticket could not be issued.  Code: <#{failure_code}>, reason: <#{failure_reason}>."
+        end
+
         self
       end
     end
