@@ -7,6 +7,7 @@ require 'castanet'
   action save_failure_code { r.failure_code = buffer; buffer = '' }
   action save_failure_reason { r.failure_reason = buffer.strip; buffer = '' }
   action save_pgt_iou { r.pgt_iou = buffer; buffer = '' }
+  action save_proxy { r.proxies << buffer; buffer = '' }
   action set_authenticated { r.valid = true; eof = -1 }
 
   include common "common.rl";
@@ -17,6 +18,9 @@ require 'castanet'
   pgt_iou = "<cas:proxyGrantingTicket>"
             ticket @buffer
             "</cas:proxyGrantingTicket>" %save_pgt_iou;
+  proxy   = "<cas:proxy>"
+            char_data @buffer
+            "</cas:proxy>" %save_proxy;
   user    = "<cas:user>"
             char_data @buffer
             "</cas:user>" %save_username;
@@ -33,6 +37,9 @@ require 'castanet'
 
   authentication_success_start    = "<cas:authenticationSuccess>";
   authentication_success_end      = "</cas:authenticationSuccess>";
+  proxies                         = "<cas:proxies>"
+                                    ( space* proxy space* )*
+                                    "</cas:proxies>";
 
   # Top-level elements
   # ------------------
@@ -44,6 +51,8 @@ require 'castanet'
                         user
                         space*
                         pgt_iou?
+                        space*
+                        proxies?
                         space*
                         authentication_success_end
                         space*
@@ -89,6 +98,35 @@ module Castanet::Responses
     attr_accessor :pgt_iou
 
     ##
+    # A list of authentication proxies for this ticket.
+    #
+    # Each participant in an authentication chain adds one entry to this list.
+    # As an example, assume the existence of two services:
+    #
+    # 1. frontend
+    # 2. backend
+    #
+    # If `frontend` proxied access to `backend`, the proxy list would be
+    #
+    # 1. backend
+    # 2. frontend
+    #
+    # The proxy chain has an unbounded maximum length.  The proxy order
+    # specified in the CAS response is preserved.
+    #
+    # For proxy tickets that fail validation, this will be an empty list.  It
+    # should also be an empty list for service tickets too, although that's
+    # really up to the CAS server.
+    #
+    # Although this list is technically a valid component of an authentication
+    # response issued by `/serviceValidate`, it's really only applicable to
+    # proxy tickets.
+    #
+    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.6.2
+    # @return [Array]
+    attr_accessor :proxies
+
+    ##
     # The name of the owner of the validated service or proxy ticket.
     #
     # This information is only present on authentication success.
@@ -115,6 +153,7 @@ module Castanet::Responses
 
     def initialize
       self.valid = false
+      self.proxies = []
     end
 
     %% write data;

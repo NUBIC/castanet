@@ -3,7 +3,6 @@ require 'castanet'
 module Castanet
   module Responses
     autoload :Proxy,            'castanet/responses/proxy'
-    autoload :ProxyValidate,    'castanet/responses/proxy_validate'
     autoload :ServiceValidate,  'castanet/responses/service_validate'
 
     ##
@@ -19,7 +18,7 @@ module Castanet
     #
     # @return [ProxyValidate]
     def parsed_proxy_validate_response(response)
-      ProxyValidate.from_cas(response)
+      ServiceValidate.from_cas(response)
     end
 
     ##

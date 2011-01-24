@@ -24,7 +24,7 @@ module Castanet
 
     describe '#parsed_proxy_validate_response' do
       it 'parses a response' do
-        Responses::ProxyValidate.should_receive(:from_cas).with('response').and_return(stub)
+        Responses::ServiceValidate.should_receive(:from_cas).with('response').and_return(stub)
 
         vessel.parsed_proxy_validate_response('response')
       end

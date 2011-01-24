@@ -42,6 +42,27 @@ module Castanet::Responses
             response.pgt_iou.should == 'PGTIOU-84678-8a9d'
           end
         end
+
+        describe 'when proxies are given' do
+          let(:response) do
+            ServiceValidate.from_cas(%Q{
+              <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+                  <cas:authenticationSuccess>
+                      <cas:user>username</cas:user>
+                      <cas:proxyGrantingTicket>PGTIOU-84678-8a9d</cas:proxyGrantingTicket>
+                      <cas:proxies>
+                          <cas:proxy>https://proxy2/pgtUrl</cas:proxy>
+                          <cas:proxy>https://proxy1/pgtUrl</cas:proxy>
+                      </cas:proxies>
+                  </cas:authenticationSuccess>
+              </cas:serviceResponse>
+            })
+          end
+
+          it 'returns the proxies' do
+            response.proxies.should == ['https://proxy2/pgtUrl', 'https://proxy1/pgtUrl']
+          end
+        end
       end
 
       describe 'on failure' do
