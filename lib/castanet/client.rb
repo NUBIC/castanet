@@ -64,6 +64,26 @@ module Castanet
     end
 
     ##
+    # Returns the proxy ticket grantor endpoint for the configured CAS URL.
+    #
+    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.7
+    # @see #cas_url
+    # @return [String]
+    def proxy_url
+      URI.join(cas_url, 'proxy').to_s
+    end
+
+    ##
+    # Returns the proxy ticket validation endpoint for the configured CAS URL.
+    #
+    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.6
+    # @see #cas_url
+    # @return [String]
+    def proxy_validate_url
+      URI.join(cas_url, 'proxyValidate').to_s
+    end
+    
+    ##
     # Prepares a {ServiceTicket} for the ticket `ticket` and the service URL
     # `service`.
     #
@@ -79,6 +99,19 @@ module Castanet
         st.proxy_callback_url = proxy_callback_url
         st.proxy_retrieval_url = proxy_retrieval_url
       end
+    end
+
+    ##
+    # Given the PGT `pgt`, retrieves a proxy ticket for the service URL
+    # `service`.
+    #
+    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.7
+    # @return [ProxyTicket] the proxy ticket
+    def proxy_ticket(pgt, service)
+      ProxyTicket.new(pgt, service).tap do |st|
+        st.proxy_url = proxy_url
+        st.proxy_validate_url = proxy_validate_url
+      end.reify!
     end
   end
 end
