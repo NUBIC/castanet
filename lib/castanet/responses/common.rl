@@ -4,11 +4,11 @@
   # XML definitions
   # ---------------
   quote       = '"' | "'";
-  xmlContent  = any -- [<&];
+  xml_content = any -- [<&];
 
   # CAS definitions
   # ---------------
   
   # Section 3.7
-  ticketCharacter = 'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '-';
+  ticket_character = 'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '-';
 }%%

@@ -4,67 +4,67 @@ require 'castanet'
   machine service_validate;
 
   action buffer { buffer << fc }
-  action saveUsername { r.username = buffer; buffer = '' }
-  action saveFailureCode { r.failure_code = buffer; buffer = '' }
-  action saveFailureReason { r.failure_reason = buffer.strip; buffer = '' }
-  action savePgtIou { r.pgt_iou = buffer; buffer = '' }
-  action setAuthenticated { r.valid = true; eof = -1 }
+  action save_username { r.username = buffer; buffer = '' }
+  action save_failure_code { r.failure_code = buffer; buffer = '' }
+  action save_failure_reason { r.failure_reason = buffer.strip; buffer = '' }
+  action save_pgt_iou { r.pgt_iou = buffer; buffer = '' }
+  action set_authenticated { r.valid = true; eof = -1 }
 
   include common "common.rl";
 
   # Leaf tags
   # ---------
 
-  code    = ( ( upper | '_' ) @buffer )+ %saveFailureCode;
-  reason  = ( xmlContent @buffer )+ %saveFailureReason;
-  pgtIou  = "<cas:proxyGrantingTicket>"
-            ( ticketCharacter @buffer ){,256}
-            "</cas:proxyGrantingTicket>" %savePgtIou;
-  user    = "<cas:user>" ( xmlContent @buffer )+ "</cas:user>" %saveUsername;
+  code    = ( ( upper | '_' ) @buffer )+ %save_failure_code;
+  reason  = ( xml_content @buffer )+ %save_failure_reason;
+  pgt_iou = "<cas:proxyGrantingTicket>"
+            ( ticket_character @buffer ){,256}
+            "</cas:proxyGrantingTicket>" %save_pgt_iou;
+  user    = "<cas:user>" ( xml_content @buffer )+ "</cas:user>" %save_username;
 
   # Non-leaf tags
   # -------------
 
-  serviceResponseStart         = "<cas:serviceResponse xmlns:cas="
-                                 quote
-                                 "http://www.yale.edu/tp/cas"
-                                 quote
-                                 ">";
-  serviceResponseEnd           = "</cas:serviceResponse>";
+  service_response_start          = "<cas:serviceResponse xmlns:cas="
+                                     quote
+                                     "http://www.yale.edu/tp/cas"
+                                     quote
+                                     ">";
+  service_response_end            = "</cas:serviceResponse>";
 
-  authenticationFailureStart   = "<cas:authenticationFailure code="
-                                 quote
-                                 code
-                                 quote
-                                 ">";
-  authenticationFailureEnd     = "</cas:authenticationFailure>";
+  authentication_failure_start    = "<cas:authenticationFailure code="
+                                     quote
+                                     code
+                                     quote
+                                     ">";
+  authentication_failure_end      = "</cas:authenticationFailure>";
 
-  authenticationSuccessStart   = "<cas:authenticationSuccess>";
-  authenticationSuccessEnd     = "</cas:authenticationSuccess>";
+  authentication_success_start    = "<cas:authenticationSuccess>";
+  authentication_success_end      = "</cas:authenticationSuccess>";
 
 
   # Top-level elements
   # ------------------
 
-  ok_cas_st         = ( serviceResponseStart
+  ok_cas_st         = ( service_response_start
                         space*
-                        authenticationSuccessStart
+                        authentication_success_start
                         space*
                         user
                         space*
-                        pgtIou?
+                        pgt_iou?
                         space*
-                        authenticationSuccessEnd
+                        authentication_success_end
                         space*
-                        serviceResponseEnd ) @setAuthenticated;
+                        service_response_end ) @set_authenticated;
 
-  failed_cas_st     = ( serviceResponseStart
+  failed_cas_st     = ( service_response_start
                         space*
-                        authenticationFailureStart
+                        authentication_failure_start
                         reason
-                        authenticationFailureEnd
+                        authentication_failure_end
                         space*
-                        serviceResponseEnd );
+                        service_response_end );
 
   main := ok_cas_st | failed_cas_st;
 }%%
