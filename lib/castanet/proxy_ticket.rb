@@ -44,6 +44,8 @@ module Castanet
     # The `/proxyValidate` response from the CAS server.
     #
     # This is set by {#present!}, but can be set manually for testing purposes.
+    #
+    # @return [#valid?]
     attr_accessor :proxy_validate_response
 
     def_delegator :proxy_response, :ticket
