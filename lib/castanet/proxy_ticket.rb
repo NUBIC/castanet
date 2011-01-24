@@ -6,6 +6,7 @@ require 'uri'
 module Castanet
   class ProxyTicket
     extend Forwardable
+    include Responses
 
     ##
     # The URL of the CAS server's proxy ticket granting service.
@@ -105,7 +106,7 @@ module Castanet
         cas_response = h.get(uri.to_s)
 
         self.tap do |t|
-          t.response = Response.from_cas(cas_response.body)
+          t.response = parsed_proxy_response(cas_response.body)
         end
       end
     end
