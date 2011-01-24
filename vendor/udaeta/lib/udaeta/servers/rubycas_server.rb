@@ -111,7 +111,7 @@ module Udaeta::Servers
     end
 
     def server_root
-      File.join(File.dirname(__FILE__), %w(.. runners rubycas_server))
+      File.expand_path('../../runners/rubycas_server', __FILE__)
     end
   end
 end
