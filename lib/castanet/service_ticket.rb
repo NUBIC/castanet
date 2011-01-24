@@ -9,7 +9,7 @@ module Castanet
 
     ##
     # The proxy callback URL to use for service validation.
-    # 
+    #
     # @return [String, nil]
     attr_accessor :proxy_callback_url
 
@@ -27,7 +27,7 @@ module Castanet
 
     ##
     # The wrapped service ticket.
-    # 
+    #
     # @return [String, nil]
     attr_reader :ticket
 
@@ -108,12 +108,12 @@ module Castanet
     end
 
     ##
-    # Retrieves a PGT from {#proxy_retrieval_url}, using the {#pgt_iou}.
+    # Retrieves a PGT from {#proxy_retrieval_url} using the PGT IOU.
     #
     # CAS 2.0 does not specify whether PGTIOUs are one-time-use only.
     # Therefore, Castanet does not prevent multiple invocations of
-    # `retrieve_pgt!`; however, it is safest to assume that PGTIOUs, like all
-    # CAS tickets save PGTs, are one-time-use only.
+    # `retrieve_pgt!`; however, it is safest to assume that PGTIOUs are
+    # one-time-use only.
     #
     # CAS 2.0 also does not specify the response format for proxy callbacks.
     # `retrieve_pgt!` assumes that a `200` response from {#proxy_retrieval_url}
@@ -121,10 +121,17 @@ module Castanet
     #
     # The retrieved PGT will be written to {#pgt} if this method succeeds.
     #
+    # If {#proxy_retrieval_url} is not a valid URI, then this method raises {ProxyTicketError}.
+    #
+    # @raise [ProxyTicketError] if {#proxy_retrieval_url} is not set or is otherwise an invalid URI
     # @return void
     def retrieve_pgt!
-      uri = URI.parse(proxy_retrieval_url).tap do |u|
-        u.query = query(['pgtIou', pgt_iou])
+      begin
+        uri = URI.parse(proxy_retrieval_url).tap do |u|
+          u.query = query(['pgtIou', pgt_iou])
+        end
+      rescue URI::InvalidURIError
+        raise ProxyTicketError, 'proxy_retrieval_url is invalid'
       end
 
       http = Net::HTTP.new(uri.host, uri.port).tap do |h|
