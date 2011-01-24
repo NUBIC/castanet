@@ -46,6 +46,16 @@ module Castanet
 
     def_delegator :response, :valid?
 
+    def_delegator :response, :pgt_iou
+
+    ##
+    # The PGT associated with this service ticket.
+    #
+    # This is set after a successful invocation of {#retrieve_pgt!}.
+    #
+    # @return [String, nil]
+    attr_accessor :pgt
+
     def initialize(ticket, service)
       @service = service
       @ticket = ticket
@@ -92,6 +102,35 @@ module Castanet
         cas_response = h.get(uri.to_s)
 
         @response = Response.from_cas(cas_response.body)
+      end
+    end
+
+    ##
+    # Retrieves a PGT from {#proxy_retrieval_url}, using the {#pgt_iou}.
+    #
+    # The CAS protocol does not specify whether PGTIOUs are one-time-use only.
+    # Therefore, Castanet does not prevent multiple invocations of
+    # `retrieve_pgt!`; however, it is safest to assume that PGTIOUs, like all
+    # CAS tickets save PGTs, are one-time-use only.
+    #
+    # The CAS protocol also does not specify the response format for proxy
+    # callbacks.  `retrieve_pgt!` assumes that a `200` response from
+    # {#proxy_retrieval_url} will contain the PGT and only the PGT.
+    #
+    # The retrieved PGT will be written to {#pgt} if this method succeeds.
+    #
+    # @return void
+    def retrieve_pgt!
+      uri = URI.parse(proxy_retrieval_url).tap do |u|
+        u.query = "pgtIou=" + URI.encode(pgt_iou)
+      end
+
+      http = Net::HTTP.new(uri.host, uri.port).tap do |h|
+        h.use_ssl = true
+      end
+
+      http.start do |h|
+        self.pgt = h.get(uri.to_s).body
       end
     end
 

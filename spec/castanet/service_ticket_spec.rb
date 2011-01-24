@@ -47,6 +47,31 @@ module Castanet
       end
     end
 
+    describe '#retrieve_pgt!' do
+      before do
+        stub_request(:any, /.*/)
+
+        ticket.proxy_retrieval_url = proxy_retrieval_url
+        ticket.stub!(:pgt_iou => 'PGTIOU-1foo')
+      end
+
+      it 'fetches a PGT from the callback URL' do
+        ticket.retrieve_pgt!
+
+        a_request(:get, proxy_retrieval_url).
+          with(:query => { 'pgtIou' => 'PGTIOU-1foo' }).
+          should have_been_made.once
+      end
+
+      it 'stores the retrieved PGT in #pgt' do
+        stub_request(:get, /.*/).to_return(:body => 'PGT-1foo')
+
+        ticket.retrieve_pgt!
+
+        ticket.pgt.should == 'PGT-1foo'
+      end
+    end
+
     describe '#valid?' do
       it 'returns true if the ticket was accepted for the given service' do
         ticket.response = stub(:valid? => true)
