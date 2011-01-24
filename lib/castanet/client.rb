@@ -47,7 +47,7 @@ module Castanet
   #     ticket.valid? # => true or false
   #   
   #   
-  # @see http://www.jasig.org/cas/protocol CAS protocol
+  # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol
   module Client
     ##
     # The CAS server's URL.
@@ -71,7 +71,7 @@ module Castanet
     # The default value of this is `nil`, which will disable CAS proxying.  To
     # use CAS proxying, provide a valid URL to a CAS proxy callback.
     #
-    # @see http://www.jasig.org/cas/protocol CAS protocol, section 2.5.4
+    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
     # @return [String, nil]
     def proxy_callback_url
     end

@@ -87,7 +87,7 @@ module Castanet
     #
     #     st.valid? # => false
     #
-    # @see http://www.jasig.org/cas/protocol CAS protocol, sections 2.5 and
+    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, sections 2.5 and
     #   3.1.1
     #
     # @return void
@@ -110,14 +110,14 @@ module Castanet
     ##
     # Retrieves a PGT from {#proxy_retrieval_url}, using the {#pgt_iou}.
     #
-    # The CAS protocol does not specify whether PGTIOUs are one-time-use only.
+    # CAS 2.0 does not specify whether PGTIOUs are one-time-use only.
     # Therefore, Castanet does not prevent multiple invocations of
     # `retrieve_pgt!`; however, it is safest to assume that PGTIOUs, like all
     # CAS tickets save PGTs, are one-time-use only.
     #
-    # The CAS protocol also does not specify the response format for proxy
-    # callbacks.  `retrieve_pgt!` assumes that a `200` response from
-    # {#proxy_retrieval_url} will contain the PGT and only the PGT.
+    # CAS 2.0 also does not specify the response format for proxy callbacks.
+    # `retrieve_pgt!` assumes that a `200` response from {#proxy_retrieval_url}
+    # will contain the PGT and only the PGT.
     #
     # The retrieved PGT will be written to {#pgt} if this method succeeds.
     #
@@ -141,7 +141,7 @@ module Castanet
     ##
     # Builds a query string for use with the `serviceValidate` service.
     #
-    # @see http://www.jasig.org/cas/protocol CAS protocol, section 2.5.1
+    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.1
     # @param [String] ticket a service ticket
     # @param [String] service a service URL
     # @return [String] a query component of a URI

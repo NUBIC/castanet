@@ -69,7 +69,7 @@ module Castanet
     # you will with {ServiceTicket#present!}, and thus must take the same
     # precautions.
     #
-    # @see http://www.jasig.org/cas/protocol CAS protocol, section 2.6
+    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.6
     # @return void
     def present!
       uri = URI.parse(proxy_validate_url).tap do |u|
