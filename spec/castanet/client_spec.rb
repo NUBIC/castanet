@@ -58,7 +58,7 @@ module Castanet
 
       describe 'if a proxy callback URL is given' do
         before do
-          client.proxy_callback_url = 'https://cas.example.edu/callback/'
+          client.proxy_callback_url = 'https://cas.example.edu/callback/receive_pgt'
         end
 
         it "sets the ticket's proxy callback URL" do
