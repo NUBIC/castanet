@@ -111,7 +111,7 @@ module Castanet::Responses
     # @param [String] response the CAS response
     # @return [ServiceValidate}
     def self.from_cas(response)
-      data = response.strip.unpack('c*')
+      data = response.strip.unpack('U*')
       buffer = ''
       eof = nil
 
