@@ -57,15 +57,15 @@ module Udaeta::Servers
     # Creates {#tmpdir} and starts a RubyCAS-Server instance.
     def start
       create_tmpdir
-      create_pipe_from_cas
+      create_pipe_from
 
       Bundler.with_clean_env do
         ENV['BUNDLE_GEMFILE'] = File.join(server_root, 'Gemfile')
 
-        self.pipe_to_cas = IO.popen(start_command, 'w')
+        self.pipe_to = IO.popen(start_command, 'w')
       end
 
-      listen_to_cas
+      listen
 
       ack(/^started$/)
     end
@@ -102,7 +102,7 @@ module Udaeta::Servers
         File.join(server_root, 'runner.rb'),
         File.expand_path(tmpdir),
         port,
-        File.expand_path(pipe_from_cas_path)
+        File.expand_path(pipe_path)
       ].join(' ')
     end
 
