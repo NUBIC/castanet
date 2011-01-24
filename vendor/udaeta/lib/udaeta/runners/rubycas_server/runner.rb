@@ -1,6 +1,9 @@
 require File.expand_path('../controllable_cas_server', __FILE__)
+require File.expand_path('../../common/control_pipe', __FILE__)
 
 class Runner
+  include ControlPipe
+
   def initialize(tmpdir, port, fifo)
     @tmpdir = tmpdir
     @port = port
