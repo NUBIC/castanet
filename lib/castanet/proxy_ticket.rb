@@ -33,17 +33,22 @@ module Castanet
     attr_reader :service
 
     ##
-    # The response from the CAS server.
+    # The `/proxy` response from the CAS server.
     #
-    # `ProxyTicket` sets this attribute whilst executing {#reify!}, but it can
-    # be manually set for e.g. testing purposes.
+    # This is set by {#reify!}, but can be set manually for testing purposes.
     #
     # @return [#ticket]
-    attr_accessor :response
+    attr_accessor :proxy_response
 
-    def_delegator :response, :ticket
+    ##
+    # The `/proxyValidate` response from the CAS server.
+    #
+    # This is set by {#present!}, but can be set manually for testing purposes.
+    attr_accessor :proxy_validate_response
 
-    def_delegator :response, :valid?
+    def_delegator :proxy_response, :ticket
+
+    def_delegator :proxy_validate_response, :valid?
 
     def initialize(pgt, service)
       @pgt = pgt
@@ -75,7 +80,7 @@ module Castanet
       http.start do |h|
         cas_response = h.get(uri.to_s)
 
-        @response = Response.from_cas(cas_response.body)
+        self.proxy_validate_response = parsed_proxy_validate_response(cas_response.body)
       end
     end
 
@@ -105,9 +110,8 @@ module Castanet
       http.start do |h|
         cas_response = h.get(uri.to_s)
 
-        self.tap do |t|
-          t.response = parsed_proxy_response(cas_response.body)
-        end
+        self.proxy_response = parsed_proxy_response(cas_response.body)
+        self
       end
     end
 

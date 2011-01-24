@@ -52,14 +52,24 @@ module Castanet
           should have_been_made.once
       end
 
-      it 'stores the retrieved proxy ticket in #ticket' do
-        ticket.response = stub(:ticket => 'PT-1foo')
+      it 'returns itself' do
+        ticket.reify!.should == ticket
+      end
+    end
+
+    describe '#ticket' do
+      it 'delegates to #proxy_response' do
+        ticket.proxy_response = stub(:ticket => 'PT-1foo')
 
         ticket.ticket.should == 'PT-1foo'
       end
+    end
 
-      it 'returns itself' do
-        ticket.reify!.should == ticket
+    describe '#valid?' do
+      it 'delegates to #proxy_validate_response' do
+        ticket.proxy_validate_response = stub(:valid? => true)
+
+        ticket.should be_valid
       end
     end
   end
