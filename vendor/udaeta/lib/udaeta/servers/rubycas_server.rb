@@ -96,7 +96,7 @@ module Udaeta::Servers
 
     def start_command
       [
-        File.join(server_root, 'env.sh'),
+        File.join(common_root, 'rvm_env.sh'),
         "rvm #{RVM_SPEC} exec",
         'bundle exec ruby',
         File.join(server_root, 'runner.rb'),
@@ -104,6 +104,10 @@ module Udaeta::Servers
         port,
         File.expand_path(pipe_from_cas_path)
       ].join(' ')
+    end
+
+    def common_root
+      File.expand_path('../../runners/common', __FILE__)
     end
 
     def server_root

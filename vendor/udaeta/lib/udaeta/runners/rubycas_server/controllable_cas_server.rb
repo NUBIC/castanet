@@ -3,7 +3,8 @@ require 'yaml'
 require 'picnic/conf'
 require 'fileutils'
 require 'active_record' # see below
-require File.join(File.dirname(__FILE__), 'controllable_rack_server')
+
+require File.expand_path('../../common/controllable_rack_server', __FILE__)
 
 module CASServer
   def self.app(config_filename)

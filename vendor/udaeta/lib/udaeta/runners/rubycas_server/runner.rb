@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'controllable_cas_server')
+require File.expand_path('../controllable_cas_server', __FILE__)
 
 class Runner
   def initialize(tmpdir, port, fifo)
@@ -19,15 +19,6 @@ class Runner
   end
 
   private
-
-  def connect_to_fifo
-    @fifo = File.open(@fifo, 'w')
-    @fifo.sync = true
-  end
-
-  def send(message)
-    @fifo.puts(message)
-  end
 
   def command_loop
     while data = gets

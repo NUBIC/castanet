@@ -1,7 +1,7 @@
-require File.join(File.dirname(__FILE__), 'spawned_http_server')
-require File.join(File.dirname(__FILE__), 'ssl_env')
-
 require 'rack'
+
+require File.expand_path('../spawned_http_server', __FILE__)
+require File.expand_path('../ssl_env', __FILE__)
 
 class ControllableRackServer < SpawnedHttpServer
   attr_accessor :app
