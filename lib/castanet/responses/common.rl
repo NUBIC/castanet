@@ -1,6 +1,10 @@
 %%{
   machine common;
 
+  # Needed to support XML's character set, i.e. Unicode minus surrogate blocks.
+  # See http://www.w3.org/TR/REC-xml/#charsets.
+  alphtype int;
+
   # XML definitions
   # ---------------
   quote       = '"' | "'";
