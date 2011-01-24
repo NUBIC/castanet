@@ -102,7 +102,7 @@ module Castanet
       http.start do |h|
         cas_response = h.get(uri.to_s)
 
-        @response = parsed_service_validate_response(cas_response.body)
+        @response = parsed_ticket_validate_response(cas_response.body)
       end
     end
 

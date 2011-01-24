@@ -1,11 +1,11 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Castanet::Responses
-  describe ServiceValidate do
+  describe TicketValidate do
     describe '.from_cas' do
       describe 'on success' do
         let(:response) do
-          ServiceValidate.from_cas(%Q{
+          TicketValidate.from_cas(%Q{
             <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
                 <cas:authenticationSuccess>
                     <cas:user>username</cas:user>
@@ -28,7 +28,7 @@ module Castanet::Responses
 
         describe 'when a PGT IOU is given' do
           let(:response) do
-            ServiceValidate.from_cas(%Q{
+            TicketValidate.from_cas(%Q{
               <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
                   <cas:authenticationSuccess>
                       <cas:user>username</cas:user>
@@ -45,7 +45,7 @@ module Castanet::Responses
 
         describe 'when proxies are given' do
           let(:response) do
-            ServiceValidate.from_cas(%Q{
+            TicketValidate.from_cas(%Q{
               <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
                   <cas:authenticationSuccess>
                       <cas:user>username</cas:user>
@@ -67,7 +67,7 @@ module Castanet::Responses
 
       describe 'on failure' do
         let(:response) do
-          ServiceValidate.from_cas(%Q{
+          TicketValidate.from_cas(%Q{
             <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
                 <cas:authenticationFailure code="INVALID_TICKET">
                     Ticket ST-1856339-aA5Yuvrxzpv8Tau1cYQ7 not recognized

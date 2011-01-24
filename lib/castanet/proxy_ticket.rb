@@ -82,7 +82,7 @@ module Castanet
       http.start do |h|
         cas_response = h.get(uri.to_s)
 
-        self.proxy_validate_response = parsed_proxy_validate_response(cas_response.body)
+        self.proxy_validate_response = parsed_ticket_validate_response(cas_response.body)
       end
     end
 

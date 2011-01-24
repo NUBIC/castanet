@@ -6,11 +6,11 @@ module Castanet
       Object.new.extend(Responses)
     end
 
-    describe '#parsed_service_validate_response' do
+    describe '#parsed_ticket_validate_response' do
       it 'parses a response' do
-        Responses::ServiceValidate.should_receive(:from_cas).with('response').and_return(stub)
+        Responses::TicketValidate.should_receive(:from_cas).with('response').and_return(stub)
 
-        vessel.parsed_service_validate_response('response')
+        vessel.parsed_ticket_validate_response('response')
       end
     end
 
@@ -19,14 +19,6 @@ module Castanet
         Responses::Proxy.should_receive(:from_cas).with('response').and_return(stub)
 
         vessel.parsed_proxy_response('response')
-      end
-    end
-
-    describe '#parsed_proxy_validate_response' do
-      it 'parses a response' do
-        Responses::ServiceValidate.should_receive(:from_cas).with('response').and_return(stub)
-
-        vessel.parsed_proxy_validate_response('response')
       end
     end
   end

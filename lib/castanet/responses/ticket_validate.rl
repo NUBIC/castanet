@@ -1,7 +1,7 @@
 require 'castanet'
 
 %%{
-  machine service_validate;
+  machine ticket_validate;
 
   action save_username { r.username = buffer; buffer = '' }
   action save_failure_code { r.failure_code = buffer; buffer = '' }
@@ -70,7 +70,16 @@ require 'castanet'
 }%%
 
 module Castanet::Responses
-  class ServiceValidate
+  ##
+  # A parsed representation of responses from `/serviceValidate` or
+  # `/proxyValidate`.
+  #
+  # The responses for the above services are identical, so we implement their
+  # parser with the same state machine.
+  #
+  # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, sections 2.5, 2.6,
+  #   and appendix A
+  class TicketValidate
     ##
     # Whether or not this response passed CAS authentication.
     #
@@ -135,10 +144,10 @@ module Castanet::Responses
     attr_accessor :username
 
     ##
-    # Generates a {ServiceValidate} object from a CAS response.
+    # Generates a {TicketValidate} object from a CAS response.
     #
     # @param [String] response the CAS response
-    # @return [ServiceValidate}
+    # @return [TicketValidate}
     def self.from_cas(response)
       data = response.strip.unpack('U*')
       buffer = ''
