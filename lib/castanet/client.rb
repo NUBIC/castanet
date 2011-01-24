@@ -19,7 +19,7 @@ module Castanet
   #     ticket = service_ticket('ST-1foo', 'https://service.example.edu')
   #     ticket.present!
   #
-  #     ticket.valid? # => true or false
+  #     ticket.ok? # => true or false
   #
   #
   # Retrieving a proxy-granting ticket
@@ -44,7 +44,7 @@ module Castanet
   #     ticket = proxy_ticket(pgt, service)
   #     ticket.present!
   #
-  #     ticket.valid? # => true or false
+  #     ticket.ok? # => true or false
   #   
   #   
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol

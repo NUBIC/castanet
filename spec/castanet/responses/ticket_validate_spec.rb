@@ -15,7 +15,7 @@ module Castanet::Responses
         end
 
         it 'returns authentication success' do
-          response.should be_valid
+          response.should be_ok
         end
 
         it 'returns the username' do
@@ -77,7 +77,7 @@ module Castanet::Responses
         end
 
         it 'does not return success' do
-          response.should_not be_valid
+          response.should_not be_ok
         end
 
         it 'returns the failure code' do

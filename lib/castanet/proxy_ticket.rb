@@ -51,7 +51,7 @@ module Castanet
 
     def_delegator :proxy_response, :ticket
 
-    def_delegator :proxy_validate_response, :valid?
+    def_delegator :proxy_validate_response, :ok?
 
     def initialize(pgt, service)
       @pgt = pgt

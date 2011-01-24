@@ -43,10 +43,10 @@ module Castanet
     # {ServiceTicket} sets this attribute whilst executing {#present!}, but it
     # can be manually set for e.g. testing purposes.
     #
-    # @return [#valid?, #pgt_iou]
+    # @return [#ok?, #pgt_iou]
     attr_accessor :response
 
-    def_delegator :response, :valid?
+    def_delegator :response, :ok?
 
     def_delegator :response, :pgt_iou
 

@@ -26,11 +26,11 @@ end
 Then /^that service ticket should be valid$/ do
   @st.present!
 
-  @st.should be_valid
+  @st.should be_ok
 end
 
 Then /^that service ticket should not be valid$/ do
   @st.present!
 
-  @st.should_not be_valid
+  @st.should_not be_ok
 end

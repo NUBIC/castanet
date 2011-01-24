@@ -3,7 +3,7 @@ Given /^a valid service ticket for "([^"]*)"$/ do |service|
 
   @st.present!
 
-  @st.should be_valid
+  @st.should be_ok
 end
 
 When /^that user requests a proxy ticket for "([^"]*)"$/ do |service|
@@ -15,5 +15,5 @@ end
 Then /^that proxy ticket should be valid$/ do
   @pt.present!
 
-  @pt.should be_valid
+  @pt.should be_ok
 end

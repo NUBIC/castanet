@@ -72,17 +72,11 @@ module Castanet
       end
     end
 
-    describe '#valid?' do
-      it 'returns true if the ticket was accepted for the given service' do
-        ticket.response = stub(:valid? => true)
+    describe '#ok?' do
+      it 'delegates to the validation response' do
+        ticket.response = stub(:ok? => true)
 
-        ticket.should be_valid
-      end
-
-      it 'returns false if the ticket was not accepted for the given service' do
-        ticket.response = stub(:valid? => false)
-
-        ticket.should_not be_valid
+        ticket.should be_ok
       end
     end
   end

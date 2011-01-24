@@ -8,7 +8,7 @@ require 'castanet'
   action save_failure_reason { r.failure_reason = buffer.strip; buffer = '' }
   action save_pgt_iou { r.pgt_iou = buffer; buffer = '' }
   action save_proxy { r.proxies << buffer; buffer = '' }
-  action set_authenticated { r.valid = true; eof = -1 }
+  action set_authenticated { r.ok = true; eof = -1 }
 
   include common "common.rl";
 
@@ -84,9 +84,9 @@ module Castanet::Responses
     # Whether or not this response passed CAS authentication.
     #
     # @return [Boolean]
-    attr_accessor :valid
+    attr_accessor :ok
 
-    alias_method :valid?, :valid
+    alias_method :ok?, :ok
 
     ##
     # The failure code returned on authentication failure.
@@ -161,7 +161,7 @@ module Castanet::Responses
     end
 
     def initialize
-      self.valid = false
+      self.ok = false
       self.proxies = []
     end
 

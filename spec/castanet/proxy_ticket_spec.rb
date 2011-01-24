@@ -65,11 +65,11 @@ module Castanet
       end
     end
 
-    describe '#valid?' do
+    describe '#ok?' do
       it 'delegates to #proxy_validate_response' do
-        ticket.proxy_validate_response = stub(:valid? => true)
+        ticket.proxy_validate_response = stub(:ok? => true)
 
-        ticket.should be_valid
+        ticket.should be_ok
       end
     end
   end
