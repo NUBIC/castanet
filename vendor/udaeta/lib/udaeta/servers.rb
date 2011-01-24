@@ -6,6 +6,7 @@ require 'udaeta'
 # performs all setup and teardown work.  The runner runs in the same
 # process as its consumer, and the wrapper runs in a different process.
 module Udaeta::Servers
-  autoload :ControlPipe,   'udaeta/servers/control_pipe'
-  autoload :RubycasServer, 'udaeta/servers/rubycas_server'
+  autoload :ControlPipe,    'udaeta/servers/control_pipe'
+  autoload :RubycasServer,  'udaeta/servers/rubycas_server'
+  autoload :ProxyCallback,  'udaeta/servers/proxy_callback'
 end
