@@ -7,6 +7,7 @@ module Castanet
   class ProxyTicket
     extend Forwardable
     include Responses
+    include QueryBuilding
 
     ##
     # The URL of the CAS server's proxy ticket granting service.
@@ -120,17 +121,13 @@ module Castanet
     private
 
     def grant_parameters
-      [
-        [ 'pgt',           pgt ],
-        [ 'targetService', service ]
-      ].map { |x, y| URI.encode(x) + '=' + URI.encode(y) }.join('&')
+      query(['pgt',           pgt],
+            ['targetService', service])
     end
 
     def validation_parameters
-      [
-        [ 'ticket',   ticket ],
-        [ 'service',  service ],
-      ].map { |x, y| URI.encode(x) + '=' + URI.encode(y) }.join('&')
+      query(['ticket',  ticket],
+            ['service', service])
     end
   end
 end

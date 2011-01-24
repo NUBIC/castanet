@@ -5,6 +5,7 @@ module Castanet
   class ServiceTicket
     extend Forwardable
     include Responses
+    include QueryBuilding
 
     ##
     # The proxy callback URL to use for service validation.
@@ -123,7 +124,7 @@ module Castanet
     # @return void
     def retrieve_pgt!
       uri = URI.parse(proxy_retrieval_url).tap do |u|
-        u.query = "pgtIou=" + URI.encode(pgt_iou)
+        u.query = query(['pgtIou', pgt_iou])
       end
 
       http = Net::HTTP.new(uri.host, uri.port).tap do |h|
@@ -145,11 +146,9 @@ module Castanet
     # @param [String] service a service URL
     # @return [String] a query component of a URI
     def validation_parameters
-      [
-        [ 'ticket',   ticket ],
-        [ 'service',  service ],
-        [ 'pgtUrl',   proxy_callback_url ]
-      ].reject { |_, v| !v }.map { |x, y| URI.encode(x) + '=' + URI.encode(y) }.join('&')
+      query(['ticket',  ticket],
+            ['service', service],
+            ['pgtUrl',  proxy_callback_url])
     end
   end
 end
