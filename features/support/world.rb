@@ -9,8 +9,14 @@ module Castanet::Cucumber
     include FileUtils
     include MechanizeTest
 
+    attr_accessor :proxy_callback_url
+
     def cas_port
       51983
+    end
+
+    def proxy_callback_port
+      57599
     end
 
     def cas_url
