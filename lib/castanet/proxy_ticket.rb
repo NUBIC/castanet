@@ -54,13 +54,13 @@ module Castanet
     #
     # CAS proxy tickets are one-time-use only
     # =======================================
-    # 
+    #
     # Much like {ServiceTicket}s, proxy tickets are one-time-use only.
     #
     # You'll get the same behavior with multiple invocations of {#present!} as
     # you will with {ServiceTicket#present!}, and thus must take the same
     # precautions.
-    # 
+    #
     # @see http://www.jasig.org/cas/protocol CAS protocol, section 2.6
     # @return void
     def present!
