@@ -7,8 +7,11 @@
 
   # XML definitions
   # ---------------
-  quote       = '"' | "'";
-  xml_content = any -- [<&];
+
+  quote          = '"' | "'";
+
+  # See http://www.w3.org/TR/REC-xml/#syntax.
+  char_data      = [^<&]* - ([^<&]* "]]>" [^<&]*);
 
   # CAS definitions
   # ---------------
