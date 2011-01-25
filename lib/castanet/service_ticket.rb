@@ -92,7 +92,7 @@ module Castanet
     #
     # @return void
     def present!
-      uri = URI.parse(service_validate_url).tap do |u|
+      uri = URI.parse(validation_url).tap do |u|
         u.query = validation_parameters
       end
 
@@ -103,7 +103,7 @@ module Castanet
       http.start do |h|
         cas_response = h.get(uri.to_s)
 
-        @response = parsed_ticket_validate_response(cas_response.body)
+        self.response = parsed_ticket_validate_response(cas_response.body)
       end
     end
 
@@ -141,6 +141,16 @@ module Castanet
       http.start do |h|
         self.pgt = h.get(uri.to_s).body
       end
+    end
+
+    protected
+
+    ##
+    # The URL to use for ticket validation.
+    #
+    # @return [String]
+    def validation_url
+      service_validate_url
     end
 
     private

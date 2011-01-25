@@ -4,7 +4,7 @@ require 'forwardable'
 require 'uri'
 
 module Castanet
-  class ProxyTicket
+  class ProxyTicket < ServiceTicket
     extend Forwardable
     include Responses
     include QueryBuilding
@@ -22,18 +22,6 @@ module Castanet
     attr_accessor :proxy_validate_url
 
     ##
-    # The PGT that will be used to {#reify! issue} this proxy ticket.
-    #
-    # @return [String]
-    attr_reader :pgt
-
-    ##
-    # The service URL for which this proxy ticket is valid.
-    #
-    # @return [String]
-    attr_reader :service
-
-    ##
     # The `/proxy` response from the CAS server.
     #
     # This is set by {#reify!}, but can be set manually for testing purposes.
@@ -41,42 +29,28 @@ module Castanet
     # @return [#ticket]
     attr_accessor :proxy_response
 
-    ##
-    # The `/proxyValidate` response from the CAS server.
-    #
-    # This is set by {#present!}, but can be set manually for testing purposes.
-    #
-    # @return [#valid?]
-    attr_accessor :proxy_validate_response
-
     def_delegator :proxy_response, :ok?, :issued?
 
     def_delegators :proxy_response, :failure_code, :failure_reason
 
-    def_delegators :proxy_validate_response, :ok?, :username
-
     ##
     # Initializes an instance of ProxyTicket.
     #
-    # As a ProxyTicket instance may be used for retrieving a proxy ticket given
-    # a PGT and service URL, validating a proxy ticket against a service URL, or
-    # both, the parameters `pt` and `pgt` are optional; however, at least one
-    # must be specified.
+    # Instantiation guide
+    # ===================
     #
-    # If requesting a proxy ticket, set `pt` to nil and `pgt` to a String.  If
-    # checking a proxy ticket, set `pt` to the proxy ticket and `pgt` to nil.
-    # In both cases, a service URL is required.
-    #
-    # (There's no harm in setting all three parameters if you have values for
-    # them, but there's also no need to set all three.)
+    # 1. If requesting a proxy ticket, set `pt` to nil, `service` to the
+    #    service URL, and `pgt` to the proxy granting ticket.
+    # 2. If checking a proxy ticket, set `pt` to the proxy ticket, `service` to
+    #    the service URL, and `pgt` to nil.
     #
     # @param [String, nil] pt the proxy ticket
     # @param [String, nil] pgt the proxy granting ticket
     # @param [String] service the service URL
     def initialize(pt, pgt, service)
-      @pt = pt
-      @pgt = pgt
-      @service = service
+      super(pt, service)
+
+      self.pgt = pgt
     end
 
     ##
@@ -89,7 +63,7 @@ module Castanet
     #
     # @return [String, nil] the proxy ticket
     def ticket
-      proxy_response ? proxy_response.ticket : @pt
+      proxy_response ? proxy_response.ticket : super
     end
 
     ##
@@ -100,36 +74,7 @@ module Castanet
     #
     # @return [String] the ticket or empty string
     def to_s
-      ticket.to_s
-    end
-
-    # Validates `ticket` for the service URL given in `service`.
-    #
-    # CAS proxy tickets are one-time-use only
-    # =======================================
-    #
-    # Much like {ServiceTicket}s, proxy tickets are one-time-use only.
-    #
-    # You'll get the same behavior with multiple invocations of {#present!} as
-    # you will with {ServiceTicket#present!}, and thus must take the same
-    # precautions.
-    #
-    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.6
-    # @return void
-    def present!
-      uri = URI.parse(proxy_validate_url).tap do |u|
-        u.query = validation_parameters
-      end
-
-      http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = (uri.scheme == 'https')
-      end
-
-      http.start do |h|
-        cas_response = h.get(uri.to_s)
-
-        self.proxy_validate_response = parsed_ticket_validate_response(cas_response.body)
-      end
+     ticket.to_s
     end
 
     ##
@@ -173,16 +118,21 @@ module Castanet
       end
     end
 
+    protected
+
+    ##
+    # The URL to use for ticket validation.
+    #
+    # @return [String]
+    def validation_url
+      proxy_validate_url
+    end
+
     private
 
     def grant_parameters
       query(['pgt',           pgt],
             ['targetService', service])
-    end
-
-    def validation_parameters
-      query(['ticket',  ticket],
-            ['service', service])
     end
   end
 end

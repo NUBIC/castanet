@@ -1,39 +1,28 @@
 require File.join(File.dirname(__FILE__), %w(.. spec_helper))
 
+require File.expand_path('../shared/a_service_ticket', __FILE__)
+
 module Castanet
   describe ProxyTicket do
     let(:pgt) { 'PGT-1foo' }
     let(:proxy_url) { 'https://cas.example.edu/proxy' }
     let(:proxy_validate_url) { 'https://cas.example.edu/proxyValidate' }
-    let(:service) { 'https://service.example.edu/' }
+    let(:service) { 'https://proxied.example.edu' }
     let(:ticket) { ProxyTicket.new(nil, pgt, service) }
+
+    it_should_behave_like 'a service ticket' do
+      let(:ticket) { ProxyTicket.new(ticket_text, nil, service) }
+      let(:ticket_text) { 'PT-1foo' }
+      let(:validation_url) { proxy_validate_url }
+
+      before do
+        ticket.proxy_validate_url = proxy_validate_url
+      end
+    end
 
     describe '#initialize' do
       it 'wraps a PGT' do
         ticket.pgt.should == pgt
-      end
-
-      it 'wraps a service URL' do
-        ticket.service.should == service
-      end
-    end
-
-    describe '#present!' do
-      let(:pt) { 'PT-1foo' }
-
-      before do
-        stub_request(:any, /.*/)
-
-        ticket.proxy_validate_url = proxy_validate_url
-        ticket.stub!(:ticket => pt)
-      end
-
-      it 'sends #ticket to the proxy ticket validator' do
-        ticket.present!
-
-        a_request(:get, proxy_validate_url).
-          with(:query => { 'ticket' => pt, 'service' => service }).
-          should have_been_made.once
       end
     end
 
@@ -106,14 +95,6 @@ module Castanet
       end
     end
 
-    describe '#ok?' do
-      it 'delegates to #proxy_validate_response' do
-        ticket.proxy_validate_response = stub(:ok? => true)
-
-        ticket.should be_ok
-      end
-    end
-
     describe '#issued?' do
       it 'delegates to #proxy_response' do
         ticket.proxy_response = stub(:ok? => true)
@@ -135,14 +116,6 @@ module Castanet
         ticket.proxy_response = stub(:failure_reason => 'Bad PGT')
 
         ticket.failure_reason.should == 'Bad PGT'
-      end
-    end
-
-    describe '#username' do
-      it 'delegates to the validation response' do
-        ticket.proxy_validate_response = stub(:username => 'username')
-
-        ticket.username.should == 'username'
       end
     end
   end

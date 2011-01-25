@@ -64,8 +64,8 @@ module Castanet
   #     ticket.present!
   #
   #     ticket.ok? # => true or false
-  #   
-  #   
+  #
+  #
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol
   module Client
     ##
@@ -100,7 +100,7 @@ module Castanet
     def proxy_validate_url
       URI.join(cas_url, 'proxyValidate').to_s
     end
-    
+
     ##
     # Prepares a {ServiceTicket} for the ticket `ticket` and the service URL
     # `service`.
@@ -113,9 +113,9 @@ module Castanet
     # @return [ServiceTicket]
     def service_ticket(ticket, service)
       ServiceTicket.new(ticket, service).tap do |st|
-        st.service_validate_url = service_validate_url
         st.proxy_callback_url = proxy_callback_url
         st.proxy_retrieval_url = proxy_retrieval_url
+        st.service_validate_url = service_validate_url
       end
     end
 
@@ -149,6 +149,8 @@ module Castanet
     # @return [ProxyTicket]
     def proxy_ticket(ticket, service)
       ProxyTicket.new(ticket.to_s, nil, service).tap do |pt|
+        pt.proxy_callback_url = proxy_callback_url
+        pt.proxy_retrieval_url = proxy_retrieval_url
         pt.proxy_url = proxy_url
         pt.proxy_validate_url = proxy_validate_url
       end
