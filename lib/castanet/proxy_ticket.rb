@@ -5,10 +5,6 @@ require 'uri'
 
 module Castanet
   class ProxyTicket < ServiceTicket
-    extend Forwardable
-    include Responses
-    include QueryBuilding
-
     ##
     # The URL of the CAS server's proxy ticket granting service.
     #
