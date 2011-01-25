@@ -7,3 +7,5 @@ Center](http://www.nucats.northwestern.edu/clinical-research-resources/data-coll
 as a replacement for [RubyCAS-Client](https://github.com/gunark/rubycas-client) in internal software.
 
 Castanet does not support CAS 1.0.
+
+More details to come.
