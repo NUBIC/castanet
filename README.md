@@ -8,4 +8,25 @@ as a replacement for [RubyCAS-Client](https://github.com/gunark/rubycas-client) 
 
 Castanet does not support CAS 1.0.
 
-More details to come.
+Getting started
+===============
+
+Mix `Castanet::Client` into the objects that need CAS client behavior.
+
+Objects that include `Castanet::Client` must implement `cas_url`,
+`proxy_callback_url`, and `proxy_retrieval_url`.
+
+See the documentation for `Castanet::Client` for more information and usage
+examples.
+
+Acknowledgments
+===============
+
+Castanet's test harness was based off of code originally written by Rhett
+Sutphin <rhett@detailedbalance.net>.
+
+License
+=======
+
+Copyright (c) 2011 David Yip.  Released under the X11 (MIT) License; see LICENSE
+for details.
