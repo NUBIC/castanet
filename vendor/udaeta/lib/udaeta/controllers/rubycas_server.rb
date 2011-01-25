@@ -11,18 +11,6 @@ module Udaeta::Controllers
     include FileUtils
 
     ##
-    # The version of Ruby needed to run RubyCAS-Server.
-    DESIRED_RUBY = '1.8.7'
-
-    ##
-    # The gemset that will be used for holding RubyCAS-Server's dependencies.
-    DESIRED_GEMSET = 'castanet'
-
-    ##
-    # Shorthand for specifying a Ruby version and gemset.
-    RVM_SPEC = "#{DESIRED_RUBY}@#{DESIRED_GEMSET}"
-
-    ##
     # The port bound to the CAS server.
     #
     # @return [Integer]
@@ -34,6 +22,10 @@ module Udaeta::Controllers
     #
     # @return [String]
     attr_accessor :tmpdir
+
+    def self.rvm_spec
+      '1.8.7@castanet'
+    end
 
     def initialize(port, tmpdir)
       self.port = port
@@ -97,7 +89,7 @@ module Udaeta::Controllers
     def start_command
       [
         File.join(common_root, 'rvm_env.sh'),
-        "rvm #{RVM_SPEC} exec",
+        "rvm #{self.class.rvm_spec} exec",
         'bundle exec ruby',
         File.join(server_root, 'runner.rb'),
         File.expand_path(tmpdir),

@@ -1,19 +1,21 @@
 require 'bundler'
 
+require File.expand_path('../load_udaeta', __FILE__)
+
+require 'udaeta'
+
 namespace :udaeta do
   task :check_dependencies => 'rubycas_server:check_dependencies'
 
   task :install_dependencies => 'rubycas_server:install_dependencies'
 
   namespace :rubycas_server do
-    DESIRED_RUBY = '1.8.7'
-    DESIRED_BUNDLER = '=1.0.7'
-    DESIRED_GEMSET = 'castanet'
-    RVM_SPEC = "#{DESIRED_RUBY}@#{DESIRED_GEMSET}"
+    DESIRED_BUNDLER = '~> 1.0'
+    RVM_SPEC = Udaeta::Controllers::RubycasServer.rvm_spec
 
-    task :check_dependencies => [:check_rvm, :check_ruby, :check_gemset]
+    task :check_dependencies => [:check_rvm, :check_ruby_and_gemset]
 
-    task :install_dependencies => [:install_ruby, :create_gemset, :install_bundle]
+    task :install_dependencies => [:install_ruby_and_gemset, :install_bundle]
 
     # ---
 
@@ -30,28 +32,19 @@ namespace :udaeta do
       end
     end
   
-    task :check_ruby do
-      unless desired_ruby_present?
-        fail "An installation of Ruby #{DESIRED_RUBY} was not detected in your RVM install."
+    task :check_ruby_and_gemset do
+      unless ruby_and_gemset_present?
+        fail "Could not activate RVM environment #{RVM_SPEC}."
       else
-        puts "Ruby #{DESIRED_RUBY} present."
+        puts "RVM environment #{RVM_SPEC} present."
       end
     end
 
-    task :check_gemset do
-      unless desired_gemset_present?
-        fail "There is no "#{DESIRED_GEMSET}" gemset in your Ruby #{DESIRED_RUBY} environment."
-      else
-        puts "#{DESIRED_GEMSET} gemset present."
-      end
-    end
+    task :install_ruby_and_gemset do
+      ENV['rvm_install_on_use_flag'] = '1'
+      ENV['rvm_gemset_create_on_use_flag'] = '1'
 
-    task :install_ruby do
-      sh "rvm install #{DESIRED_RUBY}" unless desired_ruby_present?
-    end
-
-    task :create_gemset do
-     sh "rvm #{DESIRED_RUBY} gemset create #{DESIRED_GEMSET}" unless desired_gemset_present?
+      sh "rvm use #{RVM_SPEC}"
     end
 
     desc "Install the gem bundle for RubyCAS-Server to #{RVM_SPEC}"
@@ -78,21 +71,18 @@ namespace :udaeta do
       end
     end
 
-    def desired_ruby_present?
-      !`rvm list | grep #{DESIRED_RUBY} | tail -n1`.strip.empty?
-    end
-    
-    def desired_gemset_present?
-      !`rvm #{DESIRED_RUBY} gemset list | grep #{DESIRED_GEMSET}`.strip.empty?
+    def ruby_and_gemset_present?
+      system "sh -c 'rvm use #{RVM_SPEC}'"
+      $? == 0
     end
 
     def desired_bundler_present?
-      `rvm #{RVM_SPEC} exec gem list -i bundler -v #{DESIRED_BUNDLER}`
+      `rvm #{RVM_SPEC} exec gem list -i bundler -v '#{DESIRED_BUNDLER}'`
       $? == 0
     end
 
     def gemfile
-      File.expand_path(File.join(File.dirname(__FILE__), %w(.. runners rubycas_server Gemfile)))
+      File.expand_path(File.join(File.dirname(__FILE__), %w(.. servers rubycas_server Gemfile)))
     end
   end
 end
