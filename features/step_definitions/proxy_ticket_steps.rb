@@ -15,6 +15,18 @@ When /^(?:that user )?requests a proxy ticket for "([^"]*)"$/ do |service|
   end
 end
 
+When /^that user uses their proxy ticket to request a proxy ticket for "([^"]*)"$/ do |service|
+  # retrieves a proxy ticket...
+  @deferred_request.call
+
+  # which will be used in a future step to get another proxy ticket
+  @deferred_request = lambda do
+    @pt.retrieve_pgt!
+
+    @pt = issue_proxy_ticket(@pt.pgt, service)
+  end
+end
+
 When /^that user requests a proxy ticket for "([^"]*)" with a bad PGT$/ do |service|
   @deferred_request = lambda do
     @pt = issue_proxy_ticket('PGT-1bad', service)

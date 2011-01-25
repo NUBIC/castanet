@@ -13,6 +13,17 @@ Feature: Requesting proxy tickets
 
     Then that user should receive a proxy ticket
 
+  @wip
+  Scenario: Proxy tickets can be used to issue proxy tickets
+    Given a proxy callback
+    And a user logs into CAS as "someone" / "secret"
+    And has a valid service ticket for "https://service.example.edu"
+    And requests a proxy ticket for "https://proxied.example.edu"
+  
+    When that user uses their proxy ticket to request a proxy ticket for "https://another.example.edu"
+
+    Then that user should receive a proxy ticket
+
   Scenario: A proxy ticket cannot be issued if a proxy callback is not present
     Given a user logs into CAS as "someone" / "secret"
     And a valid service ticket for "https://service.example.edu"
