@@ -22,8 +22,8 @@ examples.
 Acknowledgments
 ===============
 
-Castanet's test harness was based off of code originally written by Rhett
-Sutphin <rhett@detailedbalance.net>.
+Castanet's test harness was based off of code originally written by [Rhett
+Sutphin](mailto:rhett@detailedbalance.net).
 
 License
 =======
