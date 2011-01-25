@@ -1,9 +1,14 @@
+require 'rake/gempackagetask'
 require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
 require 'yard'
 
 load File.expand_path('../vendor/udaeta/lib/udaeta/tasks/udaeta.rake', __FILE__)
 load File.expand_path('../fsm.rake', __FILE__)
+
+gemspec = eval(File.read('castanet.gemspec'), binding, 'castanet.gemspec')
+
+Rake::GemPackageTask.new(gemspec).define
 
 RSpec::Core::RakeTask.new
 

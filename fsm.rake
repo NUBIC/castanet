@@ -1,9 +1,10 @@
-Machines = [
-'lib/castanet/responses/proxy.rb',
-'lib/castanet/responses/ticket_validate.rb'
-].map { |f| File.expand_path("../#{f}", __FILE__) }
+require 'fsms'
 
-Machines.each do |machine|
+def abspath(paths)
+  paths.map { |f| File.expand_path(f) }
+end
+
+abspath(Fsms).each do |machine|
   file machine => machine.sub(/#{File.extname(machine)}$/, '.rl') do |t|
     sh "ragel -R -o #{t.name} #{t.prerequisites.first}"
   end
@@ -12,16 +13,17 @@ end
 namespace :fsm do
   desc 'Delete compiled state machines'
   task :clean do
-    rm_f Machines
+    rm_f Fsms
   end
 
   desc 'Rebuild all state machines'
-  task :rebuild => [:clean] + Machines
+  task :rebuild => [:clean] + abspath(Fsms)
 end
 
-[ 'spec',
+[ 'gem',
+  'spec',
   'cucumber:all', 'cucumber:ok', 'cucumber:wip',
   'yard:auto', 'yard:once'
 ].each do |t|
-  task t => Machines
+  task t => abspath(Fsms)
 end

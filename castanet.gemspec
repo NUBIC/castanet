@@ -2,6 +2,8 @@
 $:.push File.expand_path("../lib", __FILE__)
 require "castanet/version"
 
+require File.expand_path('../fsms', __FILE__)
+
 Gem::Specification.new do |s|
   s.name        = "castanet"
   s.version     = Castanet::VERSION
@@ -12,9 +14,9 @@ Gem::Specification.new do |s|
   s.summary     = %q{A CAS client library}
   s.description = %q{A small, snappy CAS 2.0 client library for Ruby applications}
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.files         = Dir.glob("{README.md,lib/**/*}") + Fsms
+  s.test_files    = Dir.glob("cucumber.yml,{spec,features,vendor/udaeta}/**/*")
+  s.executables   = []
   s.require_paths = ["lib"]
 
   [
