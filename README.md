@@ -25,6 +25,12 @@ Acknowledgments
 Castanet's test harness was based off of code originally written by [Rhett
 Sutphin](mailto:rhett@detailedbalance.net).
 
+Development
+===========
+
+Continuous integration reports are available at
+https://ctms-ci.nubic.northwestern.edu/hudson/job/castanet/.
+
 License
 =======
 
