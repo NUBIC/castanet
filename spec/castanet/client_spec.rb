@@ -77,14 +77,14 @@ module Castanet
       end
     end
 
-    describe '#proxy_ticket' do
+    describe '#issue_proxy_ticket' do
       let(:pgt) { 'PGT-1foo' }
       let(:service) { 'https://proxied.example.edu' }
-      let(:ticket) { client.proxy_ticket(pgt, service) }
+      let(:ticket) { client.issue_proxy_ticket(pgt, service) }
 
       before do
         # Disable the proxy ticket issuance check.
-        stub_ticket = ProxyTicket.new('', '')
+        stub_ticket = ProxyTicket.new(nil, '', '')
         stub_ticket.stub!(:issued? => true)
         ProxyTicket.stub(:new => stub_ticket)
 
@@ -99,11 +99,25 @@ module Castanet
         ticket.proxy_validate_url.should == client.proxy_validate_url
       end
 
-      it 'contacts the proxy-ticket granting service' do
+      it 'contacts the proxy ticket issuing service' do
         ticket
 
         a_request(:get, %r{https://cas.example.edu/proxy\?.*}).
           should have_been_made.once
+      end
+    end
+
+    describe '#proxy_ticket' do
+      let(:pt) { 'PT-1foo' }
+      let(:service) { 'https://proxied.example.edu' }
+      let(:ticket) { client.proxy_ticket(pt, service) }
+
+      it "sets the URL of the CAS server's proxy ticket granting service" do
+        ticket.proxy_url.should == client.proxy_url
+      end
+
+      it "sets the URL of the CAS server's proxy validation service" do
+        ticket.proxy_validate_url.should == client.proxy_validate_url
       end
     end
   end

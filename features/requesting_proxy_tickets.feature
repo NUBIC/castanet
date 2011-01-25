@@ -11,7 +11,7 @@ Feature: Requesting proxy tickets
 
     When that user requests a proxy ticket for "https://proxied.example.edu"
 
-    Then that proxy ticket should be valid
+    Then that user should receive a proxy ticket
 
   Scenario: A proxy ticket cannot be issued if a proxy callback is not present
     Given a user logs into CAS as "someone" / "secret"

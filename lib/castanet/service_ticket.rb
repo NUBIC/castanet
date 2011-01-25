@@ -46,9 +46,7 @@ module Castanet
     # @return [#ok?, #pgt_iou]
     attr_accessor :response
 
-    def_delegator :response, :ok?
-
-    def_delegator :response, :pgt_iou
+    def_delegators :response, :ok?, :pgt_iou, :username
 
     ##
     # The PGT associated with this service ticket.
