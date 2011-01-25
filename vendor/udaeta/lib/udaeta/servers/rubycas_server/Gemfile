@@ -10,7 +10,7 @@ platform :jruby do
 end
 
 platform :ruby_18, :ruby_19 do
-  gem 'sqlite3-ruby'
+  gem 'sqlite3-ruby', '1.2.5'
 end
 
 gem 'activerecord', '~> 2.3.0'
