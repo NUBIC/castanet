@@ -1,5 +1,7 @@
-require 'forwardable'
 require 'castanet'
+
+require 'forwardable'
+require 'uri'
 
 module Castanet
   class ServiceTicket
