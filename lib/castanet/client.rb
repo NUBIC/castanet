@@ -60,7 +60,7 @@ module Castanet
     #
     # @see http://www.ietf.org/rfc/rfc3986.txt RFC 3986 (URI syntax)
     # @return [String] the CAS server URL
-    # @raises [RuntimeError] if it has not been set.
+    # @raise [RuntimeError] if it has not been set
     def cas_url
       raise RuntimeError, 'The CAS server URL must be set'
     end

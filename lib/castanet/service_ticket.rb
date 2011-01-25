@@ -65,8 +65,8 @@ module Castanet
 
     ##
     # Validates `ticket` for the service URL given in `service`.  If
-    # {proxy_callback_url} is not nil, also attempts to retrieve the PGTIOU for
-    # this service ticket.
+    # {#proxy_callback_url} is not nil, also attempts to retrieve the PGTIOU
+    # for this service ticket.
     #
     # CAS service tickets are one-time-use only
     # =========================================

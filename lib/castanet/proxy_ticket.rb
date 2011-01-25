@@ -22,7 +22,7 @@ module Castanet
     attr_accessor :proxy_validate_url
 
     ##
-    # The PGT that will be used to {#reify} this proxy ticket.
+    # The PGT that will be used to {#reify! issue} this proxy ticket.
     #
     # @return [String]
     attr_reader :pgt
