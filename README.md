@@ -25,6 +25,8 @@ Acknowledgments
 Castanet's test harness was based off of code originally written by [Rhett
 Sutphin](mailto:rhett@detailedbalance.net).
 
+Query string building code was taken from [Rack](http://rack.rubyforge.org/).
+
 Development
 ===========
 
