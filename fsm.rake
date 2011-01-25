@@ -1,4 +1,4 @@
-require 'fsms'
+require File.expand_path('../fsms', __FILE__)
 
 def abspath(paths)
   paths.map { |f| File.expand_path(f) }
