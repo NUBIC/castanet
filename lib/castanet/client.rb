@@ -7,8 +7,27 @@ module Castanet
   ##
   # A CAS client.
   #
-  # Classes that mix in this module must override {#cas_url}.  If CAS proxying
-  # is desired, classes must further override {#proxy_callback_url}.
+  # Expected interface
+  # ==================
+  #
+  # Classes that mix in this module must define the method
+  #
+  #     cas_url => String
+  #
+  # `cas_url` defines the base URL of the CAS server and must have a terminating /.
+  #
+  # If CAS proxying is desired, classes must further define
+  #
+  #     proxy_callback_url => String
+  #     proxy_retrieval_url => String
+  #
+  # `proxy_callback_url` is a URL of a service that will be used by the CAS
+  # server for depositing PGTs.  (In the CAS protocol, it's the URL passed to
+  # `/serviceValidate` in the `pgtIou` parameter.)
+  #
+  # `proxy_retrieval_url` is a URL of a service that will be used to retrieve
+  # deposited PGTs.
+  #
   #
   # Examples
   # ========
@@ -50,36 +69,9 @@ module Castanet
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol
   module Client
     ##
-    # The CAS server's URL.
-    #
-    # You must override this method so that it returns a URL to your CAS server.
-    # If you do not, an error will be raised.
-    #
-    # The URL must be terminated with a trailing slash if it contains a non-root
-    # mount point.
-    #
-    # @see http://www.ietf.org/rfc/rfc3986.txt RFC 3986 (URI syntax)
-    # @return [String] the CAS server URL
-    # @raise [RuntimeError] if it has not been set
-    def cas_url
-      raise RuntimeError, 'The CAS server URL must be set'
-    end
-
-    ##
-    # The URL of the proxy callback.
-    #
-    # The default value of this is `nil`, which will disable CAS proxying.  To
-    # use CAS proxying, provide a valid URL to a CAS proxy callback.
-    #
-    # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
-    # @return [String, nil]
-    def proxy_callback_url
-    end
-
-    ##
     # Returns the service ticket validation endpoint for the configured CAS URL.
     #
-    # The service ticket validation endpoint is defined as {#cas_url} +
+    # The service ticket validation endpoint is defined as `cas_url` +
     # `"/serviceValidate"`.
     #
     # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5

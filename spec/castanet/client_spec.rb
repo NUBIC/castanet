@@ -16,14 +16,6 @@ module Castanet
       client.cas_url = 'https://cas.example.edu/'
     end
 
-    describe '#cas_url' do
-      it 'raises if it has not been overridden' do
-        client = Object.new.extend(Client)
-
-        lambda { client.cas_url }.should raise_error /cas server url must be set/i
-      end
-    end
-
     describe '#service_validate_url' do
       it 'is the CAS server path plus "/serviceValidate"' do
         client.cas_url = 'https://cas.example.edu/cas/'
