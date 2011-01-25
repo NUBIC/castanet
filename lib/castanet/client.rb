@@ -146,7 +146,7 @@ module Castanet
     #
     # @param [String, ProxyTicket] ticket the proxy ticket
     # @param [String] service the service URL
-    # @return [Boolean]
+    # @return [ProxyTicket]
     def proxy_ticket(ticket, service)
       ProxyTicket.new(ticket.to_s, nil, service).tap do |pt|
         pt.proxy_url = proxy_url
