@@ -29,7 +29,9 @@ Development
 ===========
 
 Continuous integration reports are available at
-https://ctms-ci.nubic.northwestern.edu/hudson/job/castanet/.
+[NUBIC's CI
+server](https://ctms-ci.nubic.northwestern.edu/hudson/job/castanet/).  Castanet
+is tested on Ruby 1.8.7, Ruby 1.9.2, JRuby 1.5.6, and Rubinius 1.2.0.
 
 License
 =======
