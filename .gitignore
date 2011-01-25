@@ -7,5 +7,3 @@ Gemfile.lock
 doc
 
 reports
-
-lib/castanet/responses/*.rb
