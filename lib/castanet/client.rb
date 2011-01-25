@@ -137,8 +137,9 @@ module Castanet
     #
     # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.7
     # @see {ProxyTicket#reify!}
-    # @return [ProxyTicket] the proxy ticket
-    def proxy_ticket(pgt, service)
+    # @raise [ProxyTicketError]
+    # @return [ProxyTicket] the issued proxy ticket
+    def issue_proxy_ticket(pgt, service)
       ProxyTicket.new(nil, pgt, service).tap do |pt|
         pt.proxy_url = proxy_url
         pt.proxy_validate_url = proxy_validate_url
@@ -146,18 +147,19 @@ module Castanet
     end
 
     ##
-    # Validates the proxy ticket `ticket` for the service URL `service`.
+    # Builds a {ProxyTicket} for the proxy ticket `pt` and service URL `service`.
+    #
+    # The returned {ProxyTicket} instance can be used to validate `pt` for
+    # `service` using {ProxyTicket#present!}.
     #
     # @param [String, ProxyTicket] ticket the proxy ticket
     # @param [String] service the service URL
     # @return [Boolean]
-    def proxy_ticket_ok?(ticket, service)
+    def proxy_ticket(ticket, service)
       ProxyTicket.new(ticket.to_s, nil, service).tap do |pt|
         pt.proxy_url = proxy_url
         pt.proxy_validate_url = proxy_validate_url
-
-        pt.present!
-      end.ok?
+      end
     end
   end
 end
