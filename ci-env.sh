@@ -27,6 +27,9 @@ RVM_RUBY='ruby-1.9.2';
 'ci_jruby')
 RVM_RUBY='jruby-1.5.6';
 ;;
+'ci_rbx')
+RVM_RUBY='rbx-1.2.0';
+;;
 esac
 
 if [ -z "$RVM_RUBY" ]; then
