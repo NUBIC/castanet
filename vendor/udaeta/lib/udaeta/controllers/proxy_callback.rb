@@ -1,39 +1,34 @@
 require 'udaeta'
 
-require 'bundler'
-require 'fileutils'
-
-module Udaeta::Servers
-  ##
-  # The {#accept}, {#start}, {#stop}, and {#url} methods are synchronous.
-  class RubycasServer
+module Udaeta::Controllers
+  class ProxyCallback
     include ControlPipe
     include FileUtils
 
     ##
-    # The version of Ruby needed to run RubyCAS-Server.
+    # The port bound to the proxy callback server.
+    #
+    # @return [Integer]
+    attr_accessor :port
+
+    ##
+    # The path to the directory used for the proxy callback's PGTIOU pstore.
+    #
+    # @return [String]
+    attr_accessor :tmpdir
+
+    ##
+    # The version of Ruby needed to run the proxy callback.
     DESIRED_RUBY = '1.8.7'
 
     ##
-    # The gemset that will be used for holding RubyCAS-Server's dependencies.
+    # The gemset that will be used for holding the proxy callback's dependencies.
     DESIRED_GEMSET = 'castanet'
 
     ##
     # Shorthand for specifying a Ruby version and gemset.
     RVM_SPEC = "#{DESIRED_RUBY}@#{DESIRED_GEMSET}"
 
-    ##
-    # The port bound to the CAS server.
-    #
-    # @return [Integer]
-    attr_accessor :port
-
-    ##
-    # The path to the directory used for storing CAS data (i.e. tickets and
-    # valid credentials).
-    #
-    # @return [String]
-    attr_accessor :tmpdir
 
     def initialize(port, tmpdir)
       self.port = port
@@ -43,18 +38,7 @@ module Udaeta::Servers
     end
 
     ##
-    # Registers a given `(username, password)` pair as valid.
-    #
-    # Neither `username` nor `password` should contain spaces.
-    #
-    # @return void
-    def accept(username, password)
-      send("register #{username} #{password}")
-      ack(/^registered #{username} #{password}$/)
-    end
-
-    ##
-    # Creates {#tmpdir} and starts a RubyCAS-Server instance.
+    # Creates {#tmpdir} and starts a proxy callback instance.
     def start
       create_tmpdir
       create_pipe_from
@@ -71,7 +55,7 @@ module Udaeta::Servers
     end
 
     ##
-    # Returns the base URL of the CAS server.
+    # Returns the base URL of the proxy callback.
     #
     # @return [String]
     def url
@@ -80,13 +64,14 @@ module Udaeta::Servers
     end
 
     ##
-    # Stops a RubyCAS-Server instance.
+    # Stops a proxy callback instance.
     #
     # @return void
     def stop
       send('stop')
       ack(/^stopped$/)
     end
+
 
     private
 
@@ -111,7 +96,7 @@ module Udaeta::Servers
     end
 
     def server_root
-      File.expand_path('../../runners/rubycas_server', __FILE__)
+      File.expand_path('../../runners/proxy_callback', __FILE__)
     end
   end
 end

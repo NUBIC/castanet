@@ -9,7 +9,7 @@ end
 Before do
   rm_rf tmpdir
 
-  @cas = Udaeta::Servers::RubycasServer.new(cas_port, tmpdir)
+  @cas = Udaeta::Controllers::RubycasServer.new(cas_port, tmpdir)
 
   @cas.start
   spawned_servers << @cas

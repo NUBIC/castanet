@@ -6,5 +6,5 @@
 # castanet soloist.  (And, therefore, a man who could really stress
 # castanets.)
 module Udaeta
-  autoload :Servers,  'udaeta/servers'
+  autoload :Controllers,  'udaeta/controllers'
 end

@@ -1,6 +1,6 @@
 require 'udaeta'
 
-module Udaeta::Servers
+module Udaeta::Controllers
   ##
   # Manages two unidirectional pipes: one for communicating instructions to a
   # server wrapper, and one for receiving data from the wrapper.

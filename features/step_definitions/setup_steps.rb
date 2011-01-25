@@ -7,7 +7,7 @@ Given /^the CAS server accepts the credentials$/ do |table|
 end
 
 Given /^a proxy callback$/ do
-  proxy_callback = Udaeta::Servers::ProxyCallback.new(proxy_callback_port, tmpdir)
+  proxy_callback = Udaeta::Controllers::ProxyCallback.new(proxy_callback_port, tmpdir)
   proxy_callback.start
 
   spawned_servers << proxy_callback
