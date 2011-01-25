@@ -6,7 +6,7 @@ module Castanet
     let(:proxy_url) { 'https://cas.example.edu/proxy' }
     let(:proxy_validate_url) { 'https://cas.example.edu/proxyValidate' }
     let(:service) { 'https://service.example.edu/' }
-    let(:ticket) { ProxyTicket.new(pgt, service) }
+    let(:ticket) { ProxyTicket.new(nil, pgt, service) }
 
     describe '#initialize' do
       it 'wraps a PGT' do
@@ -70,6 +70,39 @@ module Castanet
         ticket.proxy_response = stub(:ticket => 'PT-1foo')
 
         ticket.ticket.should == 'PT-1foo'
+      end
+
+      it 'can be set from the constructor' do
+        pt = ProxyTicket.new('PT-1foo', nil, '')
+
+        pt.ticket.should == 'PT-1foo'
+      end
+
+      it 'prefers tickets from the CAS server' do
+        pt = ProxyTicket.new('PT-1foo', nil, '')
+        pt.proxy_response = stub(:ticket => 'PT-1bar')
+
+        pt.ticket.should == 'PT-1bar'
+      end
+
+      it 'returns nil if neither the CAS server nor the user set a ticket' do
+        pt = ProxyTicket.new(nil, nil, '')
+
+        pt.ticket.should be_nil
+      end
+    end
+
+    describe '#to_s' do
+      let(:ticket) { ProxyTicket.new('PT-1foo', nil, service) }
+
+      it 'returns #ticket' do
+        ticket.to_s.should == 'PT-1foo'
+      end
+
+      it 'returns "" if #ticket is nil' do
+        ticket.stub!(:ticket => nil)
+
+        ticket.to_s.should == ""
       end
     end
 

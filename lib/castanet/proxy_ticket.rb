@@ -49,17 +49,58 @@ module Castanet
     # @return [#valid?]
     attr_accessor :proxy_validate_response
 
-    def_delegator :proxy_response, :ticket
-
     def_delegator :proxy_response, :ok?, :issued?
 
     def_delegators :proxy_response, :failure_code, :failure_reason
 
     def_delegators :proxy_validate_response, :ok?, :username
 
-    def initialize(pgt, service)
+    ##
+    # Initializes an instance of ProxyTicket.
+    #
+    # As a ProxyTicket instance may be used for retrieving a proxy ticket given
+    # a PGT and service URL, validating a proxy ticket against a service URL, or
+    # both, the parameters `pt` and `pgt` are optional; however, at least one
+    # must be specified.
+    #
+    # If requesting a proxy ticket, set `pt` to nil and `pgt` to a String.  If
+    # checking a proxy ticket, set `pt` to the proxy ticket and `pgt` to nil.
+    # In both cases, a service URL is required.
+    #
+    # (There's no harm in setting all three parameters if you have values for
+    # them, but there's also no need to set all three.)
+    #
+    # @param [String, nil] pt the proxy ticket
+    # @param [String, nil] pgt the proxy granting ticket
+    # @param [String] service the service URL
+    def initialize(pt, pgt, service)
+      @pt = pt
       @pgt = pgt
       @service = service
+    end
+
+    ##
+    # The proxy ticket wrapped by this object.  This can come either from a
+    # proxy ticket issuance via {#reify!} or be set at instantiation.  Tickets
+    # issued via {#reify!} have higher precedence.
+    #
+    # If a proxy ticket was neither supplied at instantiation nor requested via
+    # {#reify!}, then ticket will return nil.
+    #
+    # @return [String, nil] the proxy ticket
+    def ticket
+      proxy_response ? proxy_response.ticket : @pt
+    end
+
+    ##
+    # Returns the string representation of {#ticket}.
+    #
+    # If {#ticket} is not nil, then the return value of this method is
+    # {#ticket}; otherwise, it is `""`.
+    #
+    # @return [String] the ticket or empty string
+    def to_s
+      ticket.to_s
     end
 
     # Validates `ticket` for the service URL given in `service`.

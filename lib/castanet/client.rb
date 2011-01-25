@@ -139,10 +139,25 @@ module Castanet
     # @see {ProxyTicket#reify!}
     # @return [ProxyTicket] the proxy ticket
     def proxy_ticket(pgt, service)
-      ProxyTicket.new(pgt, service).tap do |st|
-        st.proxy_url = proxy_url
-        st.proxy_validate_url = proxy_validate_url
+      ProxyTicket.new(nil, pgt, service).tap do |pt|
+        pt.proxy_url = proxy_url
+        pt.proxy_validate_url = proxy_validate_url
       end.reify!
+    end
+
+    ##
+    # Validates the proxy ticket `ticket` for the service URL `service`.
+    #
+    # @param [String, ProxyTicket] ticket the proxy ticket
+    # @param [String] service the service URL
+    # @return [Boolean]
+    def proxy_ticket_ok?(ticket, service)
+      ProxyTicket.new(ticket.to_s, nil, service).tap do |pt|
+        pt.proxy_url = proxy_url
+        pt.proxy_validate_url = proxy_validate_url
+
+        pt.present!
+      end.ok?
     end
   end
 end

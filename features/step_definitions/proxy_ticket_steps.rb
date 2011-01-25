@@ -7,33 +7,32 @@ Given /^a valid service ticket for "([^"]*)"$/ do |service|
 end
 
 When /^that user requests a proxy ticket for "([^"]*)"$/ do |service|
-  # We don't actually retrieve the proxy ticket or PGT here because some steps
-  # expect part of the proxy ticket issuing process to raise an exception, and
-  # it's easier to handle that in the pertinent steps rather than rolling it
-  # all into this one step.  See the "proxy ticket should be valid" and
-  # "request should fail" steps.
-  @requested_service = service
+  # The request is deferred because some steps expect exceptions to be raised.
+  @deferred_request = lambda do
+    @st.retrieve_pgt!
+
+    @pt = proxy_ticket(@st.pgt, service)
+  end
 end
 
 When /^that user requests a proxy ticket for "([^"]*)" with a bad PGT$/ do |service|
-  @requested_service = service
-  @pgt = 'PGT-1bad'
+  @deferred_request = lambda do
+    @pt = proxy_ticket('PGT-1bad', service)
+  end
 end
 
-Then /^that proxy ticket should be valid$/ do
-  @st.retrieve_pgt!
+Then /^that user should receive a proxy ticket$/ do
+  @deferred_request.should_not raise_error
 
-  @pt = proxy_ticket(@st.pgt, @requested_service)
+  @pt.ticket.should_not be_nil
+end
 
-  @pt.present!
+Then /^that proxy ticket should be valid for "([^"]*)"$/ do |service|
+  @deferred_request.call
 
-  @pt.should be_ok
+  proxy_ticket_ok?(@pt, service).should be_true
 end
 
 Then /^the proxy ticket request should fail with "([^"]*)"$/ do |message|
-  lambda do
-    @st.retrieve_pgt!
-
-    proxy_ticket(@pgt || @st.pgt, @requested_service)
-  end.should raise_error(Castanet::ProxyTicketError, /#{message}/)
+  @deferred_request.should raise_error(Castanet::ProxyTicketError, /#{message}/)
 end
