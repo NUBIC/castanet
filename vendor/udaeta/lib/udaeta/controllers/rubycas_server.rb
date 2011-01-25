@@ -107,11 +107,11 @@ module Udaeta::Controllers
     end
 
     def common_root
-      File.expand_path('../../runners/common', __FILE__)
+      File.expand_path('../../servers/common', __FILE__)
     end
 
     def server_root
-      File.expand_path('../../runners/rubycas_server', __FILE__)
+      File.expand_path('../../servers/rubycas_server', __FILE__)
     end
   end
 end
