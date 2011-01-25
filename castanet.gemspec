@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   [
     [ 'autotest',       nil         ],
+    [ 'ci_reporter',    nil         ],
     [ 'cucumber',       nil         ],
     [ 'mechanize',      nil         ],
     [ 'rack',           nil         ],

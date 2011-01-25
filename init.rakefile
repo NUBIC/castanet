@@ -1,0 +1,19 @@
+BUNDLER_VERSION="~> 1.0.0"
+
+namespace :bundle do
+  desc 'Install the gem bundle'
+  task :expand => :ensure_bundler_available do
+    sh 'bundle update'
+    fail "bundle update failed" unless $? == 0
+  end
+
+  task :ensure_bundler_available do
+    `gem list -i bundler -v '#{BUNDLER_VERSION}'`
+    unless $? == 0
+      sh "gem install bundler -v '#{BUNDLER_VERSION}'"
+      fail "Bundler install failed" unless $? == 0
+    end
+  end
+end
+
+task :default => :'bundle:expand'

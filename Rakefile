@@ -1,4 +1,5 @@
 require 'rake/gempackagetask'
+require 'ci/reporter/rake/rspec'
 require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
 require 'yard'
@@ -28,6 +29,19 @@ namespace :cucumber do
   task :ok => 'udaeta:check_dependencies'
   task :wip => 'udaeta:check_dependencies'
 end
+
+namespace :ci do
+  desc 'Run continuous integration build'
+  task :all => ['ci:setup:rspec', :spec, :cucumber]
+
+  Cucumber::Rake::Task.new(:cucumber) do |t|
+    t.profile = :ci
+  end
+
+  task :cucumber => 'udaeta:check_dependencies'
+end
+
+task :ci => 'ci:all'
 
 namespace :yard do
   desc 'Run the YARD server'

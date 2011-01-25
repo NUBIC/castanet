@@ -6,4 +6,6 @@ Gemfile.lock
 .yardoc
 doc
 
+reports
+
 lib/castanet/responses/*.rb
