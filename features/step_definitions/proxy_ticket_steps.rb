@@ -12,6 +12,7 @@ When /^(?:that user )?requests a proxy ticket for "([^"]*)"$/ do |service|
     @st.retrieve_pgt!
 
     @pt = issue_proxy_ticket(@st.pgt, service)
+    @previous_service = service
   end
 end
 
@@ -19,8 +20,17 @@ When /^that user uses their proxy ticket to request a proxy ticket for "([^"]*)"
   # retrieves a proxy ticket...
   @deferred_request.call
 
-  # which will be used in a future step to get another proxy ticket
+  # which will be used in a future step to get another proxy ticket.
+  #
+  # This would be done from a CAS-protected service A that is using a proxy
+  # ticket (issued from some other service) to proxy to another CAS-protected
+  # service B.  In a situation like this, neither service A nor service B would
+  # have access to the original PGT.
   @deferred_request = lambda do
+    @pt = proxy_ticket(@pt.ticket, @previous_service)
+
+    @pt.present!
+
     @pt.retrieve_pgt!
 
     @pt = issue_proxy_ticket(@pt.pgt, service)
