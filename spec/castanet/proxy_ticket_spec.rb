@@ -105,5 +105,12 @@ module Castanet
       end
     end
 
+    describe '#username' do
+      it 'delegates to the validation response' do
+        ticket.proxy_validate_response = stub(:username => 'username')
+
+        ticket.username.should == 'username'
+      end
+    end
   end
 end

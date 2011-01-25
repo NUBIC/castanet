@@ -53,9 +53,9 @@ module Castanet
 
     def_delegator :proxy_response, :ok?, :issued?
 
-    def_delegator :proxy_validate_response, :ok?
-
     def_delegators :proxy_response, :failure_code, :failure_reason
+
+    def_delegators :proxy_validate_response, :ok?, :username
 
     def initialize(pgt, service)
       @pgt = pgt

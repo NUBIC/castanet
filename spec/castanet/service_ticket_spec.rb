@@ -79,5 +79,13 @@ module Castanet
         ticket.should be_ok
       end
     end
+
+    describe '#username' do
+      it 'delegates to the validation response' do
+        ticket.response = stub(:username => 'username')
+
+        ticket.username.should == 'username'
+      end
+    end
   end
 end
