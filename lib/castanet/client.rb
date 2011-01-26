@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), %w(.. castanet))
+require 'castanet'
 
 require 'net/http'
 require 'uri'
