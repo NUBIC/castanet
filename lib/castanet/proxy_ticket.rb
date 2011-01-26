@@ -1,6 +1,5 @@
 require 'castanet'
 
-require 'forwardable'
 require 'uri'
 
 module Castanet
