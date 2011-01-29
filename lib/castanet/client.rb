@@ -45,8 +45,17 @@ module Castanet
   # permutation of interactions between the CAS server, the user, and the
   # application.
   #
-  # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
+  # Because of this ambiguity in the CAS protocol, Castanet will permit
+  # non-HTTPS communication with CAS servers.  However, it will also loudly
+  # complain about doing so, and there is no way to silence those complaints,
+  # because running CAS over blatantly insecure channels is really quite a
+  # silly thing to do.
   #
+  # Future revisions of Castanet may force HTTPS for all connections.
+  #
+  # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
+  # @see http://www.daemonology.net/blog/2009-09-04-complexity-is-insecurity.html
+  #   "Complexity is insecurity" by Colin Percival
   #
   # Examples
   # ========
