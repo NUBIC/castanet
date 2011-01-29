@@ -121,9 +121,11 @@ module Castanet
     #
     # The retrieved PGT will be written to {#pgt} if this method succeeds.
     #
-    # If {#proxy_retrieval_url} is not a valid URI, then this method raises {ProxyTicketError}.
+    # If {#proxy_retrieval_url} is not a valid URI, then this method raises
+    # {ProxyTicketError}.
     #
-    # @raise [ProxyTicketError] if {#proxy_retrieval_url} is not set or is otherwise an invalid URI
+    # @raise [ProxyTicketError] if {#proxy_retrieval_url} is not set or is
+    #   otherwise an invalid URI
     # @return void
     def retrieve_pgt!
       begin
