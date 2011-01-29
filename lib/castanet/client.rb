@@ -29,6 +29,25 @@ module Castanet
   # deposited PGTs.
   #
   #
+  # Security requirements
+  # =====================
+  #
+  # Section 2.5.4 of the CAS 2.0 protocol mandates that the proxy callback
+  # service pointed to by `proxy_callback_url` must
+  #
+  # 1. be accessible over HTTPS and
+  # 2. present an SSL certificate that
+  #     1. is valid and
+  #     2. has a canonical name that matches that of the proxy callback service.
+  #
+  # Secure channels are not required for any other part of the CAS protocol,
+  # but we still recommend using HTTPS for all communication involving any
+  # permutation of interactions between the CAS server, the user, and the
+  # application.
+  #
+  # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
+  #
+  #
   # Examples
   # ========
   #
