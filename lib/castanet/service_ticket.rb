@@ -81,11 +81,11 @@ module Castanet
     #     st = service_ticket(ticket, service)
     #     st.present!
     #
-    #     st.valid? # => true
+    #     st.ok? # => true
     #
     #     st.present!
     #
-    #     st.valid? # => false
+    #     st.ok? # => false
     #
     # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, sections 2.5 and
     #   3.1.1
