@@ -35,7 +35,7 @@ Query string building code was taken from [Rack](http://rack.rubyforge.org/).
 Development
 ===========
 
-Castanet uses {http://gembundler.com/ Bundler} version `~> 1.0` for dependency
+Castanet uses [Bundler](http://gembundler.com/) version `~> 1.0` for dependency
 management.
 
 Some of Castanet's development dependencies work best in certain versions of
