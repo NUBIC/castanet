@@ -41,11 +41,11 @@ management.
 Some of Castanet's development dependencies work best in certain versions of
 Ruby.  Additionally, some implementations of Ruby do not support constructs
 (i.e. `fork`) used by Castanet's tests.  For this reason, Castanet's Cucumber
-scenarios use {http://rvm.beginrescueend.com/ RVM} to run servers in
+scenarios use [RVM](http://rvm.beginrescueend.com/) to run servers in
 appropriate Ruby implementations.
 
 Castanet's CAS response parsers are implemented using
-{http://www.complang.org/ragel/ Ragel}.
+[Ragel](http://www.complang.org/ragel/).
 
 Once you've got Bundler, RVM, and Ragel installed and set up:
 
