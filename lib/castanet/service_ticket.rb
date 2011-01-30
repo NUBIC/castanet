@@ -121,19 +121,10 @@ module Castanet
     #
     # The retrieved PGT will be written to {#pgt} if this method succeeds.
     #
-    # If {#proxy_retrieval_url} is not a valid URI, then this method raises
-    # {ProxyTicketError}.
-    #
-    # @raise [ProxyTicketError] if {#proxy_retrieval_url} is not set or is
-    #   otherwise an invalid URI
     # @return void
     def retrieve_pgt!
-      begin
-        uri = URI.parse(proxy_retrieval_url).tap do |u|
-          u.query = query(['pgtIou', pgt_iou])
-        end
-      rescue URI::InvalidURIError
-        raise ProxyTicketError, 'proxy_retrieval_url is invalid'
+      uri = URI.parse(proxy_retrieval_url).tap do |u|
+        u.query = query(['pgtIou', pgt_iou])
       end
 
       http = Net::HTTP.new(uri.host, uri.port).tap do |h|
