@@ -28,22 +28,21 @@ class SpawnedHttpServer
   end
 
   def start
-    wait_for("port #{@port} to be available",
-             lambda { !http_available?(base_url) },
-             5)
-    if @pid = fork
+    @pid = fork
+
+    if pid
       wait_for("#{self.class} on #{base_url} to start",
                lambda { http_available?(base_url) },
                @timeout)
-      Process.detach(@pid)
     else
       exec_server
     end
   end
 
   def stop
-    Process.kill "TERM", self.pid
-    wait_for("the process #{pid} to stop", lambda { !http_available?(base_url) }, @timeout)
+    Process.kill "TERM", pid
+
+    Process.waitall
   end
 
   def base_url
