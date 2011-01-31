@@ -189,7 +189,7 @@ module Castanet
     # Builds a {ProxyTicket} for the proxy ticket `pt` and service URL `service`.
     #
     # The returned {ProxyTicket} instance can be used to validate `pt` for
-    # `service` using {ProxyTicket#present!}.
+    # `service` using `#present!`.
     #
     # @param [String, ProxyTicket] ticket the proxy ticket
     # @param [String] service the service URL
