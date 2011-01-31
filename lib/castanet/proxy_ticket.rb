@@ -97,7 +97,7 @@ module Castanet
       end
 
       http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = (uri.scheme == 'https')
+        h.use_ssl = !https_disabled
       end
 
       http.start do |h|
