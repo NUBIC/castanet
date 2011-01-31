@@ -9,6 +9,7 @@ shared_examples_for 'a service ticket' do
     raise "A 'validation_url' method must be defined in the host group"
   end
 
+  let(:logger) { stub }
   let(:service) { 'https://service.example.edu/' }
   let(:proxy_callback_url) { 'https://cas.example.edu/callback/receive_pgt' }
   let(:proxy_retrieval_url) { 'https://cas.example.edu/callback/retrieve_pgt' }
@@ -46,6 +47,16 @@ shared_examples_for 'a service ticket' do
              'pgtUrl' => proxy_callback_url }).
         should have_been_made.once
     end
+
+    it 'warns when a non-HTTPS connection is established' do
+      url = validation_url.sub(/^https/, 'http')
+      ticket.logger = logger
+      ticket.stub!(:validation_url => url)
+
+      logger.should_receive(:warn).once.with(/#{url} will not be accessed over HTTPS/i)
+
+      ticket.present!
+    end
   end
 
   describe '#retrieve_pgt!' do
@@ -70,6 +81,15 @@ shared_examples_for 'a service ticket' do
       ticket.retrieve_pgt!
 
       ticket.pgt.should == 'PGT-1foo'
+    end
+
+    it 'warns when a non-HTTPS connection is established' do
+      ticket.logger = logger
+      ticket.proxy_retrieval_url = 'http://cas.example.edu/callback/retrieve_pgt'
+
+      logger.should_receive(:warn).once.with(/#{ticket.proxy_retrieval_url} will not be accessed over HTTPS/i)
+
+      ticket.retrieve_pgt!
     end
   end
 

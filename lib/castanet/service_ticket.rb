@@ -10,6 +10,14 @@ module Castanet
     include QueryBuilding
 
     ##
+    # Used to log messages from operations invoked on this ticket.
+    #
+    # This is usually set by {Castanet::Client}.
+    #
+    # @return [#warn]
+    attr_accessor :logger
+
+    ##
     # The proxy callback URL to use for service validation.
     #
     # @return [String, nil]
@@ -100,6 +108,8 @@ module Castanet
         h.use_ssl = (uri.scheme == 'https')
       end
 
+      logger.warn("#{validation_url} will not be accessed over HTTPS") unless http.use_ssl?
+
       http.start do |h|
         cas_response = h.get(uri.to_s)
 
@@ -130,6 +140,8 @@ module Castanet
       http = Net::HTTP.new(uri.host, uri.port).tap do |h|
         h.use_ssl = (uri.scheme == 'https')
       end
+
+      logger.warn("#{proxy_retrieval_url} will not be accessed over HTTPS") unless http.use_ssl?
 
       http.start do |h|
         self.pgt = h.get(uri.to_s).body

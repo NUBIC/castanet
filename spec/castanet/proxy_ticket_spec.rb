@@ -27,6 +27,8 @@ module Castanet
     end
 
     describe '#reify!' do
+      let(:logger) { stub }
+
       before do
         stub_request(:any, /.*/)
 
@@ -51,6 +53,15 @@ module Castanet
         ticket.stub(:issued? => false)
 
         lambda { ticket.reify! }.should raise_error(ProxyTicketError)
+      end
+
+      it 'warns when a non-HTTPS connection is established' do
+        ticket.logger = logger
+        ticket.proxy_url = 'http://cas.example.edu/proxyValidate'
+
+        logger.should_receive(:warn).once.with(/#{ticket.proxy_url} will not be accessed over HTTPS/i)
+
+        ticket.reify!
       end
     end
 
