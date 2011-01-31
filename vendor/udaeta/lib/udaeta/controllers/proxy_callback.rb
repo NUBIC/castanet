@@ -4,6 +4,7 @@ module Udaeta::Controllers
   class ProxyCallback
     include ControlPipe
     include FileUtils
+    include Paths
 
     ##
     # The port bound to the proxy callback server.
@@ -35,7 +36,7 @@ module Udaeta::Controllers
       create_pipe_from
 
       Bundler.with_clean_env do
-        ENV['BUNDLE_GEMFILE'] = File.join(server_root, 'Gemfile')
+        ENV['BUNDLE_GEMFILE'] = gemfile
 
         self.pipe_to = IO.popen(start_command, 'w')
       end
@@ -80,10 +81,6 @@ module Udaeta::Controllers
         port,
         File.expand_path(pipe_path)
       ].join(' ')
-    end
-
-    def common_root
-      File.expand_path('../../servers/common', __FILE__)
     end
 
     def server_root

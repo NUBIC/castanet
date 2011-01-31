@@ -1,5 +1,6 @@
 source "http://rubygems.org"
 
+gem 'activerecord', '~> 2.3.0'
 gem 'markaby', '0.5'
 gem 'rack'
 gem 'rubycas-server'
@@ -13,4 +14,6 @@ platform :ruby_18, :ruby_19 do
   gem 'sqlite3-ruby', '1.2.5'
 end
 
-gem 'activerecord', '~> 2.3.0'
+platform :ruby_18 do
+  gem 'SystemTimer'
+end

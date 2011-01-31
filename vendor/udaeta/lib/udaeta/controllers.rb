@@ -8,5 +8,6 @@ require 'udaeta'
 module Udaeta::Controllers
   autoload :ControlPipe,    'udaeta/controllers/control_pipe'
   autoload :RubycasServer,  'udaeta/controllers/rubycas_server'
+  autoload :Paths,          'udaeta/controllers/paths'
   autoload :ProxyCallback,  'udaeta/controllers/proxy_callback'
 end
