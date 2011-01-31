@@ -128,7 +128,7 @@ module Castanet
       end
 
       http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = true
+        h.use_ssl = (uri.scheme == 'https')
       end
 
       http.start do |h|
