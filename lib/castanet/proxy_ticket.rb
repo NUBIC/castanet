@@ -100,8 +100,6 @@ module Castanet
         h.use_ssl = (uri.scheme == 'https')
       end
 
-      logger.warn("#{proxy_url} will not be accessed over HTTPS") unless http.use_ssl?
-
       http.start do |h|
         cas_response = h.get(uri.to_s)
 
