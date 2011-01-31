@@ -2,6 +2,14 @@ require 'net/http'
 require 'net/https'
 require 'fileutils'
 
+if RUBY_VERSION == '1.8.7'
+  require 'system_timer'
+  TO = SystemTimer
+else
+  require 'timeout'
+  TO = Timeout
+end
+
 class SpawnedHttpServer
   include FileUtils
 
@@ -64,11 +72,13 @@ class SpawnedHttpServer
   end
 
   def wait_for(what, proc, timeout)
-    start = Time.now
-    until proc.call || (Time.now - start > timeout)
-      sleep 1
-    end
-    unless proc.call
+    begin
+      TO.timeout(timeout) do
+        until proc.call
+          sleep 1
+        end
+      end
+    rescue Timeout::Error
       raise "Wait for #{what} expired (took more than #{timeout} seconds)"
     end
   end
