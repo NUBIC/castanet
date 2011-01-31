@@ -1,14 +1,7 @@
 require 'net/http'
 require 'net/https'
 require 'fileutils'
-
-if RUBY_VERSION == '1.8.7'
-  require 'system_timer'
-  TO = SystemTimer
-else
-  require 'timeout'
-  TO = Timeout
-end
+require 'timeout'
 
 class SpawnedHttpServer
   include FileUtils
@@ -72,7 +65,7 @@ class SpawnedHttpServer
 
   def wait_for(what, proc, timeout)
     begin
-      TO.timeout(timeout) do
+      Timeout.timeout(timeout) do
         until proc.call
           sleep 1
         end
