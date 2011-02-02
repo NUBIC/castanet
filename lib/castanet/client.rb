@@ -45,13 +45,21 @@ module Castanet
   # permutation of interactions between the CAS server, the user, and the
   # application.
   #
-  # Because of this ambiguity in the CAS protocol, Castanet will permit
-  # non-HTTPS communication with CAS servers.  However, it will also loudly
-  # complain about doing so, and there is no way to silence those complaints,
-  # because running CAS over blatantly insecure channels is really quite a
-  # silly thing to do.
+  # Because of this ambiguity in the CAS protocol -- and because unencrypted
+  # transmission can be useful in isolated development environments -- Castanet
+  # will permit non-HTTPS communication with CAS servers.  However, you must
+  # explicitly declare your intent in the class using this client by defining
+  # {#https_disabled} equal to `true`:
   #
-  # Future revisions of Castanet may force HTTPS for all connections.
+  #     class InsecureClient
+  #       include Castanet::Client
+  #
+  #       def https_disabled
+  #         true
+  #       end
+  #     end
+  #
+  # Also keep in mind that future revisions of Castanet may remove this option.
   #
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
   # @see http://www.daemonology.net/blog/2009-09-04-complexity-is-insecurity.html
@@ -97,6 +105,15 @@ module Castanet
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol
   module Client
     ##
+    # Whether or not to disable HTTPS for CAS server communication.  Defaults
+    # to false.
+    #
+    # @return [false]
+    def https_disabled
+      false
+    end
+
+    ##
     # Returns the service ticket validation endpoint for the configured CAS URL.
     #
     # The service ticket validation endpoint is defined as `cas_url` +
@@ -141,6 +158,7 @@ module Castanet
     # @return [ServiceTicket]
     def service_ticket(ticket, service)
       ServiceTicket.new(ticket, service).tap do |st|
+        st.https_disabled = https_disabled
         st.proxy_callback_url = proxy_callback_url
         st.proxy_retrieval_url = proxy_retrieval_url
         st.service_validate_url = service_validate_url
@@ -161,6 +179,7 @@ module Castanet
     # @return [ProxyTicket] the issued proxy ticket
     def issue_proxy_ticket(pgt, service)
       ProxyTicket.new(nil, pgt, service).tap do |pt|
+        pt.https_disabled = https_disabled
         pt.proxy_url = proxy_url
         pt.proxy_validate_url = proxy_validate_url
       end.reify!
@@ -170,13 +189,14 @@ module Castanet
     # Builds a {ProxyTicket} for the proxy ticket `pt` and service URL `service`.
     #
     # The returned {ProxyTicket} instance can be used to validate `pt` for
-    # `service` using {ProxyTicket#present!}.
+    # `service` using `#present!`.
     #
     # @param [String, ProxyTicket] ticket the proxy ticket
     # @param [String] service the service URL
     # @return [ProxyTicket]
     def proxy_ticket(ticket, service)
       ProxyTicket.new(ticket.to_s, nil, service).tap do |pt|
+        pt.https_disabled = https_disabled
         pt.proxy_callback_url = proxy_callback_url
         pt.proxy_retrieval_url = proxy_retrieval_url
         pt.proxy_url = proxy_url

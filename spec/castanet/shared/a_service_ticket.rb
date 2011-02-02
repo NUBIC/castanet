@@ -46,46 +46,46 @@ shared_examples_for 'a service ticket' do
              'pgtUrl' => proxy_callback_url }).
         should have_been_made.once
     end
+  end
 
-    describe '#retrieve_pgt!' do
-      before do
-        stub_request(:any, /.*/)
+  describe '#retrieve_pgt!' do
+    before do
+      stub_request(:any, /.*/)
 
-        ticket.proxy_retrieval_url = proxy_retrieval_url
-        ticket.stub!(:pgt_iou => 'PGTIOU-1foo')
-      end
-
-      it 'fetches a PGT from the callback URL' do
-        ticket.retrieve_pgt!
-
-        a_request(:get, proxy_retrieval_url).
-          with(:query => { 'pgtIou' => 'PGTIOU-1foo' }).
-          should have_been_made.once
-      end
-
-      it 'stores the retrieved PGT in #pgt' do
-        stub_request(:get, /.*/).to_return(:body => 'PGT-1foo')
-
-        ticket.retrieve_pgt!
-
-        ticket.pgt.should == 'PGT-1foo'
-      end
+      ticket.proxy_retrieval_url = proxy_retrieval_url
+      ticket.stub!(:pgt_iou => 'PGTIOU-1foo')
     end
 
-    describe '#ok?' do
-      it 'delegates to the validation response' do
-        ticket.response = stub(:ok? => true)
+    it 'fetches a PGT from the callback URL' do
+      ticket.retrieve_pgt!
 
-        ticket.should be_ok
-      end
+      a_request(:get, proxy_retrieval_url).
+        with(:query => { 'pgtIou' => 'PGTIOU-1foo' }).
+        should have_been_made.once
     end
 
-    describe '#username' do
-      it 'delegates to the validation response' do
-        ticket.response = stub(:username => 'username')
+    it 'stores the retrieved PGT in #pgt' do
+      stub_request(:get, /.*/).to_return(:body => 'PGT-1foo')
 
-        ticket.username.should == 'username'
-      end
+      ticket.retrieve_pgt!
+
+      ticket.pgt.should == 'PGT-1foo'
+    end
+  end
+
+  describe '#ok?' do
+    it 'delegates to the validation response' do
+      ticket.response = stub(:ok? => true)
+
+      ticket.should be_ok
+    end
+  end
+
+  describe '#username' do
+    it 'delegates to the validation response' do
+      ticket.response = stub(:username => 'username')
+
+      ticket.username.should == 'username'
     end
   end
 end

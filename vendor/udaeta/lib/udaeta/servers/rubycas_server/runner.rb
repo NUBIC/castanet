@@ -11,7 +11,7 @@ class Runner
   end
 
   def start
-    @server = ControllableCasServer.new(@tmpdir, @port)
+    @server = ControllableCasServer.new(@tmpdir, @port, :ssl => true)
     @server.start
 
     connect_to_fifo

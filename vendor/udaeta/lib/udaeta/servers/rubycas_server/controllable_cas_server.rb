@@ -22,10 +22,10 @@ class ControllableCasServer < ControllableRackServer
 
   attr_reader :users_database_filename
 
-  def initialize(tmpdir, port)
-    super(:port => port, :tmpdir => tmpdir, :ssl => false, :app_creator => lambda {
-            CASServer.app(create_server_config(binding))
-          })
+  def initialize(tmpdir, port, options = {})
+    super(options.merge(:port => port,
+                        :tmpdir => tmpdir,
+                        :app_creator => lambda { CASServer.app(create_server_config(binding)) }))
   end
 
   def start

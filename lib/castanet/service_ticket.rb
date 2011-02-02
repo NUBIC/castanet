@@ -10,6 +10,22 @@ module Castanet
     include QueryBuilding
 
     ##
+    # Set this to `true` to _not_ use HTTPS for CAS server communication.
+    #
+    # In almost all cases where CAS is used, there is no good reason to avoid
+    # HTTPS.  However, if you
+    #
+    #   1. need to have access to CAS server messages and
+    #   2. are in an isolated development environment
+    #
+    # then it may make sense to disable HTTPS.
+    #
+    # This is usually set by {Castanet::Client}.
+    #
+    # @return [Boolean]
+    attr_accessor :https_disabled
+
+    ##
     # The proxy callback URL to use for service validation.
     #
     # @return [String, nil]
@@ -97,7 +113,7 @@ module Castanet
       end
 
       http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = (uri.scheme == 'https')
+        h.use_ssl = !https_disabled
       end
 
       http.start do |h|
@@ -128,7 +144,7 @@ module Castanet
       end
 
       http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = true
+        h.use_ssl = !https_disabled
       end
 
       http.start do |h|
