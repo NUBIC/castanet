@@ -1,9 +1,7 @@
 
-# line 1 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rl"
 require 'castanet'
 
 
-# line 58 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rl"
 
 
 module Castanet::Responses
@@ -58,18 +56,15 @@ module Castanet::Responses
       buffer = ''
 
       
-# line 62 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rb"
 begin
 	p ||= 0
 	pe ||= data.length
 	cs = proxy_start
 end
 
-# line 112 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rl"
 
       new.tap do |r|
         
-# line 73 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rb"
 begin
 	_klen, _trans, _keys, _acts, _nacts = nil
 	_goto_level = 0
@@ -150,26 +145,20 @@ begin
 			_acts += 1
 			case _proxy_actions[_acts - 1]
 when 0 then
-# line 11 "/Users/davidyip/Projects/castanet/lib/castanet/responses/common.rl"
 		begin
  buffer << data[p] 		end
 when 1 then
-# line 11 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rl"
 		begin
  r.failure_code = buffer; buffer = '' 		end
 when 2 then
-# line 12 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rl"
 		begin
  r.failure_reason = buffer.strip; buffer = '' 		end
 when 3 then
-# line 13 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rl"
 		begin
  r.ticket = buffer; buffer = '' 		end
 when 4 then
-# line 14 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rl"
 		begin
  r.ok = true 		end
-# line 173 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rb"
 			end # action switch
 		end
 	end
@@ -196,12 +185,10 @@ when 4 then
 	end
 	end
 
-# line 115 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rl"
       end
     end
 
     
-# line 205 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rb"
 class << self
 	attr_accessor :_proxy_actions
 	private :_proxy_actions, :_proxy_actions=
@@ -535,6 +522,5 @@ end
 self.proxy_en_main = 1;
 
 
-# line 119 "/Users/davidyip/Projects/castanet/lib/castanet/responses/proxy.rl"
   end
 end

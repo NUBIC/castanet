@@ -13,7 +13,7 @@ end
 
 abspath(Fsms).each do |machine|
   file machine => machine.sub(/#{File.extname(machine)}$/, '.rl') do |t|
-    sh "ragel -R -o #{t.name} #{t.prerequisites.first}"
+    sh "ragel -L -R -o #{t.name} #{t.prerequisites.first}"
   end
 end
 
