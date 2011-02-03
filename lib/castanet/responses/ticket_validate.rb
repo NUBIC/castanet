@@ -89,7 +89,6 @@ module Castanet::Responses
     def self.from_cas(response)
       data = response.strip.unpack('U*')
       buffer = ''
-      eof = nil
 
       
 begin
@@ -197,7 +196,7 @@ when 4 then
  r.proxies << buffer; buffer = '' 		end
 when 5 then
 		begin
- r.ok = true; eof = -1 		end
+ r.ok = true 		end
 when 6 then
 		begin
  buffer << data[p] 		end

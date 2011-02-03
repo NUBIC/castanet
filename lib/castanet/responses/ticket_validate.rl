@@ -8,7 +8,7 @@ require 'castanet'
   action save_failure_reason { r.failure_reason = buffer.strip; buffer = '' }
   action save_pgt_iou { r.pgt_iou = buffer; buffer = '' }
   action save_proxy { r.proxies << buffer; buffer = '' }
-  action set_authenticated { r.ok = true; eof = -1 }
+  action set_authenticated { r.ok = true }
 
   include common "common.rl";
 
@@ -154,7 +154,6 @@ module Castanet::Responses
     def self.from_cas(response)
       data = response.strip.unpack('U*')
       buffer = ''
-      eof = nil
 
       %% write init;
 
