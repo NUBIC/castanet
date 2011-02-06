@@ -16,6 +16,10 @@ server](https://ctms-ci.nubic.northwestern.edu/hudson/job/castanet/).
 Getting started
 ===============
 
+Castanet is distributed as a Rubygem, and can be installed like any other Rubygem:
+
+    gem install castanet
+
 Mix `Castanet::Client` into the objects that need CAS client behavior.
 
 Objects that include `Castanet::Client` must implement `cas_url`,

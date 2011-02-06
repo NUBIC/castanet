@@ -1,9 +1,7 @@
 
-# line 1 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
 require 'castanet'
 
 
-# line 70 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
 
 
 module Castanet::Responses
@@ -91,21 +89,17 @@ module Castanet::Responses
     def self.from_cas(response)
       data = response.strip.unpack('U*')
       buffer = ''
-      eof = nil
 
       
-# line 98 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rb"
 begin
 	p ||= 0
 	pe ||= data.length
 	cs = ticket_validate_start
 end
 
-# line 160 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
 
       new.tap do |r|
         
-# line 109 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rb"
 begin
 	_klen, _trans, _keys, _acts, _nacts = nil
 	_goto_level = 0
@@ -186,34 +180,26 @@ begin
 			_acts += 1
 			case _ticket_validate_actions[_acts - 1]
 when 0 then
-# line 6 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
 		begin
  r.username = buffer; buffer = '' 		end
 when 1 then
-# line 7 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
 		begin
  r.failure_code = buffer; buffer = '' 		end
 when 2 then
-# line 8 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
 		begin
  r.failure_reason = buffer.strip; buffer = '' 		end
 when 3 then
-# line 9 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
 		begin
  r.pgt_iou = buffer; buffer = '' 		end
 when 4 then
-# line 10 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
 		begin
  r.proxies << buffer; buffer = '' 		end
 when 5 then
-# line 11 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
 		begin
- r.ok = true; eof = -1 		end
+ r.ok = true 		end
 when 6 then
-# line 11 "/Users/davidyip/Projects/castanet/lib/castanet/responses/common.rl"
 		begin
  buffer << data[p] 		end
-# line 217 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rb"
 			end # action switch
 		end
 	end
@@ -240,7 +226,6 @@ when 6 then
 	end
 	end
 
-# line 163 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
       end
     end
 
@@ -250,7 +235,6 @@ when 6 then
     end
 
     
-# line 254 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rb"
 class << self
 	attr_accessor :_ticket_validate_actions
 	private :_ticket_validate_actions, :_ticket_validate_actions=
@@ -732,6 +716,5 @@ end
 self.ticket_validate_en_main = 1;
 
 
-# line 172 "/Users/davidyip/Projects/castanet/lib/castanet/responses/ticket_validate.rl"
   end
 end
