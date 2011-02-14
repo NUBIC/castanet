@@ -1,6 +1,7 @@
 require 'castanet'
 
 require 'net/http'
+require 'net/https'
 require 'uri'
 
 module Castanet
