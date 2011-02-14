@@ -1,3 +1,3 @@
 module Castanet
-  VERSION = '0.0.2'
+  VERSION = '0.0.3.pre'
 end
