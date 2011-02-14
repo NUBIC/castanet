@@ -1,6 +1,6 @@
 require 'castanet'
 
 module Castanet
-  class ProxyTicketError < Error
+  class Error < StandardError
   end
 end

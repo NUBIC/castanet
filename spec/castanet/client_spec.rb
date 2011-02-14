@@ -67,6 +67,18 @@ module Castanet
           ticket.proxy_retrieval_url.should == client.proxy_retrieval_url
         end
       end
+
+      describe 'if https is not required' do
+        before do
+          class << client
+            def https_required; false; end
+          end
+        end
+
+        it 'does not require https for the service ticket' do
+          ticket.https_required.should be_false
+        end
+      end
     end
 
     describe '#issue_proxy_ticket' do
@@ -97,6 +109,18 @@ module Castanet
         a_request(:get, %r{https://cas.example.edu/proxy\?.*}).
           should have_been_made.once
       end
+
+      describe 'if https is not required' do
+        before do
+          class << client
+            def https_required; false; end
+          end
+        end
+
+        it 'does not require https for the proxy ticket' do
+          ticket.https_required.should be_false
+        end
+      end
     end
 
     describe '#proxy_ticket' do
@@ -110,6 +134,18 @@ module Castanet
 
       it "sets the URL of the CAS server's proxy validation service" do
         ticket.proxy_validate_url.should == client.proxy_validate_url
+      end
+
+      describe 'if https is not required' do
+        before do
+          class << client
+            def https_required; false; end
+          end
+        end
+
+        it 'does not require https for the proxy ticket' do
+          ticket.https_required.should be_false
+        end
       end
     end
   end

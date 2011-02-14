@@ -50,13 +50,13 @@ module Castanet
   # transmission can be useful in isolated development environments -- Castanet
   # will permit non-HTTPS communication with CAS servers.  However, you must
   # explicitly declare your intent in the class using this client by defining
-  # {#https_disabled} equal to `true`:
+  # {#https_required} equal to `false`:
   #
   #     class InsecureClient
   #       include Castanet::Client
   #
-  #       def https_disabled
-  #         true
+  #       def https_required
+  #         false
   #       end
   #     end
   #
@@ -106,12 +106,12 @@ module Castanet
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol
   module Client
     ##
-    # Whether or not to disable HTTPS for CAS server communication.  Defaults
-    # to false.
+    # Whether or not to require HTTPS for CAS server communication.  Defaults
+    # to true.
     #
-    # @return [false]
-    def https_disabled
-      false
+    # @return [true]
+    def https_required
+      true
     end
 
     ##
@@ -159,7 +159,7 @@ module Castanet
     # @return [ServiceTicket]
     def service_ticket(ticket, service)
       ServiceTicket.new(ticket, service).tap do |st|
-        st.https_disabled = https_disabled
+        st.https_required = https_required
         st.proxy_callback_url = proxy_callback_url
         st.proxy_retrieval_url = proxy_retrieval_url
         st.service_validate_url = service_validate_url
@@ -180,7 +180,7 @@ module Castanet
     # @return [ProxyTicket] the issued proxy ticket
     def issue_proxy_ticket(pgt, service)
       ProxyTicket.new(nil, pgt, service).tap do |pt|
-        pt.https_disabled = https_disabled
+        pt.https_required = https_required
         pt.proxy_url = proxy_url
         pt.proxy_validate_url = proxy_validate_url
       end.reify!
@@ -197,7 +197,7 @@ module Castanet
     # @return [ProxyTicket]
     def proxy_ticket(ticket, service)
       ProxyTicket.new(ticket.to_s, nil, service).tap do |pt|
-        pt.https_disabled = https_disabled
+        pt.https_required = https_required
         pt.proxy_callback_url = proxy_callback_url
         pt.proxy_retrieval_url = proxy_retrieval_url
         pt.proxy_url = proxy_url

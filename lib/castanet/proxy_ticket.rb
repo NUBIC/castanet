@@ -96,11 +96,7 @@ module Castanet
         u.query = grant_parameters
       end
 
-      http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = !https_disabled
-      end
-
-      http.start do |h|
+      net_http(uri).start do |h|
         cas_response = h.get(uri.to_s)
 
         self.proxy_response = parsed_proxy_response(cas_response.body)
