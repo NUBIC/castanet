@@ -90,7 +90,7 @@ module Castanet
     # you may find this method useful.
     #
     # @raise [ProxyTicketError] if a proxy ticket cannot be issued
-    # @return void
+    # @return [ProxyTicket] self
     def reify!
       uri = URI.parse(proxy_url).tap do |u|
         u.query = grant_parameters
