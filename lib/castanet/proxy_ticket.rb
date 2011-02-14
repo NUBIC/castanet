@@ -54,7 +54,7 @@ module Castanet
     # issued via {#reify!} have higher precedence.
     #
     # If a proxy ticket was neither supplied at instantiation nor requested via
-    # {#reify!}, then ticket will return nil.
+    # {#reify!}, then `ticket` will return nil.
     #
     # @return [String, nil] the proxy ticket
     def ticket
