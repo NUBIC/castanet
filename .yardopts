@@ -2,3 +2,4 @@
 --markup markdown
 --hide-void-return
 --files lib/castanet/**/*.rl
+--files History.md
