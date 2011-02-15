@@ -34,8 +34,7 @@ module Castanet
 
         describe '#present!' do
           it 'fails' do
-            lambda { ticket.present! }.should raise_error(
-              Error, "Castanet requires SSL for all communication")
+            lambda { ticket.present! }.should raise_error('Castanet requires SSL for all communication')
           end
         end
 
@@ -45,8 +44,7 @@ module Castanet
           end
 
           it 'fails' do
-            lambda { ticket.retrieve_pgt! }.should raise_error(
-              Error, "Castanet requires SSL for all communication")
+            lambda { ticket.retrieve_pgt! }.should raise_error('Castanet requires SSL for all communication')
           end
         end
       end

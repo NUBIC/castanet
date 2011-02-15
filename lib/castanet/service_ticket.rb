@@ -185,15 +185,14 @@ module Castanet
     # Determines whether to use SSL based on the the given URI scheme and the
     # {#https_required} attribute.
     #
-    # @raise [Castanet::Error] if the scheme is HTTP but {#http_required} is
-    #   true.
+    # @raise if the scheme is `http` but {#https_required} is true
     # @return [Boolean]
     def use_ssl?(scheme)
       case scheme.downcase
       when 'https'
         true
       when 'http'
-        raise Castanet::Error.new('Castanet requires SSL for all communication') if https_required
+        raise 'Castanet requires SSL for all communication' if https_required
         false
       else
         fail "Unexpected URI scheme #{scheme.inspect}"

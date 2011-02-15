@@ -62,8 +62,7 @@ module Castanet
         it 'fails with an HTTP URI' do
           ticket.proxy_url = insecure_proxy_url
 
-          lambda { ticket.reify! }.should raise_error(Error,
-            "Castanet requires SSL for all communication")
+          lambda { ticket.reify! }.should raise_error('Castanet requires SSL for all communication')
         end
       end
 
