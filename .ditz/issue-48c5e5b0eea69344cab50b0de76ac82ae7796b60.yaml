@@ -1,0 +1,21 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Castanet's "HTTPS requirement violated" notice needs to be more descriptive
+desc: |-
+  If one tries to use Castanet in HTTPS mode to connect to a CAS server that only understands HTTP, an arcane OpenSSL exception is raised.
+  
+  A more descriptive exception (e.g. "The URL <URL here> specifies HTTP, but Castanet requires HTTPS") would be useful for troubleshooting.
+type: :task
+component: castanet
+release: 
+reporter: David Yip <yipdw@member.fsf.org>
+status: :unstarted
+disposition: 
+creation_time: 2011-02-15 01:53:59.287821 Z
+references: []
+
+id: 48c5e5b0eea69344cab50b0de76ac82ae7796b60
+log_events: 
+- - 2011-02-15 01:54:00.599891 Z
+  - yipdw <yipdw@member.fsf.org>
+  - created
+  - ""

@@ -1,0 +1,29 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Invert sense of HTTPS requirement
+desc: |-
+  A "always on or always off" approach to HTTPS in CAS is too simplistic.
+  
+  There is only one aspect of the CAS protocol that absolutely requires HTTPS, and that's the CAS server -> proxy callback communication.  Everything else _should_ run over HTTPS, but doesn't have to.
+  
+  Because Castanet does not participate in the CAS server -> proxy callback part of the protocol, it was thought that an on-or-off switch for HTTPS would have been sufficient.  This choice, however, assumed that CAS proxy callbacks would respond to both HTTP and HTTPS requests, which in practice has turned out to not be the case.
+  
+  A more nuanced solution is therefore required.  A patch provided by Rhett Sutphin indicates one way forward: instead of `https_disabled`, invert the sense of the option to `https_required`, and default it to `true`.  When it is `false`, then requests will be sent using HTTP and HTTPS.  When it is `true`, then it is assumed that HTTPS will be used, and attempts to do otherwise (i.e. sending HTTPS traffic to a server that only supports HTTP) will result in an exception.  (See castanet-4 for more information on this point.)
+type: :bugfix
+component: castanet
+release: 
+reporter: David Yip <yipdw@member.fsf.org>
+status: :unstarted
+disposition: 
+creation_time: 2011-02-14 22:38:00.641883 Z
+references: []
+
+id: fa9f77bec3428954b30315870baa2039b72fb85d
+log_events: 
+- - 2011-02-14 22:38:07.833387 Z
+  - yipdw <yipdw@member.fsf.org>
+  - created
+  - ""
+- - 2011-02-14 22:38:29.429090 Z
+  - yipdw <yipdw@member.fsf.org>
+  - edited description
+  - ""
