@@ -83,11 +83,11 @@ module Castanet
     # run multiple times, but each invocation will overwrite {#ticket} with a
     # new ticket.
     #
-    # This method is automatically called by {Client#proxy_ticket}, and as such
-    # should never need to be called by users of Castanet; however, in the
-    # interest of program organization, the method is public and located here.
-    # Also, if you're managing `ProxyTicket` instances manually for some reason,
-    # you may find this method useful.
+    # This method is automatically called by {Client#issue_proxy_ticket}, and
+    # as such should never need to be called by users of Castanet; however, in
+    # the interest of program organization, the method is public and located
+    # here.  Also, if you're managing `ProxyTicket` instances manually for some
+    # reason, you may find this method useful.
     #
     # @raise [ProxyTicketError] if a proxy ticket cannot be issued
     # @return [ProxyTicket] void
