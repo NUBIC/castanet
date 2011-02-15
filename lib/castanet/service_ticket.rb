@@ -190,10 +190,10 @@ module Castanet
     # @return [Boolean]
     def use_ssl?(scheme)
       case scheme.downcase
-      when "https"
+      when 'https'
         true
-      when "http"
-        raise Castanet::Error.new("Castanet requires SSL for all communication") if https_required
+      when 'http'
+        raise Castanet::Error.new('Castanet requires SSL for all communication') if https_required
         false
       else
         fail "Unexpected URI scheme #{scheme.inspect}"
