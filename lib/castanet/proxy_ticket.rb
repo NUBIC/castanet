@@ -54,7 +54,7 @@ module Castanet
     # issued via {#reify!} have higher precedence.
     #
     # If a proxy ticket was neither supplied at instantiation nor requested via
-    # {#reify!}, then ticket will return nil.
+    # {#reify!}, then `ticket` will return nil.
     #
     # @return [String, nil] the proxy ticket
     def ticket
@@ -90,7 +90,7 @@ module Castanet
     # you may find this method useful.
     #
     # @raise [ProxyTicketError] if a proxy ticket cannot be issued
-    # @return void
+    # @return [ProxyTicket] self
     def reify!
       uri = URI.parse(proxy_url).tap do |u|
         u.query = grant_parameters
