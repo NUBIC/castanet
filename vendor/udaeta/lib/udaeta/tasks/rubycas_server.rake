@@ -67,7 +67,7 @@ namespace :udaeta do
 
     task :install_bundler do
       unless desired_bundler_present?
-        sh "rvm #{RVM_SPEC} exec gem install bundler -v #{DESIRED_BUNDLER}"
+        sh "rvm #{RVM_SPEC} exec gem install bundler -v '#{DESIRED_BUNDLER}'"
       end
     end
 
