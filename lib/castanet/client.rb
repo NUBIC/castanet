@@ -183,7 +183,9 @@ module Castanet
         pt.https_disabled = https_disabled
         pt.proxy_url = proxy_url
         pt.proxy_validate_url = proxy_validate_url
-      end.reify!
+
+        pt.reify!
+      end
     end
 
     ##

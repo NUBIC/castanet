@@ -43,10 +43,6 @@ module Castanet
           should have_been_made.once
       end
 
-      it 'returns itself' do
-        ticket.reify!.should == ticket
-      end
-
       it 'raises if a ticket could not be issued' do
         ticket.stub(:issued? => false)
 
