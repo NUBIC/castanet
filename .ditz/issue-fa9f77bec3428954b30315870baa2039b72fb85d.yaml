@@ -10,7 +10,7 @@ desc: |-
   A more nuanced solution is therefore required.  A patch provided by Rhett Sutphin indicates one way forward: instead of `https_disabled`, invert the sense of the option to `https_required`, and default it to `true`.  When it is `false`, then requests will be sent using HTTP and HTTPS.  When it is `true`, then it is assumed that HTTPS will be used, and attempts to do otherwise (i.e. sending HTTPS traffic to a server that only supports HTTP) will result in an exception.  (See castanet-4 for more information on this point.)
 type: :bugfix
 component: castanet
-release: 
+release: 1.0.0
 reporter: David Yip <yipdw@member.fsf.org>
 status: :unstarted
 disposition: 
@@ -26,4 +26,8 @@ log_events:
 - - 2011-02-14 22:38:29.429090 Z
   - yipdw <yipdw@member.fsf.org>
   - edited description
+  - ""
+- - 2011-02-15 02:23:21.749222 Z
+  - yipdw <yipdw@member.fsf.org>
+  - assigned to release 1.0.0 from unassigned
   - ""

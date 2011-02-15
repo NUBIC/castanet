@@ -6,7 +6,7 @@ desc: |-
   A more descriptive exception (e.g. "The URL <URL here> specifies HTTP, but Castanet requires HTTPS") would be useful for troubleshooting.
 type: :task
 component: castanet
-release: 
+release: 1.0.0
 reporter: David Yip <yipdw@member.fsf.org>
 status: :unstarted
 disposition: 
@@ -18,4 +18,8 @@ log_events:
 - - 2011-02-15 01:54:00.599891 Z
   - yipdw <yipdw@member.fsf.org>
   - created
+  - ""
+- - 2011-02-15 02:23:26.612319 Z
+  - yipdw <yipdw@member.fsf.org>
+  - assigned to release 1.0.0 from unassigned
   - ""
