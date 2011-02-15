@@ -75,9 +75,9 @@ module Castanet
     attr_accessor :pgt
 
     def initialize(ticket, service)
+      @https_required = true
       @service = service
       @ticket = ticket
-      @https_required = true
     end
 
     ##
