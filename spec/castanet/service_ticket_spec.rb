@@ -65,7 +65,6 @@ module Castanet
           let(:proxy_retrieval_url) { 'http://cas.example.edu/callback/retrieve_pgt' }
 
           before do
-            ticket.https_required
             ticket.service_validate_url = validation_url
           end
         end
