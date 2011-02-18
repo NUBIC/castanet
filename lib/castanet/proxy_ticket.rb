@@ -83,24 +83,20 @@ module Castanet
     # run multiple times, but each invocation will overwrite {#ticket} with a
     # new ticket.
     #
-    # This method is automatically called by {Client#proxy_ticket}, and as such
-    # should never need to be called by users of Castanet; however, in the
-    # interest of program organization, the method is public and located here.
-    # Also, if you're managing `ProxyTicket` instances manually for some reason,
-    # you may find this method useful.
+    # This method is automatically called by {Client#issue_proxy_ticket}, and
+    # as such should never need to be called by users of Castanet; however, in
+    # the interest of program organization, the method is public and located
+    # here.  Also, if you're managing `ProxyTicket` instances manually for some
+    # reason, you may find this method useful.
     #
     # @raise [ProxyTicketError] if a proxy ticket cannot be issued
-    # @return [ProxyTicket] self
+    # @return [ProxyTicket] void
     def reify!
       uri = URI.parse(proxy_url).tap do |u|
         u.query = grant_parameters
       end
 
-      http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = !https_disabled
-      end
-
-      http.start do |h|
+      net_http(uri).start do |h|
         cas_response = h.get(uri.to_s)
 
         self.proxy_response = parsed_proxy_response(cas_response.body)
@@ -108,8 +104,6 @@ module Castanet
         unless issued?
           raise ProxyTicketError, "A proxy ticket could not be issued.  Code: <#{failure_code}>, reason: <#{failure_reason}>."
         end
-
-        self
       end
     end
 

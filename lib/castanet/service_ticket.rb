@@ -10,7 +10,7 @@ module Castanet
     include QueryBuilding
 
     ##
-    # Set this to `true` to _not_ use HTTPS for CAS server communication.
+    # Set this to `false` to allow plain HTTP for CAS server communication.
     #
     # In almost all cases where CAS is used, there is no good reason to avoid
     # HTTPS.  However, if you
@@ -23,7 +23,7 @@ module Castanet
     # This is usually set by {Castanet::Client}.
     #
     # @return [Boolean]
-    attr_accessor :https_disabled
+    attr_accessor :https_required
 
     ##
     # The proxy callback URL to use for service validation.
@@ -75,6 +75,7 @@ module Castanet
     attr_accessor :pgt
 
     def initialize(ticket, service)
+      @https_required = true
       @service = service
       @ticket = ticket
     end
@@ -112,11 +113,7 @@ module Castanet
         u.query = validation_parameters
       end
 
-      http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = !https_disabled
-      end
-
-      http.start do |h|
+      net_http(uri).start do |h|
         cas_response = h.get(uri.to_s)
 
         self.response = parsed_ticket_validate_response(cas_response.body)
@@ -143,11 +140,7 @@ module Castanet
         u.query = query(['pgtIou', pgt_iou])
       end
 
-      http = Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = !https_disabled
-      end
-
-      http.start do |h|
+      net_http(uri).start do |h|
         self.pgt = h.get(uri.to_s).body
       end
     end
@@ -160,6 +153,17 @@ module Castanet
     # @return [String]
     def validation_url
       service_validate_url
+    end
+
+    ##
+    # Creates a new {Net::HTTP} instance which can be used to connect
+    # to the designated URI.
+    #
+    # @return [Net::HTTP]
+    def net_http(uri)
+      Net::HTTP.new(uri.host, uri.port).tap do |h|
+        h.use_ssl = use_ssl?(uri.scheme)
+      end
     end
 
     private
@@ -175,6 +179,24 @@ module Castanet
       query(['ticket',  ticket],
             ['service', service],
             ['pgtUrl',  proxy_callback_url])
+    end
+
+    ##
+    # Determines whether to use SSL based on the the given URI scheme and the
+    # {#https_required} attribute.
+    #
+    # @raise if the scheme is `http` but {#https_required} is true
+    # @return [Boolean]
+    def use_ssl?(scheme)
+      case scheme.downcase
+      when 'https'
+        true
+      when 'http'
+        raise 'Castanet requires SSL for all communication' if https_required
+        false
+      else
+        fail "Unexpected URI scheme #{scheme.inspect}"
+      end
     end
   end
 end

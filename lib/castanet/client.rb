@@ -39,32 +39,30 @@ module Castanet
   # 1. be accessible over HTTPS and
   # 2. present an SSL certificate that
   #     1. is valid and
-  #     2. has a canonical name that matches that of the proxy callback service.
+  #     2. has a canonical name that matches that of the proxy callback
+  #     service.
   #
-  # Secure channels are not required for any other part of the CAS protocol,
-  # but we still recommend using HTTPS for all communication involving any
-  # permutation of interactions between the CAS server, the user, and the
-  # application.
+  # Secure channels are not required for any other part of the CAS protocol.
   #
-  # Because of this ambiguity in the CAS protocol -- and because unencrypted
-  # transmission can be useful in isolated development environments -- Castanet
-  # will permit non-HTTPS communication with CAS servers.  However, you must
-  # explicitly declare your intent in the class using this client by defining
-  # {#https_disabled} equal to `true`:
+  # By default, Castanet requires HTTPS for all communication with the CAS
+  # server or CAS proxy callback, and will raise a `RuntimeError` when
+  # non-HTTPS communication is attempted.
+  #
+  # However, because of the above ambiguity in the CAS protocol -- and because
+  # unencrypted transmission can be useful in isolated development environments
+  # -- Castanet will permit non-HTTPS communication with CAS servers.  However,
+  # you must explicitly declare your intent in the class using this client by
+  # defining {#https_required} equal to `false`:
   #
   #     class InsecureClient
   #       include Castanet::Client
   #
-  #       def https_disabled
-  #         true
+  #       def https_required
+  #         false
   #       end
   #     end
   #
-  # Also keep in mind that future revisions of Castanet may remove this option.
-  #
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
-  # @see http://www.daemonology.net/blog/2009-09-04-complexity-is-insecurity.html
-  #   "Complexity is insecurity" by Colin Percival
   #
   # Examples
   # ========
@@ -102,16 +100,15 @@ module Castanet
   #
   #     ticket.ok? # => true or false
   #
-  #
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol
   module Client
     ##
-    # Whether or not to disable HTTPS for CAS server communication.  Defaults
-    # to false.
+    # Whether or not to require HTTPS for CAS server communication.  Defaults
+    # to true.
     #
-    # @return [false]
-    def https_disabled
-      false
+    # @return [true]
+    def https_required
+      true
     end
 
     ##
@@ -159,7 +156,7 @@ module Castanet
     # @return [ServiceTicket]
     def service_ticket(ticket, service)
       ServiceTicket.new(ticket, service).tap do |st|
-        st.https_disabled = https_disabled
+        st.https_required = https_required
         st.proxy_callback_url = proxy_callback_url
         st.proxy_retrieval_url = proxy_retrieval_url
         st.service_validate_url = service_validate_url
@@ -180,10 +177,12 @@ module Castanet
     # @return [ProxyTicket] the issued proxy ticket
     def issue_proxy_ticket(pgt, service)
       ProxyTicket.new(nil, pgt, service).tap do |pt|
-        pt.https_disabled = https_disabled
+        pt.https_required = https_required
         pt.proxy_url = proxy_url
         pt.proxy_validate_url = proxy_validate_url
-      end.reify!
+
+        pt.reify!
+      end
     end
 
     ##
@@ -197,7 +196,7 @@ module Castanet
     # @return [ProxyTicket]
     def proxy_ticket(ticket, service)
       ProxyTicket.new(ticket.to_s, nil, service).tap do |pt|
-        pt.https_disabled = https_disabled
+        pt.https_required = https_required
         pt.proxy_callback_url = proxy_callback_url
         pt.proxy_retrieval_url = proxy_retrieval_url
         pt.proxy_url = proxy_url

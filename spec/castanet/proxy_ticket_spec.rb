@@ -6,6 +6,7 @@ module Castanet
   describe ProxyTicket do
     let(:pgt) { 'PGT-1foo' }
     let(:proxy_url) { 'https://cas.example.edu/proxy' }
+    let(:insecure_proxy_url) { 'http://cas.example.edu/proxy' }
     let(:proxy_validate_url) { 'https://cas.example.edu/proxyValidate' }
     let(:service) { 'https://proxied.example.edu' }
     let(:ticket) { ProxyTicket.new(nil, pgt, service) }
@@ -43,14 +44,46 @@ module Castanet
           should have_been_made.once
       end
 
-      it 'returns itself' do
-        ticket.reify!.should == ticket
-      end
-
       it 'raises if a ticket could not be issued' do
         ticket.stub(:issued? => false)
 
         lambda { ticket.reify! }.should raise_error(ProxyTicketError)
+      end
+
+      describe 'when SSL is required' do
+        before do
+          ticket.https_required = true
+        end
+
+        it 'fails with an HTTP URI' do
+          ticket.proxy_url = insecure_proxy_url
+
+          lambda { ticket.reify! }.should raise_error('Castanet requires SSL for all communication')
+        end
+      end
+
+      describe 'when SSL is not required' do
+        before do
+          ticket.https_required = false
+        end
+
+        it 'makes an SSL-using request with an HTTPS URI' do
+          ticket.reify!
+
+          a_request(:get, proxy_url).
+            with(:query => { 'pgt' => pgt, 'targetService' => service }).
+            should have_been_made.once
+        end
+
+        it 'makes an unsecured request with an HTTP URI' do
+          ticket.proxy_url = insecure_proxy_url
+
+          ticket.reify!
+
+          a_request(:get, insecure_proxy_url).
+            with(:query => { 'pgt' => pgt, 'targetService' => service }).
+            should have_been_made.once
+        end
       end
     end
 
