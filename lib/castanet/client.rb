@@ -63,8 +63,6 @@ module Castanet
   #     end
   #
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
-  # @see http://www.daemonology.net/blog/2009-09-04-complexity-is-insecurity.html
-  #   "Complexity is insecurity" by Colin Percival
   #
   # Examples
   # ========
