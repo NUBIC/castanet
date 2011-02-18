@@ -8,8 +8,8 @@ type: :task
 component: castanet
 release: 1.0.0
 reporter: David Yip <yipdw@member.fsf.org>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2011-02-15 01:53:59.287821 Z
 references: []
 
@@ -22,4 +22,8 @@ log_events:
 - - 2011-02-15 02:23:26.612319 Z
   - yipdw <yipdw@member.fsf.org>
   - assigned to release 1.0.0 from unassigned
+  - ""
+- - 2011-02-18 22:45:59.943087 Z
+  - yipdw <yipdw@member.fsf.org>
+  - closed with disposition fixed
   - ""
