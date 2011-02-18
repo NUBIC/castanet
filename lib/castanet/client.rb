@@ -39,18 +39,20 @@ module Castanet
   # 1. be accessible over HTTPS and
   # 2. present an SSL certificate that
   #     1. is valid and
-  #     2. has a canonical name that matches that of the proxy callback service.
+  #     2. has a canonical name that matches that of the proxy callback
+  #     service.
   #
-  # Secure channels are not required for any other part of the CAS protocol,
-  # but we still recommend using HTTPS for all communication involving any
-  # permutation of interactions between the CAS server, the user, and the
-  # application.
+  # Secure channels are not required for any other part of the CAS protocol.
   #
-  # Because of this ambiguity in the CAS protocol -- and because unencrypted
-  # transmission can be useful in isolated development environments -- Castanet
-  # will permit non-HTTPS communication with CAS servers.  However, you must
-  # explicitly declare your intent in the class using this client by defining
-  # {#https_required} equal to `false`:
+  # By default, Castanet requires HTTPS for all communication with the CAS
+  # server or CAS proxy callback, and will raise a `RuntimeError` when
+  # non-HTTPS communication is attempted.
+  #
+  # However, because of the above ambiguity in the CAS protocol -- and because
+  # unencrypted transmission can be useful in isolated development environments
+  # -- Castanet will permit non-HTTPS communication with CAS servers.  However,
+  # you must explicitly declare your intent in the class using this client by
+  # defining {#https_required} equal to `false`:
   #
   #     class InsecureClient
   #       include Castanet::Client
@@ -59,8 +61,6 @@ module Castanet
   #         false
   #       end
   #     end
-  #
-  # Also keep in mind that future revisions of Castanet may remove this option.
   #
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
   # @see http://www.daemonology.net/blog/2009-09-04-complexity-is-insecurity.html
