@@ -20,7 +20,7 @@ module Castanet
       end
     end
 
-    describe 'when SSL is required' do
+    describe 'when HTTPS is required' do
       describe 'and we use HTTP URIs' do
         let(:ticket) { ServiceTicket.new(ticket_text, service) }
         let(:ticket_text) { 'ST-1foo' }
@@ -50,7 +50,7 @@ module Castanet
       end
     end
 
-    describe 'when SSL is not required' do
+    describe 'when HTTPS is not required' do
       before do
         ticket.https_required = false
       end
