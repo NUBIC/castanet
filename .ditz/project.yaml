@@ -14,3 +14,12 @@ releases:
     - yipdw <yipdw@member.fsf.org>
     - created
     - ""
+- !ditz.rubyforge.org,2008-03-06/release 
+  name: 1.0.1
+  status: :unreleased
+  release_time: 
+  log_events: 
+  - - 2011-02-18 22:57:15.997175 Z
+    - yipdw <yipdw@member.fsf.org>
+    - created
+    - ""

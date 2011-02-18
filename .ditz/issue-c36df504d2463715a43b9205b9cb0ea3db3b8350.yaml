@@ -1,0 +1,21 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Test Castanet against the JASIG CAS server
+desc: |-
+  JASIG's CAS server implementation <http://www.jasig.org/cas/download> is in wide use, and Castanet should work with it.
+  
+  Extend Castanet's Cucumber test suite so that each scenario is run against both RubyCAS-Server and JASIG's CAS server.
+type: :task
+component: castanet
+release: 1.0.1
+reporter: David Yip <yipdw@member.fsf.org>
+status: :unstarted
+disposition: 
+creation_time: 2011-02-18 22:59:05.374775 Z
+references: []
+
+id: c36df504d2463715a43b9205b9cb0ea3db3b8350
+log_events: 
+- - 2011-02-18 22:59:06.159097 Z
+  - yipdw <yipdw@member.fsf.org>
+  - created
+  - ""
