@@ -14,9 +14,9 @@ module Castanet
       end
     end
 
-    describe "#https_required" do
+    describe '#https_required' do
       it 'defaults to true' do
-        ServiceTicket.new("ST-3baz", "https://example.com/happy").https_required.should be_true
+        ServiceTicket.new('ST-3baz', 'https://example.com/happy').https_required.should be_true
       end
     end
 
