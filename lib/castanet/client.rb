@@ -100,7 +100,6 @@ module Castanet
   #
   #     ticket.ok? # => true or false
   #
-  #
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol
   module Client
     ##
