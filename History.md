@@ -1,4 +1,4 @@
-1.0.0 (unreleased)
+1.0.0 (2011-02-18)
 ==================
 
 Backwards-incompatible changes
