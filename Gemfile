@@ -11,4 +11,6 @@ group :development do
   platform :ruby_18, :ruby_19 do
     gem 'rdiscount'
   end
+
+  gem 'addressable', '2.2.4'
 end
