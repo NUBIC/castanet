@@ -1,0 +1,122 @@
+Castanet
+========
+
+Castanet is a client library for applications that use Jasig's Central
+Authentication Service.  It fully implements version 2.0 of the CAS protocol.
+
+Castanet was built at the Northwestern University Health and Biomedical
+Informatics Center as a replacement for RubyCAS-Client in internal software.
+
+
+Installation and setup
+======================
+
+To install:
+
+    $ gem install castanet
+
+The Castanet::Client module is the top-level interface for all of Castanet's
+functions.  Mix it into the classes that will do CAS interaction:
+
+    class Authenticator
+      include Castanet::Client
+    
+      ##
+      # The base URL of the CAS server.  Required.
+      def cas_url
+        'https://cas.example.edu'
+      end
+        
+      ##
+      # The URL to a service that will be used by the CAS server to deposit
+      # proxy-granting tickets.  Required if you're using CAS proxying.
+      def proxy_callback_url
+        'https://cas.example.edu/callback/receive_pgt'
+      end
+
+      ##
+      # The URL to a service that will be used to retrieve deposited PGTs.
+      # Required if you're doing CAS proxying.
+      def proxy_retrieval_url
+        'https://cas.example.edu/callback/receive_pgt'
+      end
+    end
+
+
+Using Castanet
+==============
+
+Validating a service ticket presented by a user
+-----------------------------------------------
+
+    # First parameter is the ticket, second is the service URL
+    st = service_ticket('ST-1foo', 'https://service.example.edu')
+    st.present!
+
+    st.ok?  # true or false
+
+
+Retrieving a proxy-granting ticket from a service ticket
+--------------------------------------------------------
+
+    st = service_ticket('ST-1foo', 'https://service.example.edu')
+    st.present!
+
+    st.retrieve_pgt! if st.ok?
+    pgt = st.pgt
+
+
+Retrieving a proxy-granting ticket from a proxy ticket
+------------------------------------------------------
+
+    pt = proxy_ticket('PT-1foo', 'https://service.example.edu')
+    pt.present!
+
+    pt.retrieve_pgt! if pt.ok?
+    pgt = pt.pgt
+
+
+Validating a proxy ticket received from an incoming request
+-----------------------------------------------------------
+
+    # First parameter is the ticket, second is the service URL
+    pt = proxy_ticket('PT-1foo', 'https://service.example.edu')
+    pt.present!
+    
+    pt.ok?  # true or false
+
+
+Requesting a proxy ticket for a service
+---------------------------------------
+
+    begin
+      # First parameter is a PGT, second is the URL of the service to contact
+      pt = issue_proxy_ticket('PGT-1foo', 'https://proxied.example.edu')
+      
+      # string representation of the ticket can now be retrieved using pt.ticket
+      # or pt.to_s for use in e.g. URLs
+      service = "https://proxied.example.edu/endpoint?PT=#{pt.to_s}"
+
+      # more code here...
+    rescue Castanet::ProxyTicketError
+      # code to rescue from a PT issuance error
+    end
+
+
+Acknowledgments
+===============
+
+Castanet's test harness was based off of code originally written by Rhett
+Sutphin.
+
+Query string building code was taken from Rack.
+
+
+License
+=======
+
+Copyright (c) 2011 David Yip.  Released under the X11 (MIT) License; see LICENSE
+for details.
+
+
+ vim:ts=2:sw=2:et:tw=80

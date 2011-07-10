@@ -6,29 +6,10 @@ require 'uri'
 
 module Castanet
   ##
-  # A CAS client.
+  # The top-level interface for Castant.
   #
-  # Expected interface
-  # ==================
-  #
-  # Classes that mix in this module must define the method
-  #
-  #     cas_url => String
-  #
-  # `cas_url` defines the base URL of the CAS server and must have a terminating /.
-  #
-  # If CAS proxying is desired, classes must further define
-  #
-  #     proxy_callback_url => String
-  #     proxy_retrieval_url => String
-  #
-  # `proxy_callback_url` is a URL of a service that will be used by the CAS
-  # server for depositing PGTs.  (In the CAS protocol, it's the URL passed to
-  # `/serviceValidate` in the `pgtIou` parameter.)
-  #
-  # `proxy_retrieval_url` is a URL of a service that will be used to retrieve
-  # deposited PGTs.
-  #
+  # See the README for usage examples and interface expectations.
+  # 
   #
   # Security requirements
   # =====================
@@ -61,44 +42,6 @@ module Castanet
   #         false
   #       end
   #     end
-  #
-  # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol, section 2.5.4
-  #
-  # Examples
-  # ========
-  #
-  # Presenting a service ticket
-  # ---------------------------
-  #
-  #     ticket = service_ticket('ST-1foo', 'https://service.example.edu')
-  #     ticket.present!
-  #
-  #     ticket.ok? # => true or false
-  #
-  #
-  # Retrieving a proxy-granting ticket
-  # ----------------------------------
-  #
-  #     ticket = service_ticket(...)
-  #     ticket.present!
-  #     ticket.retrieve_pgt!    # PGT can be retrieved from ticket.pgt
-  #
-  #
-  # Requesting a proxy ticket
-  # -------------------------
-  #
-  #     ticket = proxy_ticket(pgt, service)  # returns a ProxyTicket
-  #
-  # {ProxyTicket}s can be coerced into Strings.
-  #
-  #
-  # Validating a proxy ticket
-  # -------------------------
-  #
-  #     ticket = proxy_ticket(pgt, service)
-  #     ticket.present!
-  #
-  #     ticket.ok? # => true or false
   #
   # @see http://www.jasig.org/cas/protocol CAS 2.0 protocol
   module Client

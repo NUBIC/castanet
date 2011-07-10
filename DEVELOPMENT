@@ -1,0 +1,17 @@
+To work on Castanet, you'll need Bundler ~> 1.0, RVM, and Ragel 6.7.  URLs:
+
+http://gembundler.com
+http://rvm.beginrescueend.com
+http://www.complang.org/ragel
+
+Once you've got Bundler, RVM, and Ragel installed and set up:
+
+    $ bundle install
+    $ rake udaeta:install_dependencies --trace   # because it helps to see what's going on
+    $ rake ci --trace                            # ditto
+
+To rebuild the state machines:
+
+    $ rake fsm:rebuild
+
+ vim:ts=2:sw=2:et:tw=80
