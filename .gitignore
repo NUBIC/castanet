@@ -5,6 +5,7 @@ Gemfile.lock
 *.sw?
 .yardoc
 doc
+.DS_Store
 
 reports
 
