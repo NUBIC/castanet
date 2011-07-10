@@ -1,6 +1,11 @@
 1.0.1 (unreleased)
 ==================
 
+Minor enhancements
+------------------
+
+- Moved setup and usage examples to readme.
+
 1.0.0 (2011-02-18)
 ==================
 
