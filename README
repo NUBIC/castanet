@@ -106,8 +106,7 @@ Requesting a proxy ticket for a service
 Acknowledgments
 ===============
 
-Castanet's test harness was based off of code originally written by Rhett
-Sutphin.
+Castanet's test harness was based on code originally written by Rhett Sutphin.
 
 Query string building code was taken from Rack.
 
