@@ -25,10 +25,10 @@ RVM_RUBY='ruby-1.8.7';
 RVM_RUBY='ruby-1.9.2';
 ;;
 'ci_jruby')
-RVM_RUBY='jruby-1.5.6';
+RVM_RUBY='jruby';
 ;;
 'ci_rbx')
-RVM_RUBY='rbx-1.2.0';
+RVM_RUBY='rbx';
 ;;
 esac
 
