@@ -1,0 +1,18 @@
+YYYY-MM-DD (1.0.1)
+
+* Moved setup and usage examples to README.
+
+2011-02-18 (1.0.0)
+
+* Castanet::Client#https_disabled has changed to Castanet::Client#https_required, and mixed HTTP/HTTPS communication is now possible.  See the documentation of {Castanet::Client} for more information.
+* Castanet::ProxyTicket#reify! no longer returns self.
+
+2011-02-14 (0.0.2)
+
+* castanet/client.rb: require net/https to properly activate the HTTPS bits of Net::HTTP.  (Dates to version 0.0.1.)
+* castanet/proxy_ticket.rb: fix formatting error in documentation. (Dates to version 0.0.1.)
+* Included this changelog in the YARD docs.
+
+2011-02-03 (0.0.1)
+
+* Initial release.
