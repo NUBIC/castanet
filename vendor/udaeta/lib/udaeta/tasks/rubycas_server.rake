@@ -49,7 +49,7 @@ namespace :udaeta do
 
     desc "Install the gem bundle for RubyCAS-Server to #{RVM_SPEC}"
     task :install_bundle => :install_bundler do
-      Bundler.with_clean_env do
+      without_bundler_env do
         cd File.dirname(gemfile) do
           sh "rvm #{RVM_SPEC} exec bundle install"
         end
@@ -58,7 +58,7 @@ namespace :udaeta do
 
     desc "Update the gem bundle for RubyCAS-Server in #{RVM_SPEC}"
     task :update_bundle => :install_bundler do
-      Bundler.with_clean_env do
+      without_bundler_env do
         cd File.dirname(gemfile) do
           sh "rvm #{RVM_SPEC} exec bundle update"
         end
@@ -67,7 +67,9 @@ namespace :udaeta do
 
     task :install_bundler do
       unless desired_bundler_present?
-        sh "rvm #{RVM_SPEC} exec gem install bundler -v '#{DESIRED_BUNDLER}'"
+        without_bundler_env do
+          sh "rvm #{RVM_SPEC} exec gem install bundler -v '#{DESIRED_BUNDLER}'"
+        end
       end
     end
 
@@ -77,12 +79,27 @@ namespace :udaeta do
     end
 
     def desired_bundler_present?
-      `rvm #{RVM_SPEC} exec gem list -i bundler -v '#{DESIRED_BUNDLER}'`
-      $? == 0
+      without_bundler_env do
+        `rvm #{RVM_SPEC} exec gem list -i bundler -v '#{DESIRED_BUNDLER}'`
+        $? == 0
+      end
     end
 
     def gemfile
       File.expand_path(File.join(File.dirname(__FILE__), %w(.. servers rubycas_server Gemfile)))
+    end
+
+    # adapted from http://spectator.in/2011/01/28/bundler-in-subshells/
+    def without_bundler_env
+      vars = %w(BUNDLE_GEMFILE RUBYOPT BUNDLE_BIN_PATH)
+      old_env = ENV.to_hash
+
+      begin
+        vars.each { |v| ENV.delete(v) }
+        yield
+      ensure
+        ENV.replace(old_env)
+      end
     end
   end
 end
