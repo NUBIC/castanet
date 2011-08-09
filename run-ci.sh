@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash -e
 
 # Runs a CI build for castanet.  Assumes:
 #
