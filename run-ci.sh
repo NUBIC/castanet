@@ -9,13 +9,14 @@
 #
 # 3)	The Ruby environment to use is provided as the first argument.
 
-. ~/.rvm/scripts/rvm
-
 if [ -z $1 ]; then
 	echo "Ruby environment not given; aborting"
 	exit 1
 fi
 
+. ~/.rvm/scripts/rvm
+
+set +e
 rvm use $1@castanet
 
 rake -f init.rakefile
