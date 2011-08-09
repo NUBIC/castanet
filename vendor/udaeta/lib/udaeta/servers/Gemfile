@@ -4,7 +4,7 @@ gem 'activerecord', '~> 2.3.0'
 gem 'markaby', '0.5'
 gem 'rake'
 gem 'rack'
-gem 'rubycas-server'
+gem 'rubycas-server', '< 1.0'
 
 platform :jruby do
   gem 'jdbc-sqlite3'
