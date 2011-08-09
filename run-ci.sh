@@ -19,6 +19,13 @@ fi
 set +e
 rvm use $1@castanet
 
+gem list -i rake
+
+if [ $? -ne 0 ]; then
+	gem install rake --no-rdoc --no-ri
+fi
+set -e
+
 rake -f init.rakefile
 bundle exec rake udaeta:install_dependencies --trace
 bundle exec rake ci --trace
