@@ -42,7 +42,6 @@ functions.  Mix it into the classes that will do CAS interaction:
       end
     end
 
-
 Using Castanet
 ==============
 
@@ -102,6 +101,8 @@ Requesting a proxy ticket for a service
       # code to rescue from a PT issuance error
     end
 
+More usage examples can be found in Castanet's tests and NUBIC's Aker library 
+at https://github.com/NUBIC/aker.git.
 
 Acknowledgments
 ===============
