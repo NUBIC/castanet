@@ -6,6 +6,7 @@ group :development do
   platform :jruby do
     gem 'maruku'
     gem 'json', '1.4.6'
+    gem 'ZenTest', '~> 4.5.0'
   end
 
   platform :ruby_18, :ruby_19 do
