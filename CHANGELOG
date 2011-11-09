@@ -1,6 +1,8 @@
-YYYY-MM-DD (1.0.1)
+2011-10-06 (1.0.1)
 
 * Moved setup and usage examples to README.
+* Made Castanet::ProxyTicketError#reify! raise Castanet::ProxyTicketError if no PGT is present.
+* Added some tweaks for running CI builds on NUBIC's infrastructure.
 
 2011-02-18 (1.0.0)
 

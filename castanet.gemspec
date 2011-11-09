@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{A CAS client library}
   s.description = %q{A small, snappy CAS 2.0 client library for Ruby applications}
 
-  s.files         = Dir.glob("{.yardopts,README.md,History.md,LICENSE,lib/**/*}")
+  s.files         = Dir.glob("{.yardopts,README,CHANGELOG,LICENSE,lib/**/*}")
   s.test_files    = Dir.glob("cucumber.yml,{spec,features,vendor/udaeta}/**/*")
   s.executables   = []
   s.require_paths = ["lib"]

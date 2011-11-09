@@ -89,9 +89,12 @@ module Castanet
     # here.  Also, if you're managing `ProxyTicket` instances manually for some
     # reason, you may find this method useful.
     #
+    # @raise [ProxyTicketError] if the PGT is nil
     # @raise [ProxyTicketError] if a proxy ticket cannot be issued
     # @return void
     def reify!
+      raise ProxyTicketError, 'A PGT is not present.' unless pgt
+
       uri = URI.parse(proxy_url).tap do |u|
         u.query = grant_parameters
       end

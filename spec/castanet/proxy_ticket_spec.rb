@@ -44,6 +44,12 @@ module Castanet
           should have_been_made.once
       end
 
+      it 'raises if the PGT is nil' do
+        ticket.pgt = nil
+
+        lambda { ticket.reify! }.should raise_error(ProxyTicketError, 'A PGT is not present.')
+      end
+
       it 'raises if a ticket could not be issued' do
         ticket.stub(:issued? => false)
 
