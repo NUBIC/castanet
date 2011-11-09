@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
     [ 'mechanize',      nil         ],
     [ 'rack',           nil         ],
     [ 'rake',           nil         ],
-    [ 'rspec',          '~> 2.0'    ],
+    [ 'rspec',          '~> 2.6.0'  ],
     [ 'webmock',        nil         ],
     [ 'yard',           nil         ]
   ].each do |gem, version|
