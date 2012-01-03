@@ -13,6 +13,7 @@ module Castanet::Cucumber
         a.log = Logger.new("#{tmpdir}/mechanize.log")
         # Default to simulating interactive access
         a.user_agent_alias = 'Linux Firefox'
+        a.verify_mode = OpenSSL::SSL::VERIFY_NONE
       }
     end
 
@@ -34,7 +35,7 @@ module Castanet::Cucumber
 
     def get(url)
       begin
-        @page = agent.get(:url => url, :headers => headers)
+        @page = agent.get(url, [], nil, headers)
       rescue Mechanize::ResponseCodeError => e
         @page = e.page
       end
