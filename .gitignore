@@ -9,6 +9,6 @@ doc
 
 reports
 
-*.rbc
+.rbx
 
 .ditz-config
