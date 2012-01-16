@@ -71,6 +71,26 @@ shared_examples_for 'a service ticket' do
 
       ticket.pgt.should == 'PGT-1foo'
     end
+
+    describe 'when the proxy callback returns a non-success response' do
+      before do
+        stub_request(:get, /.*/).to_return(:status => 500)
+      end
+
+      it 'raises Castanet::ProxyTicketError' do
+        lambda { ticket.retrieve_pgt! }.should raise_error(Castanet::ProxyTicketError)
+      end
+    end
+
+    describe 'when the proxy callback returns a redirect response' do
+      before do
+        stub_request(:get, /.*/).to_return(:status => 302)
+      end
+
+      it 'raises Castanet::ProxyTicketError' do
+        lambda { ticket.retrieve_pgt! }.should raise_error(Castanet::ProxyTicketError)
+      end
+    end
   end
 
   describe '#ok?' do

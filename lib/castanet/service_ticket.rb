@@ -128,12 +128,21 @@ module Castanet
     # `retrieve_pgt!`; however, it is safest to assume that PGTIOUs are
     # one-time-use only.
     #
-    # CAS 2.0 also does not specify the response format for proxy callbacks.
-    # `retrieve_pgt!` assumes that a `200` response from {#proxy_retrieval_url}
-    # will contain the PGT and only the PGT.
+    # This method assumes the following about the PGT retrieval service:
     #
-    # The retrieved PGT will be written to {#pgt} if this method succeeds.
+    # 1. The PGT can be retrieved using a GET request on
+    #    {#proxy_retrieval_url}.
+    # 2. No query string or particular headers are required.
+    # 3. The body of success responses from the service is precisely the PGT.
+    #    (So, no XML tags, JSON syntax, etc. will be present in the
+    #    response.)
+    # 4. A non-success response is issued from the service is a service
+    #    error.  In this case, this method raises
+    #    {Castanet::ProxyTicketError}.
+    #    The response code and body, if any, will be present in the exception
+    #    message.
     #
+    # @raise Castanet::ProxyTicketError
     # @return void
     def retrieve_pgt!
       uri = URI.parse(proxy_retrieval_url).tap do |u|
@@ -141,7 +150,18 @@ module Castanet
       end
 
       net_http(uri).start do |h|
-        self.pgt = h.get(uri.to_s).body
+        response = h.get(uri.to_s)
+        body = response.body
+
+        case response
+        when Net::HTTPSuccess
+          self.pgt = body
+        else
+          raise Castanet::ProxyTicketError, <<-END
+          A PGT could not be issued.  The PGT service at #{proxy_retrieval_url}
+          returned code #{response.code}, body #{body}."
+          END
+        end
       end
     end
 
