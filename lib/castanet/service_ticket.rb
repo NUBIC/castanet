@@ -132,11 +132,13 @@ module Castanet
     #
     # 1. The PGT can be retrieved using a GET request on
     #    {#proxy_retrieval_url}.
-    # 2. No query string or particular headers are required.
-    # 3. The body of success responses from the service is precisely the PGT.
+    # 2. No particular headers are required.
+    # 3. The service expects the PGTIOU to be sent as a `pgtIou` parameter in
+    #    the query string.
+    # 4. The body of success responses from the service is precisely the PGT.
     #    (So, no XML tags, JSON syntax, etc. will be present in the
     #    response.)
-    # 4. A non-success response is issued from the service is a service
+    # 5. A non-success response is issued from the service is a service
     #    error.  In this case, this method raises
     #    {Castanet::ProxyTicketError}.
     #    The response code and body, if any, will be present in the exception
