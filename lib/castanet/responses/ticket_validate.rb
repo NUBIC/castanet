@@ -1,6 +1,4 @@
 
-require 'castanet'
-
 
 
 
@@ -135,9 +133,9 @@ begin
 	        break if _upper < _lower
 	        _mid = _lower + ( (_upper - _lower) >> 1 )
 
-	        if data[p] < _ticket_validate_trans_keys[_mid]
+	        if data[p].ord < _ticket_validate_trans_keys[_mid]
 	           _upper = _mid - 1
-	        elsif data[p] > _ticket_validate_trans_keys[_mid]
+	        elsif data[p].ord > _ticket_validate_trans_keys[_mid]
 	           _lower = _mid + 1
 	        else
 	           _trans += (_mid - _keys)
@@ -156,9 +154,9 @@ begin
 	     loop do
 	        break if _upper < _lower
 	        _mid = _lower + (((_upper-_lower) >> 1) & ~1)
-	        if data[p] < _ticket_validate_trans_keys[_mid]
+	        if data[p].ord < _ticket_validate_trans_keys[_mid]
 	          _upper = _mid - 2
-	        elsif data[p] > _ticket_validate_trans_keys[_mid+1]
+	        elsif data[p].ord > _ticket_validate_trans_keys[_mid+1]
 	          _lower = _mid + 2
 	        else
 	          _trans += ((_mid - _keys) >> 1)
@@ -199,7 +197,7 @@ when 5 then
  r.ok = true 		end
 when 6 then
 		begin
- buffer << data[p] 		end
+ buffer << data[p].ord 		end
 			end # action switch
 		end
 	end

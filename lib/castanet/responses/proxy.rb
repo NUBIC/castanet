@@ -1,6 +1,4 @@
 
-require 'castanet'
-
 
 
 
@@ -100,9 +98,9 @@ begin
 	        break if _upper < _lower
 	        _mid = _lower + ( (_upper - _lower) >> 1 )
 
-	        if data[p] < _proxy_trans_keys[_mid]
+	        if data[p].ord < _proxy_trans_keys[_mid]
 	           _upper = _mid - 1
-	        elsif data[p] > _proxy_trans_keys[_mid]
+	        elsif data[p].ord > _proxy_trans_keys[_mid]
 	           _lower = _mid + 1
 	        else
 	           _trans += (_mid - _keys)
@@ -121,9 +119,9 @@ begin
 	     loop do
 	        break if _upper < _lower
 	        _mid = _lower + (((_upper-_lower) >> 1) & ~1)
-	        if data[p] < _proxy_trans_keys[_mid]
+	        if data[p].ord < _proxy_trans_keys[_mid]
 	          _upper = _mid - 2
-	        elsif data[p] > _proxy_trans_keys[_mid+1]
+	        elsif data[p].ord > _proxy_trans_keys[_mid+1]
 	          _lower = _mid + 2
 	        else
 	          _trans += ((_mid - _keys) >> 1)
@@ -146,7 +144,7 @@ begin
 			case _proxy_actions[_acts - 1]
 when 0 then
 		begin
- buffer << data[p] 		end
+ buffer << data[p].ord 		end
 when 1 then
 		begin
  r.failure_code = buffer; buffer = '' 		end
