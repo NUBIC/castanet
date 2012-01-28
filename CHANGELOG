@@ -2,6 +2,8 @@ yyyy-mm-dd (1.0.2)
 
 * Castanet::ServiceTicket#retrieve_pgt! now raises Castanet::ProxyTicketError
   if a PGT cannot be retrieved.  (#6)
+* All autoload directives removed from Castanet.  The udaeta test code still
+  has them; I'll fix those at some point.
 
 2011-10-06 (1.0.1)
 
