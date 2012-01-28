@@ -1,10 +1,8 @@
-require 'castanet'
+require 'castanet/responses/proxy'
+require 'castanet/responses/ticket_validate'
 
 module Castanet
   module Responses
-    autoload :Proxy,          'castanet/responses/proxy'
-    autoload :TicketValidate, 'castanet/responses/ticket_validate'
-
     ##
     # Parses a response from `/proxy`.
     #

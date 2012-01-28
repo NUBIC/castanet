@@ -1,6 +1,7 @@
-require 'castanet'
-
 require 'uri'
+
+require 'castanet/proxy_ticket_error'
+require 'castanet/service_ticket'
 
 module Castanet
   class ProxyTicket < ServiceTicket

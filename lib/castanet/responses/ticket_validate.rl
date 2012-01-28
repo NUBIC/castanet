@@ -1,5 +1,3 @@
-require 'castanet'
-
 %%{
   machine ticket_validate;
 

@@ -1,8 +1,9 @@
-require 'castanet'
-
 require 'net/http'
 require 'net/https'
 require 'uri'
+
+require 'castanet/proxy_ticket'
+require 'castanet/service_ticket'
 
 module Castanet
   ##
