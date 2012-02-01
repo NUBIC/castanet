@@ -56,6 +56,22 @@ module Castanet
     end
 
     ##
+    # Returns a hash of SSL options.
+    #
+    # Available options are:
+    #
+    # :ca_file: A path to a file containing a PEM-formatted CA certificate
+    # :ca_path: A path to a directory containing PEM-formatted CA certificates;
+    # certificates are expected to be accessible via their hash value[0].
+    #
+    # Defaults to {}.
+    #
+    # [0]: http://www.bo.infn.it/alice/introgrd/certmgr/node19.html
+    def ssl_context
+      {}
+    end
+
+    ##
     # Returns the service ticket validation endpoint for the configured CAS URL.
     #
     # The service ticket validation endpoint is defined as `cas_url` +
@@ -104,6 +120,7 @@ module Castanet
         st.proxy_callback_url = proxy_callback_url
         st.proxy_retrieval_url = proxy_retrieval_url
         st.service_validate_url = service_validate_url
+        st.ssl_context = ssl_context
       end
     end
 
@@ -124,6 +141,7 @@ module Castanet
         pt.https_required = https_required
         pt.proxy_url = proxy_url
         pt.proxy_validate_url = proxy_validate_url
+        pt.ssl_context = ssl_context
 
         pt.reify!
       end
@@ -145,6 +163,7 @@ module Castanet
         pt.proxy_retrieval_url = proxy_retrieval_url
         pt.proxy_url = proxy_url
         pt.proxy_validate_url = proxy_validate_url
+        pt.ssl_context = ssl_context
       end
     end
   end

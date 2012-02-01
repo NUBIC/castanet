@@ -28,6 +28,12 @@ module Castanet
     attr_accessor :https_required
 
     ##
+    # SSL context for HTTPS communication.
+    #
+    # This is usually set by {Castanet::Client}.
+    attr_accessor :ssl_context
+
+    ##
     # The proxy callback URL to use for service validation.
     #
     # @return [String, nil]
@@ -78,6 +84,7 @@ module Castanet
 
     def initialize(ticket, service)
       @https_required = true
+      @ssl_context = {}
       @service = service
       @ticket = ticket
     end
@@ -189,6 +196,8 @@ module Castanet
         if use_ssl?(uri.scheme)
           h.use_ssl = true
           h.verify_mode = OpenSSL::SSL::VERIFY_PEER
+          h.ca_file = ssl_context[:ca_file]
+          h.ca_path = ssl_context[:ca_path]
         end
       end
     end
