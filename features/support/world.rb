@@ -24,6 +24,10 @@ module Castanet::Cucumber
       @cas.url
     end
 
+    def ssl_context
+      { :ca_file => File.expand_path('../../../vendor/udaeta/lib/udaeta/servers/common/integrated-test-ssl.crt', __FILE__) }
+    end
+
     def spawned_servers
       @servers ||= []
     end
