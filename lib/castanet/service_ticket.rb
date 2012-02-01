@@ -1,4 +1,5 @@
 require 'forwardable'
+require 'openssl'
 require 'uri'
 
 require 'castanet/query_building'
@@ -185,7 +186,10 @@ module Castanet
     # @return [Net::HTTP]
     def net_http(uri)
       Net::HTTP.new(uri.host, uri.port).tap do |h|
-        h.use_ssl = use_ssl?(uri.scheme)
+        if use_ssl?(uri.scheme)
+          h.use_ssl = true
+          h.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        end
       end
     end
 
