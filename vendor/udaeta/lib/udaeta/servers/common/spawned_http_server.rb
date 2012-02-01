@@ -10,7 +10,7 @@ class SpawnedHttpServer
 
   def initialize(options={})
     @port = options.delete(:port) or raise "Please specify a port"
-    @host = options.delete(:host) || '127.0.0.1'
+    @host = options.delete(:host) || 'localhost'
     @timeout = options.delete(:timeout) || 30
     @tmpdir = options.delete(:tmpdir) or raise "Please specify tmpdir"
     @ssl = options.delete(:ssl) || false
