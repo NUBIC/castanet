@@ -111,12 +111,4 @@ Castanet's test harness was based on code originally written by Rhett Sutphin.
 
 Query string building code was taken from Rack.
 
-
-License
-=======
-
-Copyright (c) 2011 David Yip.  Released under the X11 (MIT) License; see LICENSE
-for details.
-
-
  vim:ts=2:sw=2:et:tw=80
