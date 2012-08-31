@@ -21,10 +21,10 @@ Gem::Specification.new do |s|
     [ 'autotest',       nil         ],
     [ 'ci_reporter',    nil         ],
     [ 'cucumber',       nil         ],
-    [ 'mechanize',      '~> 2.1'    ],
+    [ 'mechanize',      nil         ],
     [ 'rack',           nil         ],
     [ 'rake',           nil         ],
-    [ 'rspec',          '~> 2.6.0'  ],
+    [ 'rspec',          nil         ],
     [ 'webmock',        nil         ],
     [ 'yard',           nil         ]
   ].each do |gem, version|
