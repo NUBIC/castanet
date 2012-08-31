@@ -1,5 +1,6 @@
 pkg/*
-*.gem
+tmp
+.gem
 .bundle
 Gemfile.lock
 *.sw?
