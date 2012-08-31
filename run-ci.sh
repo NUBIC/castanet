@@ -48,4 +48,4 @@ fi
 set -e
 
 bundle update
-bundle exec rake udaeta:install_dependencies ci --trace
+bundle exec rake ci --trace

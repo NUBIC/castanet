@@ -4,7 +4,6 @@ require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
 require 'yard'
 
-load File.expand_path('../vendor/udaeta/lib/udaeta/tasks/udaeta.rake', __FILE__)
 load File.expand_path('../fsm.rake', __FILE__)
 
 gemspec = eval(File.read('castanet.gemspec'), binding, 'castanet.gemspec')
@@ -24,10 +23,6 @@ namespace :cucumber do
 
   desc 'Run all features'
   task :all => ['cucumber:ok', 'cucumber:wip']
-
-  task :all => 'udaeta:check_dependencies'
-  task :ok => 'udaeta:check_dependencies'
-  task :wip => 'udaeta:check_dependencies'
 end
 
 namespace :ci do
@@ -37,8 +32,6 @@ namespace :ci do
   Cucumber::Rake::Task.new(:cucumber) do |t|
     t.profile = :ci
   end
-
-  task :cucumber => 'udaeta:check_dependencies'
 end
 
 task :ci => 'ci:all'
