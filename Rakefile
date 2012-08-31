@@ -34,10 +34,3 @@ namespace :yard do
   desc 'Generate YARD documentation'
   YARD::Rake::YardocTask.new('once')
 end
-
-namespace :rbx do
-  desc 'Remove Rubinius compilation products'
-  task :clean do
-    rm Dir['**/*.rbc']
-  end
-end
