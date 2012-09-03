@@ -43,6 +43,23 @@ module Castanet::Responses
           end
         end
 
+        describe 'given a PGT IOU with periods in it' do
+          let(:response) do
+            TicketValidate.from_cas(%Q{
+              <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+                <cas:authenticationSuccess>
+                  <cas:user>right</cas:user>
+                  <cas:proxyGrantingTicket>PGTIOU-1-7hab9f21dIY9Dk3rK6Ff-cas01.example.org</cas:proxyGrantingTicket>
+                </cas:authenticationSuccess>
+              </cas:serviceResponse>
+            })
+          end
+
+          it 'returns the PGT IOU' do
+            response.pgt_iou.should == 'PGTIOU-1-7hab9f21dIY9Dk3rK6Ff-cas01.example.org'
+          end
+        end
+
         describe 'when proxies are given' do
           let(:response) do
             TicketValidate.from_cas(%Q{
