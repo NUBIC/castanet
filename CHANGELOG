@@ -1,5 +1,7 @@
 yyyy-mm-dd (1.1.0)
 
+* Properly handle nil response bodies.
+* Test against the Jasig CAS server.
 * Castanet::ServiceTicket#retrieve_pgt! now raises Castanet::ProxyTicketError
   if a PGT cannot be retrieved.  (#6)
 * Custom CA certificates can be specified. (#5)
