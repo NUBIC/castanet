@@ -4,7 +4,7 @@ Feature: Validating proxy tickets
   Need this library to validate proxy tickets.
 
   Background:
-    And a proxy callback
+    Given a proxy callback
   
   Scenario: Proxy tickets issued via a valid PGT are valid
     Given a user logs into CAS as "someone" / "secret"
