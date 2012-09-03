@@ -7,7 +7,7 @@ When /^(?:a user )?requests a service ticket for "([^"]*)"$/ do |service|
   # redirects because our scenarios use domains reserved for testing purposes.
   agent.redirect_ok = false
 
-  get URI.join(cas_url, "/login?service=#{Rack::Utils.escape(service)}")
+  get cas_url + "login?service=#{Rack::Utils.escape(service)}"
 
   query = URI.parse(page.response['location']).query
 
