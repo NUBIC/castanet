@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     [ 'rack',           nil         ],
     [ 'rake',           nil         ],
     [ 'rspec',          nil         ],
+    [ 'travis-lint',    nil         ],
     [ 'webmock',        nil         ],
     [ 'yard',           nil         ]
   ].each do |gem, version|
