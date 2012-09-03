@@ -25,15 +25,7 @@ world = Class.new do
   end
 
   def ssl_context
-    { :ca_file => File.expand_path('../integrated-test-ssl.crt', __FILE__) }
-  end
-
-  def spawned_servers
-    @servers ||= []
-  end
-
-  def stop_spawned_servers
-    spawned_servers.each { |s| s.stop }
+    { :ca_file => File.expand_path('../test.crt', __FILE__) }
   end
 
   def tmpdir
