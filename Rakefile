@@ -35,3 +35,5 @@ namespace :yard do
   desc 'Generate YARD documentation'
   YARD::Rake::YardocTask.new('once')
 end
+
+task :default => [:spec, 'cucumber:ok']
