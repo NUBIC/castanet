@@ -1,11 +1,5 @@
 require 'uri'
 
-Given /^the CAS server accepts the credentials$/ do |table|
-  table.hashes.each do |credentials|
-    cas.accept(credentials['username'], credentials['password'])
-  end
-end
-
 Given /^a proxy callback$/ do
   pending
 end

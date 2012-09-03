@@ -3,11 +3,6 @@ Feature: Service ticket validation
   Application developers
   Need this library to properly validate service tickets.
 
-  Background:
-    Given the CAS server accepts the credentials
-      | username | password |
-      | someone  | secret   |
-
   Scenario: Service tickets issued by the CAS server are valid
     When a user logs into CAS as "someone" / "secret"
     And requests a service ticket for "https://service.example.edu"
