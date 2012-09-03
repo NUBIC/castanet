@@ -11,7 +11,7 @@ Feature: Requesting proxy tickets
     Then that user should receive a proxy ticket
 
   Scenario: Proxy tickets can be used to issue proxy tickets
-    And a user logs into CAS as "someone" / "secret"
+    Given a user logs into CAS as "right" / "right"
     And has a valid service ticket for "https://service.example.edu"
     And requests a proxy ticket for "https://proxied.example.edu"
 
@@ -20,7 +20,7 @@ Feature: Requesting proxy tickets
     Then that user should receive a proxy ticket
 
   Scenario: A proxy ticket cannot be issued from a bad PGT
-    And a user logs into CAS as "someone" / "secret"
+    Given a user logs into CAS as "right" / "right"
     And a valid service ticket for "https://service.example.edu"
 
     When that user requests a proxy ticket for "https://proxied.example.edu" with a bad PGT

@@ -7,7 +7,7 @@ Feature: Validating proxy tickets
     Given a proxy callback
   
   Scenario: Proxy tickets issued via a valid PGT are valid
-    Given a user logs into CAS as "someone" / "secret"
+    Given a user logs into CAS as "right" / "right"
     And a valid service ticket for "https://service.example.edu"
 
     When that user requests a proxy ticket for "https://proxied.example.edu"
@@ -21,7 +21,7 @@ Feature: Validating proxy tickets
     Then that proxy ticket should not be valid
 
   Scenario: Previously used proxy tickets are invalid
-    Given a user logs into CAS as "someone" / "secret"
+    Given a user logs into CAS as "right" / "right"
     And has a valid service ticket for "https://service.example.edu"
     And requests a proxy ticket for "https://proxied.example.edu"
 
