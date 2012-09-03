@@ -5,8 +5,7 @@ Feature: Requesting proxy tickets
   Scenario: A valid login should be able to request proxy tickets
     When a user logs into CAS as "right" / "right"
     And a valid service ticket for "https://service.example.edu"
-
-    When that user requests a proxy ticket for "https://proxied.example.edu"
+    And that user requests a proxy ticket for "https://proxied.example.edu"
 
     Then that user should receive a proxy ticket
 

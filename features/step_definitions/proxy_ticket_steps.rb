@@ -1,5 +1,5 @@
 Given /^(?:has )?a valid service ticket for "([^"]*)"$/ do |service|
-  When %Q{a user requests a service ticket for "#{service}"}
+  step %Q{a user requests a service ticket for "#{service}"}
 
   @st.present!
 
