@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
     [ 'ci_reporter',    nil         ],
     [ 'cucumber',       nil         ],
     [ 'mechanize',      nil         ],
+    [ 'posix-spawn',    nil         ],
     [ 'rack',           nil         ],
     [ 'rake',           nil         ],
     [ 'rspec',          nil         ],
