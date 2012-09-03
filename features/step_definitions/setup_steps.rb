@@ -6,7 +6,7 @@ Given /^a proxy callback$/ do
 end
 
 When /^a user logs into CAS as "([^"]*)" \/ "([^"]*)"$/ do |username, password|
-  get cas.url
+  get cas_url
   login_form = page.forms.first
   login_form.username = username
   login_form.password = password
