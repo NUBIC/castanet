@@ -4,7 +4,7 @@ require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
 require 'yard'
 
-load File.expand_path('../fsm.rake', __FILE__)
+load File.expand_path('../lib/tasks/fsm.rake', __FILE__)
 
 gemspec = eval(File.read('castanet.gemspec'), binding, 'castanet.gemspec')
 
