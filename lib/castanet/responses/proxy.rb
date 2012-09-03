@@ -47,10 +47,10 @@ module Castanet::Responses
     ##
     # Generates a {Proxy} object from a CAS response.
     #
-    # @param [String] response the CAS response
+    # @param [String, nil] response the CAS response
     # @return [Proxy]
     def self.from_cas(response)
-      data = response.strip.unpack('U*')
+      data = response.to_s.strip.unpack('U*')
       buffer = ''
 
       
