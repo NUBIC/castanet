@@ -1,7 +1,8 @@
 require 'uri'
 
 Given /^a proxy callback$/ do
-  pending
+  self.proxy_callback_url = $CALLBACK_URL
+  self.proxy_retrieval_url = $RETRIEVAL_URL
 end
 
 When /^a user logs into CAS as "([^"]*)" \/ "([^"]*)"$/ do |username, password|
