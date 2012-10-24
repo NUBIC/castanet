@@ -28,6 +28,10 @@ AfterConfiguration do
   OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:verify_mode] = OpenSSL::SSL::VERIFY_PEER
   OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:ca_file] = File.expand_path('../test.crt', __FILE__)
 
+  # OpenSSL craps on itself trying to negotiate a protocol version, so we force
+  # a protocol to avoid that crappiness
+  OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:ssl_version] = 'SSLv3'
+
   cas_ok = 1.upto(60) do |i|
     LOGGER.debug "Attempt #{i}/60: GET #{cas_url}"
     begin
