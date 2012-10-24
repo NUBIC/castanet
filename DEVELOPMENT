@@ -1,3 +1,6 @@
+Prerequisites
+=============
+
 To work on Castanet, you'll need Bundler ~> 1.0, RVM, and Ragel 6.7.  URLs:
 
 http://gembundler.com
@@ -13,5 +16,13 @@ Once you've got Bundler, RVM, and Ragel installed and set up:
 To rebuild the state machines:
 
     $ rake fsm:rebuild
+
+
+Build status and such
+====================
+
+https://travis-ci.org/NUBIC/castanet
+https://codeclimate.com/github/NUBIC/castanet
+
 
  vim:ts=2:sw=2:et:tw=80
