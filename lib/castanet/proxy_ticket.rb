@@ -101,7 +101,7 @@ module Castanet
       end
 
       net_http(uri).start do |h|
-        cas_response = h.get(uri.to_s)
+        cas_response = h.get(uri.request_uri)
 
         self.proxy_response = parsed_proxy_response(cas_response.body)
 

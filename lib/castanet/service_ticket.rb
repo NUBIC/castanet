@@ -123,7 +123,7 @@ module Castanet
       end
 
       net_http(uri).start do |h|
-        cas_response = h.get(uri.to_s)
+        cas_response = h.get(uri.request_uri)
 
         self.response = parsed_ticket_validate_response(cas_response.body)
       end
@@ -161,7 +161,7 @@ module Castanet
       end
 
       net_http(uri).start do |h|
-        response = h.get(uri.to_s)
+        response = h.get(uri.request_uri)
         body = response.body
 
         case response
