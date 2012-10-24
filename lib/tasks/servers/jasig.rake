@@ -84,7 +84,7 @@ namespace :servers do
       <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
         <Arg><Ref id="sslContextFactory" /></Arg>
         <Set name="Port">
-          <Property name="jetty.ssl_port" default="8443" />
+          <Property name="jetty.ssl_port" default="#{JASIG_PORT}" />
         </Set>
         <Set name="maxIdleTime">30000</Set>
         <Set name="Acceptors">2</Set>
