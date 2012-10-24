@@ -1,14 +1,16 @@
 require 'castanet'
 require 'fileutils'
 require 'openssl'
-require 'rbconfig'
+require 'logger'
 require 'net/https'
 require 'posix/spawn'
+require 'rbconfig'
 require 'uri'
 require 'yaml'
 
 require File.expand_path('../mechanize_test', __FILE__)
 
+LOGGER = Logger.new($stderr)
 
 AfterConfiguration do
   ruby = RbConfig::CONFIG['bindir'] + '/' + RbConfig::CONFIG['RUBY_INSTALL_NAME']
@@ -27,13 +29,15 @@ AfterConfiguration do
   OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:ca_file] = File.expand_path('../test.crt', __FILE__)
 
   cas_ok = 1.upto(60) do |i|
+    LOGGER.debug "Attempt #{i}/60: GET #{cas_url}"
     begin
       h = Net::HTTP.new(cas_url.host, cas_url.port)
       h.use_ssl = true
       resp = h.get(cas_url.request_uri)
 
       break true if resp.code == '200'
-    rescue
+    rescue => e
+      LOGGER.debug "#{e.class}: #{e.message}"
     end
 
     sleep 1
@@ -42,6 +46,7 @@ AfterConfiguration do
   raise "Unable to start CAS server" unless cas_ok
 
   callback_ok = 1.upto(60) do |i|
+    LOGGER.debug "Attempt #{i}/60: GET #{callback_url}"
     begin
       h = Net::HTTP.new(callback_url.host, callback_url.port)
       h.use_ssl = true
@@ -49,7 +54,7 @@ AfterConfiguration do
 
       break true if resp
     rescue => e
-      puts e.inspect
+      LOGGER.debug "#{e.class}: #{e.message}"
     end
 
     sleep 1
