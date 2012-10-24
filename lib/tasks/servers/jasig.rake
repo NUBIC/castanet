@@ -40,7 +40,7 @@ namespace :servers do
 
         mkdir_p dest_dir
 
-        sh "wget #{url} -O #{dest_file}" if !File.exists?(dest_file)
+        sh "wget -q #{url} -O #{dest_file}" if !File.exists?(dest_file)
         sh "tar xf #{dest_file} -C #{dest_dir} --strip-components 1"
       end
     end
