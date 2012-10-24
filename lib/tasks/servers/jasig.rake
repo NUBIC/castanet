@@ -20,11 +20,8 @@ namespace :servers do
     task :start do
       Dir.chdir(JETTY_DIR) do
         Kernel.exec 'java',
-          "-Djavax.net.ssl.trustStore='#{KEYSTORE}'",
-          "-Djavax.net.ssl.trustStorePassword='#{STOREPASS}'",
           "-jar",
-          "start.jar",
-          "jetty.ssl_port=#{JASIG_PORT}"
+          "start.jar"
       end
     end
 
@@ -74,6 +71,14 @@ namespace :servers do
     <Set name="TrustStore">#{KEYSTORE}</Set>
     <Set name="TrustStorePassword">#{STOREPASS}</Set>
   </New>
+  <Call class="java.lang.System" name="setProperty">
+    <Arg>javax.net.ssl.trustStore</Arg>
+    <Arg>#{KEYSTORE}</Arg>
+  </Call>
+  <Call class="java.lang.System" name="setProperty">
+    <Arg>javax.net.ssl.trustStorePassword</Arg>
+    <Arg>#{STOREPASS}</Arg>
+  </Call>
   <Call name="addConnector">
     <Arg>
       <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
