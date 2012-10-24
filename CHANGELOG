@@ -2,7 +2,8 @@ yyyy-mm-dd (1.1.0)
 
 * Properly handle nil response bodies.
 * Test against the Jasig CAS server.
-* Custom CA certificates can be specified. (#5)
+* Users have greater control over the SSL context (#5).  The SSL context hash
+  uses the same format as Faraday.
 * Castanet::ServiceTicket#retrieve_pgt! now raises Castanet::ProxyTicketError
   if a PGT cannot be retrieved.  (#6)
 * Castanet now uses relative URLs to talk to servers, which is more in line
