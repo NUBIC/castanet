@@ -34,8 +34,9 @@ AfterConfiguration do
       h = Net::HTTP.new(cas_url.host, cas_url.port)
       h.use_ssl = true
       resp = h.get(cas_url.request_uri)
+      code = resp.code.to_i
 
-      break true if resp.code == '200'
+      break true if (200..399).include?(code)
     rescue => e
       LOGGER.debug "#{e.class}: #{e.message}"
     end
@@ -51,8 +52,9 @@ AfterConfiguration do
       h = Net::HTTP.new(callback_url.host, callback_url.port)
       h.use_ssl = true
       resp = h.get(callback_url.request_uri)
+      code = resp.code.to_i
 
-      break true if resp
+      break true if (200..399).include?(code)
     rescue => e
       LOGGER.debug "#{e.class}: #{e.message}"
     end
