@@ -107,7 +107,7 @@ at https://github.com/NUBIC/aker.git.
 Acknowledgments
 ===============
 
-Castanet's test harness was based on code originally written by Rhett Sutphin.
+Castanet's test harness was originally based on code written by Rhett Sutphin.
 
 Query string building code was taken from Rack.
 
