@@ -9,28 +9,18 @@ require 'yaml'
 
 require File.expand_path('../mechanize_test', __FILE__)
 
-CAS_PORT = 51983
-CALLBACK_PORT = 57599
 
 AfterConfiguration do
   ruby = RbConfig::CONFIG['bindir'] + '/' + RbConfig::CONFIG['RUBY_INSTALL_NAME']
 
-  child = POSIX::Spawn::Child.new({ 'PORT' => CAS_PORT.to_s }, "#{ruby} -S rake servers:jasig:endpoints")
+  child = POSIX::Spawn::Child.new("#{ruby} -S rake servers:jasig:endpoints")
   data = YAML.load(child.out)
   cas_url = URI(data[:cas])
 
-  child = POSIX::Spawn::Child.new({ 'PORT' => CALLBACK_PORT.to_s }, "#{ruby} -S rake servers:callback:endpoints")
+  child = POSIX::Spawn::Child.new("#{ruby} -S rake servers:callback:endpoints")
   data = YAML.load(child.out)
   callback_urls = data
   callback_url = URI(callback_urls[:callback])
-
-  cas_server = POSIX::Spawn.spawn({ 'PORT' => CAS_PORT.to_s }, "#{ruby} -S rake servers:jasig:start")
-  callback = POSIX::Spawn.spawn({ 'PORT' => CALLBACK_PORT.to_s }, "#{ruby} -S rake servers:callback:start")
-
-  at_exit do
-    Process.kill('TERM', cas_server)
-    Process.kill('TERM', callback)
-  end
 
   # Trust the test cert.
   OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:verify_mode] = OpenSSL::SSL::VERIFY_PEER
@@ -68,7 +58,7 @@ AfterConfiguration do
   raise "Unable to start proxy callback" unless callback_ok
 
   $CAS_URL = cas_url
-  $CALLBACK_URL = callback_urls[:callback]
+  $CALLBACK_URL = URI(callback_urls[:callback])
   $RETRIEVAL_URL = callback_urls[:retrieval]
 end
 
@@ -81,11 +71,11 @@ world = Class.new do
   attr_accessor :proxy_retrieval_url
 
   def cas_port
-    CAS_PORT
+    $CAS_URL.port
   end
 
   def proxy_callback_port
-    CALLBACK_PORT
+    $CALLBACK_URL.port
   end
 
   def cas_url

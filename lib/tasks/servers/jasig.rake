@@ -7,6 +7,8 @@ namespace :servers do
     JASIG_URL = 'http://downloads.jasig.org/cas/cas-server-3.5.0-release.tar.gz'
     JETTY_URL = 'http://ftp.osuosl.org/pub/eclipse/jetty/stable-8/dist/jetty-distribution-8.1.5.v20120716.tar.gz'
 
+    JASIG_PORT = 51983
+
     JASIG_DIR = "#{DOWNLOAD_DIR}/jasig-cas"
     JETTY_DIR = "#{DOWNLOAD_DIR}/jetty"
     KEYSTORE = "#{JETTY_DIR}/jetty.ks"
@@ -16,10 +18,13 @@ namespace :servers do
 
     desc 'Start the Jasig CAS server for integration tests'
     task :start do
-      port = ENV['PORT'] || 8443
-
       Dir.chdir(JETTY_DIR) do
-        Kernel.exec "java -Djavax.net.ssl.trustStore='#{KEYSTORE}' -Djavax.net.ssl.trustStorePassword='#{STOREPASS}' -jar start.jar jetty.ssl_port=#{port}"
+        Kernel.exec 'java',
+          "-Djavax.net.ssl.trustStore='#{KEYSTORE}'",
+          "-Djavax.net.ssl.trustStorePassword='#{STOREPASS}'",
+          "-jar",
+          "start.jar",
+          "jetty.ssl_port=#{JASIG_PORT}"
       end
     end
 
@@ -27,8 +32,7 @@ namespace :servers do
     task :prep => ['jasig:download', 'jasig:configure']
 
     task :endpoints do
-      port = ENV['PORT'] || 8443
-      data = { :cas => "https://localhost:#{port}/cas-server-uber-webapp-3.5.0/" }.to_yaml
+      data = { :cas => "https://localhost:#{JASIG_PORT}/cas-server-uber-webapp-3.5.0/" }.to_yaml
 
       puts data
     end
