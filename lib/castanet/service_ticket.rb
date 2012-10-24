@@ -193,16 +193,23 @@ module Castanet
     # @return [Net::HTTP]
     def net_http(uri)
       Net::HTTP.new(uri.host, uri.port).tap do |h|
-        if use_ssl?(uri.scheme)
-          h.use_ssl = true
-          h.verify_mode = OpenSSL::SSL::VERIFY_PEER
-          h.ca_file = ssl_context[:ca_file]
-          h.ca_path = ssl_context[:ca_path]
-        end
+        configure_ssl(h, ssl_context) if use_ssl?(uri.scheme)
       end
     end
 
     private
+
+    def configure_ssl(h, ssl)
+      h.use_ssl      = true
+      h.verify_mode  = ssl[:verify_mode] || OpenSSL::SSL::VERIFY_PEER
+
+      h.ca_file      = ssl[:ca_file]      if ssl[:ca_file]
+      h.ca_path      = ssl[:ca_path]      if ssl[:ca_path]
+      h.cert         = ssl[:client_cert]  if ssl[:client_cert]
+      h.cert_store   = ssl[:cert_store]   if ssl[:cert_store]
+      h.key          = ssl[:client_key]   if ssl[:client_key]
+      h.verify_depth = ssl[:verify_depth] if ssl[:verify_depth]
+    end
 
     ##
     # Builds a query string for use with the `serviceValidate` service.
