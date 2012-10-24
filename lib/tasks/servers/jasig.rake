@@ -5,7 +5,7 @@ require 'yaml'
 namespace :servers do
   namespace :jasig do
     JASIG_URL = 'http://downloads.jasig.org/cas/cas-server-3.5.0-release.tar.gz'
-    JETTY_URL = 'http://ftp.osuosl.org/pub/eclipse/jetty/stable-8/dist/jetty-distribution-8.1.5.v20120716.tar.gz'
+    JETTY_URL = 'http://download.eclipse.org/jetty/8.1.7.v20120910/dist/jetty-distribution-8.1.7.v20120910.tar.gz'
 
     JASIG_PORT = 51983
 
