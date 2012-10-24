@@ -3,11 +3,10 @@ require 'fileutils'
 require 'openssl'
 require 'logger'
 require 'net/https'
-require 'posix/spawn'
 require 'rbconfig'
-require 'uri'
 require 'yaml'
 
+require File.expand_path('../connection_testing', __FILE__)
 require File.expand_path('../mechanize_test', __FILE__)
 
 LOGGER = Logger.new($stderr)
@@ -15,14 +14,12 @@ LOGGER = Logger.new($stderr)
 AfterConfiguration do
   ruby = RbConfig::CONFIG['bindir'] + '/' + RbConfig::CONFIG['RUBY_INSTALL_NAME']
 
-  child = POSIX::Spawn::Child.new("#{ruby} -S rake servers:jasig:endpoints")
-  data = YAML.load(child.out)
-  cas_url = URI(data[:cas])
+  data = YAML.load(`#{ruby} -S rake servers:jasig:endpoints`)
+  $CAS_URL = data[:cas]
 
-  child = POSIX::Spawn::Child.new("#{ruby} -S rake servers:callback:endpoints")
-  data = YAML.load(child.out)
-  callback_urls = data
-  callback_url = URI(callback_urls[:callback])
+  data = YAML.load(`#{ruby} -S rake servers:callback:endpoints`)
+  $CALLBACK_URL = data[:callback]
+  $RETRIEVAL_URL = data[:retrieval]
 
   # Trust the test cert.
   OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:verify_mode] = OpenSSL::SSL::VERIFY_PEER
@@ -31,66 +28,33 @@ AfterConfiguration do
   # OpenSSL craps on itself trying to negotiate a protocol version, so we force
   # a protocol to avoid that crappiness
   OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:ssl_version] = 'SSLv3'
+end
 
-  cas_ok = 1.upto(60) do |i|
-    LOGGER.debug "Attempt #{i}/60: GET #{cas_url}"
-    begin
-      h = Net::HTTP.new(cas_url.host, cas_url.port)
-      h.use_ssl = true
-      resp = h.get(cas_url.request_uri)
-      code = resp.code.to_i
-
-      break true if (200..399).include?(code)
-    rescue => e
-      LOGGER.debug "#{e.class}: #{e.message}"
-    end
-
-    sleep 1
+Before do
+  if wait_for_http_service($CAS_URL) != :up
+    raise 'Unable to start CAS server'
   end
 
-  raise "Unable to start CAS server" unless cas_ok
-
-  callback_ok = 1.upto(60) do |i|
-    LOGGER.debug "Attempt #{i}/60: GET #{callback_url}"
-    begin
-      h = Net::HTTP.new(callback_url.host, callback_url.port)
-      h.use_ssl = true
-      resp = h.get(callback_url.request_uri)
-      code = resp.code.to_i
-
-      break true if (200..399).include?(code)
-    rescue => e
-      LOGGER.debug "#{e.class}: #{e.message}"
-    end
-
-    sleep 1
+  if wait_for_http_service($CALLBACK_URL) != :up
+    raise 'Unable to start proxy callback'
   end
-
-  raise "Unable to start proxy callback" unless callback_ok
-
-  $CAS_URL = cas_url
-  $CALLBACK_URL = URI(callback_urls[:callback])
-  $RETRIEVAL_URL = callback_urls[:retrieval]
 end
 
 world = Class.new do
   include Castanet::Client
+  include ConnectionTesting
   include FileUtils
   include MechanizeTest
 
   attr_accessor :proxy_callback_url
   attr_accessor :proxy_retrieval_url
 
-  def cas_port
-    $CAS_URL.port
-  end
-
-  def proxy_callback_port
-    $CALLBACK_URL.port
-  end
-
   def cas_url
     $CAS_URL
+  end
+
+  def logger
+    @logger ||= ::Logger.new($stderr)
   end
 
   def ssl_context
@@ -98,7 +62,7 @@ world = Class.new do
   end
 
   def tmpdir
-    '/tmp/castanet-tests'
+    File.expand_path('../../../tmp', __FILE__)
   end
 end
 
