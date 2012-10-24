@@ -2,11 +2,16 @@ yyyy-mm-dd (1.1.0)
 
 * Properly handle nil response bodies.
 * Test against the Jasig CAS server.
+* Custom CA certificates can be specified. (#5)
 * Castanet::ServiceTicket#retrieve_pgt! now raises Castanet::ProxyTicketError
   if a PGT cannot be retrieved.  (#6)
-* Custom CA certificates can be specified. (#5)
-* All autoload directives removed from Castanet.  The udaeta test code still
-  has them; I'll fix those at some point.
+* Castanet now uses relative URLs to talk to servers, which is more in line
+  with expectations of some HTTP servers, i.e. Thin.  (#7)
+* Castanet now handles periods in service ticket strings.  This is required by
+  the Jasig CAS server; I first saw this behavior in 3.5.0, but it could have
+  been introduced earlier.
+* All autoload directives removed from Castanet.
+* JRuby 1.7 and Rubinius 2.0 preview are now supported.
 
 2011-10-06 (1.0.1)
 
