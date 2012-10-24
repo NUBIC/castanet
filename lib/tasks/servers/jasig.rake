@@ -1,3 +1,4 @@
+require 'erb'
 require 'yaml'
 
 # This is a ridiculous amount of setup for a CAS server.
@@ -60,40 +61,9 @@ namespace :servers do
       sh "openssl pkcs12 -inkey '#{KEY_FILE}' -in '#{CERT_FILE}' -export -out '#{JETTY_DIR}/jetty.pkcs12' -password 'pass:#{STOREPASS}'"
       sh "keytool -destkeystore '#{KEYSTORE}' -importkeystore -srckeystore '#{JETTY_DIR}/jetty.pkcs12' -srcstoretype PKCS12 -srcstorepass '#{STOREPASS}' -storepass '#{STOREPASS}' -noprompt"
 
-      # Tell Jetty to use the keystore.
-      jetty_ssl_xml = %Q{
-<?xml version="1.0"?>
-<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
-<Configure id="Server" class="org.eclipse.jetty.server.Server">
-  <New id="sslContextFactory" class="org.eclipse.jetty.http.ssl.SslContextFactory">
-    <Set name="KeyStore">#{KEYSTORE}</Set>
-    <Set name="KeyStorePassword">#{STOREPASS}</Set>
-    <Set name="TrustStore">#{KEYSTORE}</Set>
-    <Set name="TrustStorePassword">#{STOREPASS}</Set>
-  </New>
-  <Call class="java.lang.System" name="setProperty">
-    <Arg>javax.net.ssl.trustStore</Arg>
-    <Arg>#{KEYSTORE}</Arg>
-  </Call>
-  <Call class="java.lang.System" name="setProperty">
-    <Arg>javax.net.ssl.trustStorePassword</Arg>
-    <Arg>#{STOREPASS}</Arg>
-  </Call>
-  <Call name="addConnector">
-    <Arg>
-      <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
-        <Arg><Ref id="sslContextFactory" /></Arg>
-        <Set name="Port">
-          <Property name="jetty.ssl_port" default="#{JASIG_PORT}" />
-        </Set>
-        <Set name="maxIdleTime">30000</Set>
-        <Set name="Acceptors">2</Set>
-        <Set name="AcceptQueueSize">100</Set>
-      </New>
-    </Arg>
-  </Call>
-</Configure>
-      }.strip
+      # Configure Jetty with our keystore.
+      template = File.read(File.expand_path('../jetty.xml.erb', __FILE__))
+      jetty_ssl_xml = ERB.new(template).result(binding)
 
       File.open(JETTY_SSL_CONFIG, 'w') { |f| f.write(jetty_ssl_xml) }
 
