@@ -74,6 +74,13 @@ namespace :servers do
           f.write(JETTY_SSL_CONFIG)
         end
       end
+
+      # Delete the default connector.
+      patchfile = File.expand_path('../jetty.xml.patch', __FILE__)
+
+      cd "#{JETTY_DIR}/etc" do
+        sh "patch -p1 < #{patchfile}"
+      end
     end
   end
 end
