@@ -19,11 +19,7 @@ namespace :servers do
 
     desc 'Start the Jasig CAS server for integration tests'
     task :start do
-      Dir.chdir(JETTY_DIR) do
-        Kernel.exec 'java',
-          "-jar",
-          "start.jar"
-      end
+      exec "cd #{JETTY_DIR} && exec java -jar start.jar"
     end
 
     desc 'Prep the Jasig CAS server for use in integration tests'
