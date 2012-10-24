@@ -22,7 +22,8 @@
   # ---------------
 
   # Section 3.7
-  ticket_character = 'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '-';
+  # Augmented with . because Jasig CAS server 3.5.0 violates this standard
+  ticket_character = 'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '-' | '.';
   ticket           = ticket_character*;
 
   # All service responses (Appendix A)

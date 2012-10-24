@@ -1,17 +1,12 @@
 require 'uri'
 
-Given /^the CAS server accepts the credentials$/ do |table|
-  table.hashes.each do |credentials|
-    cas.accept(credentials['username'], credentials['password'])
-  end
-end
-
 Given /^a proxy callback$/ do
-  pending
+  self.proxy_callback_url = $CALLBACK_URL
+  self.proxy_retrieval_url = $RETRIEVAL_URL
 end
 
 When /^a user logs into CAS as "([^"]*)" \/ "([^"]*)"$/ do |username, password|
-  get cas.url
+  get cas_url
   login_form = page.forms.first
   login_form.username = username
   login_form.password = password

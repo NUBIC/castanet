@@ -1,0 +1,8 @@
+rvm:
+  - 1.9.3
+  - rbx-19mode
+language: ruby
+before_script:
+  - "rake servers:jasig:prep"
+  - "rake servers:jasig:start &"
+  - "rake servers:callback:start &"

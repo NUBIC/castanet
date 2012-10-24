@@ -4,7 +4,8 @@ require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
 require 'yard'
 
-load File.expand_path('../fsm.rake', __FILE__)
+load File.expand_path('../lib/tasks/fsm.rake', __FILE__)
+load File.expand_path('../lib/tasks/servers.rake', __FILE__)
 
 gemspec = eval(File.read('castanet.gemspec'), binding, 'castanet.gemspec')
 
@@ -35,9 +36,4 @@ namespace :yard do
   YARD::Rake::YardocTask.new('once')
 end
 
-namespace :rbx do
-  desc 'Remove Rubinius compilation products'
-  task :clean do
-    rm Dir['**/*.rbc']
-  end
-end
+task :default => [:spec, 'cucumber:ok']

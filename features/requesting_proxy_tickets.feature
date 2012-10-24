@@ -1,21 +1,16 @@
 Feature: Requesting proxy tickets
   Background:
-    Given the CAS server accepts the credentials
-      | username | password |
-      | someone  | secret   |
+    Given a proxy callback
 
   Scenario: A valid login should be able to request proxy tickets
-    Given a proxy callback
-    And a user logs into CAS as "someone" / "secret"
+    When a user logs into CAS as "right" / "right"
     And a valid service ticket for "https://service.example.edu"
-
-    When that user requests a proxy ticket for "https://proxied.example.edu"
+    And that user requests a proxy ticket for "https://proxied.example.edu"
 
     Then that user should receive a proxy ticket
 
   Scenario: Proxy tickets can be used to issue proxy tickets
-    Given a proxy callback
-    And a user logs into CAS as "someone" / "secret"
+    Given a user logs into CAS as "right" / "right"
     And has a valid service ticket for "https://service.example.edu"
     And requests a proxy ticket for "https://proxied.example.edu"
 
@@ -24,8 +19,7 @@ Feature: Requesting proxy tickets
     Then that user should receive a proxy ticket
 
   Scenario: A proxy ticket cannot be issued from a bad PGT
-    Given a proxy callback
-    And a user logs into CAS as "someone" / "secret"
+    Given a user logs into CAS as "right" / "right"
     And a valid service ticket for "https://service.example.edu"
 
     When that user requests a proxy ticket for "https://proxied.example.edu" with a bad PGT
