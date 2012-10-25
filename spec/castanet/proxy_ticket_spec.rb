@@ -19,6 +19,8 @@ module Castanet
 
         ticket.pgt = pgt
         ticket.stub!(:issued? => true)
+
+        use_https_urls
       end
 
       it 'retrieves a proxy ticket for the given PGT and service' do
