@@ -6,6 +6,11 @@
     <Set name="KeyStorePassword"><%= STOREPASS %></Set>
     <Set name="TrustStore"><%= KEYSTORE %></Set>
     <Set name="TrustStorePassword"><%= STOREPASS %></Set>
+    <Set name="IncludeCipherSuites">
+      <Array type="java.lang.String">
+        <Item>TLS_DHE_RSA_WITH_AES_128_CBC_SHA</Item>
+      </Array>
+    </Set>
   </New>
   <Call class="java.lang.System" name="setProperty">
     <Arg>javax.net.ssl.trustStore</Arg>
