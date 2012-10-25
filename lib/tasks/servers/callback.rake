@@ -15,10 +15,8 @@ namespace :servers do
     end
 
     task :start do
-      server = File.expand_path('../../../../features/support/callback.rb', __FILE__)
-      ruby = RbConfig::CONFIG['bindir'] + '/' + RbConfig::CONFIG['RUBY_INSTALL_NAME']
-
-      exec "PORT=#{CALLBACK_PORT} sh -c 'exec #{ruby} #{server}'"
+      ENV['PORT'] = CALLBACK_PORT.to_s
+      load File.expand_path('../callback.rb', __FILE__)
     end
   end
 end

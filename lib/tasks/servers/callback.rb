@@ -170,18 +170,19 @@ end
 
 # ---------------------------------------------------------------------------- 
 
-if $0 == __FILE__
-  # WEBrick traps these signals and supplies utterly useless behavior.  We
-  # provide something a bit more useful.
-  trap('INT') { exit! }
-  trap('TERM') { exit! }
+# WEBrick traps these signals and supplies utterly useless behavior.  We
+# provide something a bit more useful.
+trap('INT') { exit! }
+trap('TERM') { exit! }
 
-  # Start it up.
-  Rack::Handler::WEBrick.run(RackProxyCallback.application, {
-    :BindAddress => 'localhost',
-    :Port => ENV['PORT'] || 9292,
-    :SSLEnable => true,
-    :SSLCertificate => OpenSSL::X509::Certificate.new(File.read(File.expand_path('../test.crt', __FILE__))),
-    :SSLPrivateKey => OpenSSL::PKey::RSA.new(File.read(File.expand_path('../test.key', __FILE__)))
-  })
-end
+cert_path = File.expand_path('../../../../features/support/test.crt', __FILE__)
+key_path = File.expand_path('../../../../features/support/test.key', __FILE__)
+
+# Start it up.
+Rack::Handler::WEBrick.run(RackProxyCallback.application, {
+  :BindAddress => 'localhost',
+  :Port => ENV['PORT'] || 9292,
+  :SSLEnable => true,
+  :SSLCertificate => OpenSSL::X509::Certificate.new(File.read(cert_path)),
+  :SSLPrivateKey => OpenSSL::PKey::RSA.new(File.read(key_path))
+})
