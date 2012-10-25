@@ -7,7 +7,7 @@ require 'castanet/service_ticket'
 
 module Castanet
   ##
-  # The top-level interface for Castant.
+  # The top-level interface for Castanet.
   #
   # See the README for usage examples and interface expectations.
   # 
