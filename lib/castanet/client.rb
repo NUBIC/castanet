@@ -48,9 +48,20 @@ module Castanet
   module Client
     ##
     # Whether or not to require HTTPS for CAS server communication.  Defaults
-    # to true.
+    # to true.  Set this to `false` to allow plain HTTP for CAS server
+    # communication.
     #
-    # @return [true]
+    # In almost all cases where CAS is used, there is no good reason to avoid
+    # HTTPS.  However, if you
+    #
+    #   1. need to have access to CAS server messages and
+    #   2. are in an isolated development environment
+    #
+    # then it may make sense to disable HTTPS.
+    #
+    # This is usually set by {Castanet::Client}.
+    #
+    # @return [Boolean]
     def https_required
       true
     end
@@ -115,13 +126,7 @@ module Castanet
     # @param [String] service a service URL
     # @return [ServiceTicket]
     def service_ticket(ticket, service)
-      ServiceTicket.new(ticket, service).tap do |st|
-        st.https_required = https_required
-        st.proxy_callback_url = proxy_callback_url
-        st.proxy_retrieval_url = proxy_retrieval_url
-        st.service_validate_url = service_validate_url
-        st.ssl_context = ssl_context
-      end
+      ServiceTicket.new(ticket, service, self)
     end
 
     ##
@@ -137,14 +142,7 @@ module Castanet
     # @raise [ProxyTicketError]
     # @return [ProxyTicket] the issued proxy ticket
     def issue_proxy_ticket(pgt, service)
-      ProxyTicket.new(nil, pgt, service).tap do |pt|
-        pt.https_required = https_required
-        pt.proxy_url = proxy_url
-        pt.proxy_validate_url = proxy_validate_url
-        pt.ssl_context = ssl_context
-
-        pt.reify!
-      end
+      ProxyTicket.new(nil, pgt, service, self).tap(&:reify!)
     end
 
     ##
@@ -157,14 +155,7 @@ module Castanet
     # @param [String] service the service URL
     # @return [ProxyTicket]
     def proxy_ticket(ticket, service)
-      ProxyTicket.new(ticket.to_s, nil, service).tap do |pt|
-        pt.https_required = https_required
-        pt.proxy_callback_url = proxy_callback_url
-        pt.proxy_retrieval_url = proxy_retrieval_url
-        pt.proxy_url = proxy_url
-        pt.proxy_validate_url = proxy_validate_url
-        pt.ssl_context = ssl_context
-      end
+      ProxyTicket.new(ticket.to_s, nil, service, self)
     end
   end
 end

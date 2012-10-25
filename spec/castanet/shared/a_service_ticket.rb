@@ -1,50 +1,77 @@
 require File.expand_path('../../../spec_helper', __FILE__)
+require File.expand_path('../../../support/test_urls', __FILE__)
 
 shared_examples_for 'a service ticket' do
-  def ticket
-    raise "A 'ticket' method must be defined in the host group"
-  end
-
-  def validation_url
-    raise "A 'validation_url' method must be defined in the host group"
-  end
-
-  let(:service) { 'https://service.example.edu/' }
-  let(:proxy_callback_url) { 'https://cas.example.edu/callback/receive_pgt' }
-  let(:proxy_retrieval_url) { 'https://cas.example.edu/callback/retrieve_pgt' }
-
-  describe '#initialize' do
-    it 'wraps a textual ticket' do
-      ticket.ticket.should == ticket_text
-    end
-
-    it 'sets the expected service' do
-      ticket.service.should == service
-    end
-  end
+  include_context 'test URLs'
 
   describe '#present!' do
     before do
       stub_request(:any, /.*/)
+
+      use_https_urls
     end
 
-    it 'validates its ticket for the given service' do
-      ticket.present!
+    describe 'without a proxy callback URL' do
+      before do
+        client.proxy_callback_url = nil
+      end
 
-      a_request(:get, validation_url).
-        with(:query => { 'ticket' => ticket_text, 'service' => service }).
-        should have_been_made.once
+      it 'validates its ticket for the given service' do
+        ticket.present!
+
+        a_request(:get, ticket.validation_url).
+          with(:query => { 'ticket' => ticket.ticket, 'service' => ticket.service }).
+          should have_been_made.once
+      end
     end
 
     it 'sends proxy callback URLs to the service ticket validator' do
-      ticket.proxy_callback_url = proxy_callback_url
-
       ticket.present!
 
-      a_request(:get, validation_url).
-        with(:query => { 'ticket' => ticket_text, 'service' => service,
-             'pgtUrl' => proxy_callback_url }).
+      a_request(:get, ticket.validation_url).
+        with(:query => { 'ticket' => ticket.ticket, 'service' => ticket.service,
+             'pgtUrl' => https_proxy_callback_url }).
         should have_been_made.once
+    end
+
+    describe 'when HTTPS is required' do
+      before do
+        client.stub!(:https_required => true)
+      end
+
+      it 'fails with an HTTP URL' do
+        use_http_urls
+
+        lambda { ticket.present! }.should raise_error('Castanet requires SSL for all communication')
+      end
+    end
+
+    describe 'when HTTPS is not required' do
+      before do
+        client.stub!(:https_required => false)
+      end
+
+      it 'makes an SSL-using request with an HTTPS URL' do
+        use_https_urls
+
+        ticket.present!
+
+        a_request(:get, ticket.validation_url).
+          with(:query => { 'ticket' => ticket.ticket, 'service' => ticket.service,
+               'pgtUrl' => https_proxy_callback_url }).
+          should have_been_made.once
+      end
+
+      it 'makes an unsecured request with an HTTP URL' do
+        use_http_urls
+
+        ticket.present!
+
+        a_request(:get, ticket.validation_url).
+          with(:query => { 'ticket' => ticket.ticket, 'service' => ticket.service,
+               'pgtUrl' => http_proxy_callback_url }).
+          should have_been_made.once
+      end
     end
   end
 
@@ -52,14 +79,14 @@ shared_examples_for 'a service ticket' do
     before do
       stub_request(:any, /.*/)
 
-      ticket.proxy_retrieval_url = proxy_retrieval_url
       ticket.stub!(:pgt_iou => 'PGTIOU-1foo')
+      use_https_urls
     end
 
     it 'fetches a PGT from the callback URL' do
       ticket.retrieve_pgt!
 
-      a_request(:get, proxy_retrieval_url).
+      a_request(:get, https_proxy_retrieval_url).
         with(:query => { 'pgtIou' => 'PGTIOU-1foo' }).
         should have_been_made.once
     end
@@ -89,6 +116,44 @@ shared_examples_for 'a service ticket' do
 
       it 'raises Castanet::ProxyTicketError' do
         lambda { ticket.retrieve_pgt! }.should raise_error(Castanet::ProxyTicketError)
+      end
+    end
+
+    describe 'when HTTPS is required' do
+      before do
+        client.stub!(:https_required => true)
+      end
+
+      it 'fails with an HTTP URL' do
+        use_http_urls
+
+        lambda { ticket.retrieve_pgt! }.should raise_error('Castanet requires SSL for all communication')
+      end
+    end
+
+    describe 'when HTTPS is not required' do
+      before do
+        client.stub!(:https_required => false) 
+      end
+
+      it 'makes an SSL-using request with an HTTPS URL' do
+        use_https_urls
+
+        ticket.retrieve_pgt!
+
+        a_request(:get, https_proxy_retrieval_url).
+          with(:query => { 'pgtIou' => 'PGTIOU-1foo' }).
+          should have_been_made.once
+      end
+
+      it 'makes an unsecured request with an HTTP URL' do
+        use_http_urls
+
+        ticket.retrieve_pgt!
+
+        a_request(:get, http_proxy_retrieval_url).
+          with(:query => { 'pgtIou' => 'PGTIOU-1foo' }).
+          should have_been_made.once
       end
     end
   end

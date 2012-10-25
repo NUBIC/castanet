@@ -5,17 +5,9 @@ require 'castanet/service_ticket'
 
 module Castanet
   class ProxyTicket < ServiceTicket
-    ##
-    # The URL of the CAS server's proxy ticket granting service.
-    #
-    # @return [String]
-    attr_accessor :proxy_url
-
-    ##
-    # The URL of the CAS server's proxy ticket validation service.
-    #
-    # @return [String]
-    attr_accessor :proxy_validate_url
+    def_delegators :client,
+      :proxy_url,
+      :proxy_validate_url
 
     ##
     # The `/proxy` response from the CAS server.
@@ -43,8 +35,8 @@ module Castanet
     # @param [String, nil] pt the proxy ticket
     # @param [String, nil] pgt the proxy granting ticket
     # @param [String] service the service URL
-    def initialize(pt, pgt, service)
-      super(pt, service)
+    def initialize(pt, pgt, service, client)
+      super(pt, service, client)
 
       self.pgt = pgt
     end
@@ -110,8 +102,6 @@ module Castanet
         end
       end
     end
-
-    protected
 
     ##
     # The URL to use for ticket validation.

@@ -12,44 +12,15 @@ module Castanet
     include QueryBuilding
 
     ##
-    # Set this to `false` to allow plain HTTP for CAS server communication.
-    #
-    # In almost all cases where CAS is used, there is no good reason to avoid
-    # HTTPS.  However, if you
-    #
-    #   1. need to have access to CAS server messages and
-    #   2. are in an isolated development environment
-    #
-    # then it may make sense to disable HTTPS.
-    #
-    # This is usually set by {Castanet::Client}.
-    #
-    # @return [Boolean]
-    attr_accessor :https_required
+    # The client that issued this ticket.
+    attr_reader :client
 
-    ##
-    # SSL context for HTTPS communication.
-    #
-    # This is usually set by {Castanet::Client}.
-    attr_accessor :ssl_context
-
-    ##
-    # The proxy callback URL to use for service validation.
-    #
-    # @return [String, nil]
-    attr_accessor :proxy_callback_url
-
-    ##
-    # The URL of the service to use for retrieving PGTs.
-    #
-    # @return [String, nil]
-    attr_accessor :proxy_retrieval_url
-
-    ##
-    # The URL of the CAS server's serviceValidate service.
-    #
-    # @return [String, nil]
-    attr_accessor :service_validate_url
+    def_delegators :client,
+      :https_required,
+      :proxy_callback_url,
+      :proxy_retrieval_url,
+      :service_validate_url,
+      :ssl_context
 
     ##
     # The wrapped service ticket.
@@ -82,9 +53,8 @@ module Castanet
     # @return [String, nil]
     attr_accessor :pgt
 
-    def initialize(ticket, service)
-      @https_required = true
-      @ssl_context = {}
+    def initialize(ticket, service, client)
+      @client = client
       @service = service
       @ticket = ticket
     end
@@ -176,8 +146,6 @@ module Castanet
       end
     end
 
-    protected
-
     ##
     # The URL to use for ticket validation.
     #
@@ -185,6 +153,8 @@ module Castanet
     def validation_url
       service_validate_url
     end
+
+    protected
 
     ##
     # Creates a new {Net::HTTP} instance which can be used to connect

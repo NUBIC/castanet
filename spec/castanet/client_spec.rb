@@ -1,19 +1,13 @@
-require File.join(File.dirname(__FILE__), %w(.. spec_helper))
+require File.expand_path('../../spec_helper', __FILE__)
+
+require File.expand_path('../../support/test_client', __FILE__)
 
 module Castanet
   describe Client do
-    let(:client) do
-      Class.new do
-        include Client
-
-        attr_accessor :cas_url
-        attr_accessor :proxy_callback_url
-        attr_accessor :proxy_retrieval_url
-      end.new
-    end
+    include_context 'test client'
 
     before do
-      client.cas_url = 'https://cas.example.edu/'
+      client.cas_url = https_cas_url
     end
 
     describe '#service_validate_url' do
@@ -41,8 +35,7 @@ module Castanet
     end
 
     describe '#service_ticket' do
-      let(:service) { 'https://service.example.edu' }
-      let(:ticket) { client.service_ticket('ST-1foo', service) }
+      let(:ticket) { client.service_ticket('ST-1foo', service_url) }
 
       it "sets the ticket's service validate URL" do
         ticket.service_validate_url.should == client.service_validate_url
@@ -50,29 +43,27 @@ module Castanet
 
       describe 'if a proxy callback URL is given' do
         before do
-          client.proxy_callback_url = 'https://cas.example.edu/callback/receive_pgt'
+          client.proxy_callback_url = https_proxy_callback_url
         end
 
         it "sets the ticket's proxy callback URL" do
-          ticket.proxy_callback_url.should == client.proxy_callback_url
+          ticket.proxy_callback_url.should == https_proxy_callback_url
         end
       end
 
       describe 'if a proxy retrieval URL is given' do
         before do
-          client.proxy_retrieval_url = 'https://cas.example.edu/callback/retrieve_pgt'
+          client.proxy_retrieval_url = https_proxy_retrieval_url
         end
 
         it "sets the ticket's proxy retrieval URL" do
-          ticket.proxy_retrieval_url.should == client.proxy_retrieval_url
+          ticket.proxy_retrieval_url.should == https_proxy_retrieval_url
         end
       end
 
       describe 'if https is not required' do
         before do
-          class << client
-            def https_required; false; end
-          end
+          client.stub!(:https_required => false)
         end
 
         it 'does not require https for the service ticket' do
@@ -88,7 +79,7 @@ module Castanet
 
       before do
         # Disable the proxy ticket issuance check.
-        stub_ticket = ProxyTicket.new(nil, '', '')
+        stub_ticket = ProxyTicket.new(nil, '', '', client)
         stub_ticket.stub!(:issued? => true)
         ProxyTicket.stub(:new => stub_ticket)
 
@@ -106,15 +97,13 @@ module Castanet
       it 'contacts the proxy ticket issuing service' do
         ticket
 
-        a_request(:get, %r{https://cas.example.edu/proxy\?.*}).
+        a_request(:get, %r{#{client.proxy_url}\?.*}).
           should have_been_made.once
       end
 
       describe 'if https is not required' do
         before do
-          class << client
-            def https_required; false; end
-          end
+          client.stub!(:https_required => false)
         end
 
         it 'does not require https for the proxy ticket' do
@@ -138,9 +127,7 @@ module Castanet
 
       describe 'if https is not required' do
         before do
-          class << client
-            def https_required; false; end
-          end
+          client.stub!(:https_required => false)
         end
 
         it 'does not require https for the proxy ticket' do

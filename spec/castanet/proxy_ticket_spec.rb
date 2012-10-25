@@ -1,46 +1,31 @@
-require File.join(File.dirname(__FILE__), %w(.. spec_helper))
+require File.expand_path('../../spec_helper', __FILE__)
 
 require File.expand_path('../shared/a_service_ticket', __FILE__)
+require File.expand_path('../../support/test_client', __FILE__)
 
 module Castanet
   describe ProxyTicket do
-    let(:pgt) { 'PGT-1foo' }
-    let(:proxy_url) { 'https://cas.example.edu/proxy' }
-    let(:insecure_proxy_url) { 'http://cas.example.edu/proxy' }
-    let(:proxy_validate_url) { 'https://cas.example.edu/proxyValidate' }
-    let(:service) { 'https://proxied.example.edu' }
-    let(:ticket) { ProxyTicket.new(nil, pgt, service) }
+    include_context 'test client'
 
-    it_should_behave_like 'a service ticket' do
-      let(:ticket) { ProxyTicket.new(ticket_text, nil, service) }
-      let(:ticket_text) { 'PT-1foo' }
-      let(:validation_url) { proxy_validate_url }
+    let(:ticket) { ProxyTicket.new('PT-1foo', nil, service_url, client) }
 
-      before do
-        ticket.proxy_validate_url = proxy_validate_url
-      end
-    end
-
-    describe '#initialize' do
-      it 'wraps a PGT' do
-        ticket.pgt.should == pgt
-      end
-    end
+    it_should_behave_like 'a service ticket'
 
     describe '#reify!' do
+      let(:pgt) { 'PGT-1foo' }
+
       before do
         stub_request(:any, /.*/)
 
-        ticket.stub(:issued? => true)
-
-        ticket.proxy_url = proxy_url
+        ticket.pgt = pgt
+        ticket.stub!(:issued? => true)
       end
 
       it 'retrieves a proxy ticket for the given PGT and service' do
         ticket.reify!
 
-        a_request(:get, proxy_url).
-          with(:query => { 'pgt' => pgt, 'targetService' => service }).
+        a_request(:get, client.proxy_url).
+          with(:query => { 'pgt' => pgt, 'targetService' => service_url }).
           should have_been_made.once
       end
 
@@ -56,38 +41,40 @@ module Castanet
         lambda { ticket.reify! }.should raise_error(ProxyTicketError)
       end
 
-      describe 'when SSL is required' do
+      describe 'when HTTPS is required' do
         before do
-          ticket.https_required = true
+          client.stub!(:https_required => true)
         end
 
-        it 'fails with an HTTP URI' do
-          ticket.proxy_url = insecure_proxy_url
+        it 'fails with an HTTP URL' do
+          use_http_urls
 
           lambda { ticket.reify! }.should raise_error('Castanet requires SSL for all communication')
         end
       end
 
-      describe 'when SSL is not required' do
+      describe 'when HTTPS is not required' do
         before do
-          ticket.https_required = false
+          client.stub!(:https_required => false)
         end
 
-        it 'makes an SSL-using request with an HTTPS URI' do
+        it 'makes an SSL-using request with an HTTPS URL' do
+          use_https_urls
+
           ticket.reify!
 
-          a_request(:get, proxy_url).
-            with(:query => { 'pgt' => pgt, 'targetService' => service }).
+          a_request(:get, client.proxy_url).
+            with(:query => { 'pgt' => pgt, 'targetService' => service_url }).
             should have_been_made.once
         end
 
-        it 'makes an unsecured request with an HTTP URI' do
-          ticket.proxy_url = insecure_proxy_url
+        it 'makes an unsecured request with an HTTP URL' do
+          use_http_urls
 
           ticket.reify!
 
-          a_request(:get, insecure_proxy_url).
-            with(:query => { 'pgt' => pgt, 'targetService' => service }).
+          a_request(:get, client.proxy_url).
+            with(:query => { 'pgt' => pgt, 'targetService' => service_url }).
             should have_been_made.once
         end
       end
@@ -101,27 +88,27 @@ module Castanet
       end
 
       it 'can be set from the constructor' do
-        pt = ProxyTicket.new('PT-1foo', nil, '')
+        pt = ProxyTicket.new('PT-1foo', nil, '', client)
 
         pt.ticket.should == 'PT-1foo'
       end
 
-      it 'prefers tickets from the CAS server' do
-        pt = ProxyTicket.new('PT-1foo', nil, '')
+      it 'prefers #proxy_response' do
+        pt = ProxyTicket.new('PT-1foo', nil, '', client)
         pt.proxy_response = stub(:ticket => 'PT-1bar')
 
         pt.ticket.should == 'PT-1bar'
       end
 
       it 'returns nil if neither the CAS server nor the user set a ticket' do
-        pt = ProxyTicket.new(nil, nil, '')
+        pt = ProxyTicket.new(nil, nil, '', client)
 
         pt.ticket.should be_nil
       end
     end
 
     describe '#to_s' do
-      let(:ticket) { ProxyTicket.new('PT-1foo', nil, service) }
+      let(:ticket) { ProxyTicket.new('PT-1foo', nil, '', client) }
 
       it 'returns #ticket' do
         ticket.to_s.should == 'PT-1foo'
@@ -130,7 +117,7 @@ module Castanet
       it 'returns "" if #ticket is nil' do
         ticket.stub!(:ticket => nil)
 
-        ticket.to_s.should == ""
+        ticket.to_s.should be_empty
       end
     end
 
@@ -159,3 +146,4 @@ module Castanet
     end
   end
 end
+
