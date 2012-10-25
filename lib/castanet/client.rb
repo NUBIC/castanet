@@ -1,3 +1,4 @@
+require 'logger'
 require 'net/http'
 require 'net/https'
 require 'uri'
@@ -64,6 +65,27 @@ module Castanet
     # @return [Boolean]
     def https_required
       true
+    end
+
+    ##
+    # Logs messages from ticket operations.
+    #
+    # By default, this is a memoized instance of Ruby's Logger class with
+    # log level DEBUG and log device set to standard error.
+    #
+    #     | Log level | Data logged                                    |
+    #     +-----------+------------------------------------------------+
+    #     | DEBUG     | Request URLs, response code/body, SSL context  |
+    #
+    # In production, you may want to silence Castanet output.  To do so, set
+    # the log level > DEBUG or log device to nil.
+    def logger
+      @logger ||= Logger.new($stderr).tap do |l|
+        formatter = Logger::Formatter.new
+
+        l.level = Logger::DEBUG
+        l.formatter = lambda { |*args| "[#{Module.nesting.first}] #{formatter.call(*args)}" }
+      end
     end
 
     ##

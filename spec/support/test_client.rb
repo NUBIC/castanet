@@ -8,13 +8,13 @@ shared_context 'test client' do
 
   class TestClient < OpenStruct
     include Castanet::Client
-  end
 
-  let(:client) do
-    TestClient.new.tap do |tc|
-      tc.cas_url = https_cas_url
+    def logger
+      Logger.new(nil)
     end
   end
+
+  let(:client) { TestClient.new }
 
   def use_https_urls
     client.cas_url = https_cas_url

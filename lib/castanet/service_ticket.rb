@@ -17,6 +17,7 @@ module Castanet
 
     def_delegators :client,
       :https_required,
+      :logger,
       :proxy_callback_url,
       :proxy_retrieval_url,
       :service_validate_url,
@@ -94,6 +95,7 @@ module Castanet
 
       net_http(uri).start do |h|
         cas_response = h.get(uri.request_uri)
+        log_response(cas_response, uri)
 
         self.response = parsed_ticket_validate_response(cas_response.body)
       end
@@ -132,6 +134,8 @@ module Castanet
 
       net_http(uri).start do |h|
         response = h.get(uri.request_uri)
+        log_response(response, uri)
+
         body = response.body
 
         case response
@@ -162,9 +166,15 @@ module Castanet
     #
     # @return [Net::HTTP]
     def net_http(uri)
+      logger.debug { "Request to #{uri}: ssl_context=#{ssl_context.inspect}" }
+
       Net::HTTP.new(uri.host, uri.port).tap do |h|
         configure_ssl(h, ssl_context) if use_ssl?(uri.scheme)
       end
+    end
+
+    def log_response(resp, uri)
+      logger.debug { "Response from #{uri}: status=#{resp.code}, body=#{resp.body}" }
     end
 
     private
