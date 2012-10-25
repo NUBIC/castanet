@@ -6,5 +6,5 @@ rvm:
 language: ruby
 before_script:
   - "rake servers:jasig:prep"
-  - "rake servers:jasig:start &"
-  - "rake servers:callback:start &"
+  - "bundle exec rake servers:jasig:start &"
+  - "bundle exec rake servers:callback:start &"
