@@ -1,25 +1,37 @@
-Prerequisites
-=============
+Setting up your development environment
+=======================================
 
-To work on Castanet, you'll need Bundler ~> 1.0, RVM, and Ragel 6.7.  URLs:
+To work on Castanet, you'll need Bundler ~> 1.0, RVM, Ragel 6.7, and a Java 6
+installation that can compile JSPs.  (If you've got a JDK installed, you're
+probably okay to go.)
 
 http://gembundler.com
 http://rvm.beginrescueend.com
 http://www.complang.org/ragel
 
-Once you've got Bundler, RVM, and Ragel installed and set up:
+Once you've got Bundler, RVM, and Ragel installed and set up, install
+dependencies.
 
     $ bundle install
-    $ rake udaeta:install_dependencies --trace   # because it helps to see what's going on
-    $ rake ci --trace                            # ditto
 
-To rebuild the state machines:
+The specs have no external dependencies and can be run directly.
+
+    $ rake spec
+
+The integration tests, however, use a CAS server and proxy callback.
+
+    $ rake servers:jasig:prep   # Downloads and configures Jasig CAS Server
+    $ rake servers:jasig:start &
+    $ rake servers:callback:start &
+    $ rake cucumber:all
+
+Finally, there's a task to rebuild the CAS response parsers.
 
     $ rake fsm:rebuild
 
 
 Build status and such
-====================
+=====================
 
 https://travis-ci.org/NUBIC/castanet
 https://codeclimate.com/github/NUBIC/castanet
