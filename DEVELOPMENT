@@ -6,8 +6,8 @@ installation that can compile JSPs.  (If you've got a JDK installed, you're
 probably okay to go.)
 
 http://gembundler.com
-http://rvm.beginrescueend.com
 http://www.complang.org/ragel
+https://rvm.io
 
 Once you've got Bundler, RVM, and Ragel installed and set up, install
 dependencies.
