@@ -14,6 +14,7 @@ yyyy-mm-dd (1.1.0)
 * All autoload directives removed from Castanet.
 * JRuby 1.7 and Rubinius 2.0 preview are now supported.
 * Request/response logging.
+* Remove deprecated use of rake/gempackagetask.
 
 2011-10-06 (1.0.1)
 
