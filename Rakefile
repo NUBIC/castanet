@@ -1,7 +1,7 @@
-require 'rake/gempackagetask'
 require 'ci/reporter/rake/rspec'
 require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
+require 'rubygems/package_task'
 require 'yard'
 
 load File.expand_path('../lib/tasks/fsm.rake', __FILE__)
@@ -9,7 +9,7 @@ load File.expand_path('../lib/tasks/servers.rake', __FILE__)
 
 gemspec = eval(File.read('castanet.gemspec'), binding, 'castanet.gemspec')
 
-Rake::GemPackageTask.new(gemspec).define
+Gem::PackageTask.new(gemspec).define
 
 RSpec::Core::RakeTask.new
 
