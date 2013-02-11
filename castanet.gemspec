@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
     [ 'mechanize',      nil         ],
     [ 'rack',           nil         ],
     [ 'rake',           nil         ],
-    [ 'rspec',          nil         ],
+    [ 'rspec',          '>= 2.12.0' ],
     [ 'travis-lint',    nil         ],
     [ 'webmock',        nil         ],
     [ 'yard',           nil         ]
