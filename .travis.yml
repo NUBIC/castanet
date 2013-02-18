@@ -4,8 +4,6 @@ rvm:
   - jruby-19mode
   - rbx-19mode
 language: ruby
-before_install:
-  - "gem update --system"
 before_script:
   - "rake servers:jasig:prep"
   - "bundle exec rake servers:jasig:start &"
