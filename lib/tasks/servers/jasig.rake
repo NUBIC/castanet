@@ -5,7 +5,7 @@ require 'yaml'
 
 namespace :servers do
   namespace :jasig do
-    JASIG_URL = 'http://downloads.jasig.org/cas/cas-server-3.5.0-release.tar.gz'
+    JASIG_URL = 'http://downloads.jasig.org/cas/cas-server-3.5.2-release.tar.gz'
     JETTY_URL = 'http://archive.eclipse.org/jetty/8.1.7.v20120910/dist/jetty-distribution-8.1.7.v20120910.tar.gz'
 
     JASIG_PORT = 51983
@@ -26,7 +26,7 @@ namespace :servers do
     task :prep => ['jasig:download', 'jasig:configure']
 
     task :endpoints do
-      data = { :cas => "https://localhost:#{JASIG_PORT}/cas-server-uber-webapp-3.5.0/" }.to_yaml
+      data = { :cas => "https://localhost:#{JASIG_PORT}/cas-server-uber-webapp-3.5.2/" }.to_yaml
 
       puts data
     end
@@ -44,7 +44,7 @@ namespace :servers do
 
     task :configure => :configure_jetty do
       # Copy the uber-webapp WAR to Jetty's webapps directory.
-      cp "#{JASIG_DIR}/modules/cas-server-uber-webapp-3.5.0.war", "#{JETTY_DIR}/webapps"
+      cp "#{JASIG_DIR}/modules/cas-server-uber-webapp-3.5.2.war", "#{JETTY_DIR}/webapps"
 
       # The Jasig CAS server, by default, ships with a mode that accepts
       # username=password and rejects everything else.  This is good enough for
