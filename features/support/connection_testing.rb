@@ -1,7 +1,7 @@
 require 'uri'
 
 module ConnectionTesting
-  def wait_for_http_service(url, timeout = 60)
+  def wait_for_http_service(url, timeout = 180)
     1.upto(timeout) do |i|
       logger.debug "Attempt #{i}/60: GET #{url}"
       uri = URI(url)
