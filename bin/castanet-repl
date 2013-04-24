@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'castanet'
+require 'irb'
+
+class Client
+  include Castanet::Client
+
+  attr_accessor :cas_url
+  attr_accessor :logger
+  attr_accessor :proxy_callback_url
+  attr_accessor :proxy_retrieval_url
+  attr_accessor :ssl_context
+  attr_accessor :https_required
+end
+
+$client = Client.new.tap do |c|
+  c.cas_url = 'https://localhost:51983'
+  c.proxy_callback_url = 'https://localhost:57599/receive_pgt'
+  c.proxy_retrieval_url = 'https://localhost:57599/retrieve_pgt'
+  c.https_required = true
+  c.ssl_context = {}
+  c.logger = Logger.new($stderr)
+end
+
+puts <<-END
+------------------------------------------------------------------------------
+This REPL provides two options for working with Castanet.
+
+1. You can instantiate the Client class to set up Castanet clients.
+   The Client class provides accessors for all user-configurable Castanet
+   settings and does not come pre-configured.
+
+2. $client is bound to a Client instance that has been pre-configured as
+   follows:
+
+      cas_url: #{$client.cas_url}
+      logger: #{$client.logger.inspect}
+      proxy_callback_url: #{$client.proxy_callback_url}
+      proxy_retrieval_url: #{$client.proxy_retrieval_url}
+      ssl_context: #{$client.ssl_context.inspect}
+      https_required: #{$client.https_required}
+
+   If you've got a CAS environment that matches this, you can use $client
+   right away.  You may, of course, change any settings on $client.
+------------------------------------------------------------------------------
+END
+
+IRB.start
+
+# vim:ts=2:sw=2:et:tw=78
