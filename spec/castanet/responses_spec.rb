@@ -8,7 +8,7 @@ module Castanet
 
     describe '#parsed_ticket_validate_response' do
       it 'parses a response' do
-        Responses::TicketValidate.should_receive(:from_cas).with('response').and_return(stub)
+        Responses::TicketValidate.should_receive(:from_cas).with('response').and_return(double)
 
         vessel.parsed_ticket_validate_response('response')
       end
@@ -16,7 +16,7 @@ module Castanet
 
     describe '#parsed_proxy_response' do
       it 'parses a response' do
-        Responses::Proxy.should_receive(:from_cas).with('response').and_return(stub)
+        Responses::Proxy.should_receive(:from_cas).with('response').and_return(double)
 
         vessel.parsed_proxy_response('response')
       end

@@ -18,7 +18,7 @@ module Castanet
         stub_request(:any, /.*/)
 
         ticket.pgt = pgt
-        ticket.stub!(:issued? => true)
+        ticket.stub(:issued? => true)
 
         use_https_urls
       end
@@ -45,7 +45,7 @@ module Castanet
 
       describe 'when HTTPS is required' do
         before do
-          client.stub!(:https_required => true)
+          client.stub(:https_required => true)
         end
 
         it 'fails with an HTTP URL' do
@@ -57,7 +57,7 @@ module Castanet
 
       describe 'when HTTPS is not required' do
         before do
-          client.stub!(:https_required => false)
+          client.stub(:https_required => false)
         end
 
         it 'makes an SSL-using request with an HTTPS URL' do
@@ -84,7 +84,7 @@ module Castanet
 
     describe '#ticket' do
       it 'delegates to #proxy_response' do
-        ticket.proxy_response = stub(:ticket => 'PT-1foo')
+        ticket.proxy_response = double(:ticket => 'PT-1foo')
 
         ticket.ticket.should == 'PT-1foo'
       end
@@ -97,7 +97,7 @@ module Castanet
 
       it 'prefers #proxy_response' do
         pt = ProxyTicket.new('PT-1foo', nil, '', client)
-        pt.proxy_response = stub(:ticket => 'PT-1bar')
+        pt.proxy_response = double(:ticket => 'PT-1bar')
 
         pt.ticket.should == 'PT-1bar'
       end
@@ -117,7 +117,7 @@ module Castanet
       end
 
       it 'returns "" if #ticket is nil' do
-        ticket.stub!(:ticket => nil)
+        ticket.stub(:ticket => nil)
 
         ticket.to_s.should be_empty
       end
@@ -125,7 +125,7 @@ module Castanet
 
     describe '#issued?' do
       it 'delegates to #proxy_response' do
-        ticket.proxy_response = stub(:ok? => true)
+        ticket.proxy_response = double(:ok? => true)
 
         ticket.should be_issued
       end
@@ -133,7 +133,7 @@ module Castanet
 
     describe '#failure_code' do
       it 'delegates to #proxy_response' do
-        ticket.proxy_response = stub(:failure_code => 'INVALID_TICKET')
+        ticket.proxy_response = double(:failure_code => 'INVALID_TICKET')
 
         ticket.failure_code.should == 'INVALID_TICKET'
       end
@@ -141,7 +141,7 @@ module Castanet
 
     describe '#failure_reason' do
       it 'delegates to #proxy_response' do
-        ticket.proxy_response = stub(:failure_reason => 'Bad PGT')
+        ticket.proxy_response = double(:failure_reason => 'Bad PGT')
 
         ticket.failure_reason.should == 'Bad PGT'
       end

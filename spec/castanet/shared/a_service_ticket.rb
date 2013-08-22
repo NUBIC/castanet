@@ -36,7 +36,7 @@ shared_examples_for 'a service ticket' do
 
     describe 'when HTTPS is required' do
       before do
-        client.stub!(:https_required => true)
+        client.stub(:https_required => true)
       end
 
       it 'fails with an HTTP URL' do
@@ -48,7 +48,7 @@ shared_examples_for 'a service ticket' do
 
     describe 'when HTTPS is not required' do
       before do
-        client.stub!(:https_required => false)
+        client.stub(:https_required => false)
       end
 
       it 'makes an SSL-using request with an HTTPS URL' do
@@ -79,7 +79,7 @@ shared_examples_for 'a service ticket' do
     before do
       stub_request(:any, /.*/)
 
-      ticket.stub!(:pgt_iou => 'PGTIOU-1foo')
+      ticket.stub(:pgt_iou => 'PGTIOU-1foo')
       use_https_urls
     end
 
@@ -121,7 +121,7 @@ shared_examples_for 'a service ticket' do
 
     describe 'when HTTPS is required' do
       before do
-        client.stub!(:https_required => true)
+        client.stub(:https_required => true)
       end
 
       it 'fails with an HTTP URL' do
@@ -133,7 +133,7 @@ shared_examples_for 'a service ticket' do
 
     describe 'when HTTPS is not required' do
       before do
-        client.stub!(:https_required => false) 
+        client.stub(:https_required => false)
       end
 
       it 'makes an SSL-using request with an HTTPS URL' do
@@ -160,7 +160,7 @@ shared_examples_for 'a service ticket' do
 
   describe '#ok?' do
     it 'delegates to the validation response' do
-      ticket.response = stub(:ok? => true)
+      ticket.response = double(:ok? => true)
 
       ticket.should be_ok
     end
@@ -168,7 +168,7 @@ shared_examples_for 'a service ticket' do
 
   describe '#username' do
     it 'delegates to the validation response' do
-      ticket.response = stub(:username => 'username')
+      ticket.response = double(:username => 'username')
 
       ticket.username.should == 'username'
     end

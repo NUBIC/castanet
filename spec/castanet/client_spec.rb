@@ -63,7 +63,7 @@ module Castanet
 
       describe 'if https is not required' do
         before do
-          client.stub!(:https_required => false)
+          client.stub(:https_required => false)
         end
 
         it 'does not require https for the service ticket' do
@@ -80,7 +80,7 @@ module Castanet
       before do
         # Disable the proxy ticket issuance check.
         stub_ticket = ProxyTicket.new(nil, '', '', client)
-        stub_ticket.stub!(:issued? => true)
+        stub_ticket.stub(:issued? => true)
         ProxyTicket.stub(:new => stub_ticket)
 
         stub_request(:any, /.*/)
@@ -103,7 +103,7 @@ module Castanet
 
       describe 'if https is not required' do
         before do
-          client.stub!(:https_required => false)
+          client.stub(:https_required => false)
         end
 
         it 'does not require https for the proxy ticket' do
@@ -127,7 +127,7 @@ module Castanet
 
       describe 'if https is not required' do
         before do
-          client.stub!(:https_required => false)
+          client.stub(:https_required => false)
         end
 
         it 'does not require https for the proxy ticket' do
