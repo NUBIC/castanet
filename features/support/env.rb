@@ -12,14 +12,13 @@ require File.expand_path('../mechanize_test', __FILE__)
 LOGGER = Logger.new($stderr)
 
 AfterConfiguration do
-  ruby = RbConfig::CONFIG['bindir'] + '/' + RbConfig::CONFIG['RUBY_INSTALL_NAME']
+  %w(CAS_URL PROXY_CALLBACK_URL PROXY_RETRIEVAL_URL).each do |v|
+    fail "You didn't set $#{v}" if ENV[v].nil?
+  end
 
-  data = YAML.load(`#{ruby} -S rake servers:jasig:endpoints`)
-  $CAS_URL = data[:cas]
-
-  data = YAML.load(`#{ruby} -S rake servers:callback:endpoints`)
-  $CALLBACK_URL = data[:callback]
-  $RETRIEVAL_URL = data[:retrieval]
+  $CAS_URL = ENV['CAS_URL']
+  $CALLBACK_URL = ENV['PROXY_CALLBACK_URL']
+  $RETRIEVAL_URL = ENV['PROXY_RETRIEVAL_URL']
 
   # Trust the test cert.
   OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:verify_mode] = OpenSSL::SSL::VERIFY_PEER

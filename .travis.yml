@@ -10,3 +10,5 @@ before_script:
   - "rake servers:jasig:prep"
   - "bundle exec rake servers:jasig:start &"
   - "bundle exec rake servers:callback:start &"
+  - "eval `rake servers:jasig:endpoints`"
+  - "eval `rake servers:callback:endpoints`"

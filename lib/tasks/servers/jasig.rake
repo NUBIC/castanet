@@ -26,9 +26,7 @@ namespace :servers do
     task :prep => ['jasig:download', 'jasig:configure']
 
     task :endpoints do
-      data = { :cas => "https://localhost:#{JASIG_PORT}/cas-server-uber-webapp-3.5.2/" }.to_yaml
-
-      puts data
+      puts "export CAS_URL='https://localhost:#{JASIG_PORT}/cas-server-uber-webapp-3.5.2/'"
     end
 
     task :download do

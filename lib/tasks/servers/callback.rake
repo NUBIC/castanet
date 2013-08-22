@@ -6,12 +6,8 @@ namespace :servers do
     CALLBACK_PORT = 57599
 
     task :endpoints do
-      data = {
-        :callback => "https://localhost:#{CALLBACK_PORT}/receive_pgt",
-        :retrieval => "https://localhost:#{CALLBACK_PORT}/retrieve_pgt"
-      }.to_yaml
-
-      puts data
+      puts "export PROXY_CALLBACK_URL='https://localhost:#{CALLBACK_PORT}/receive_pgt'"
+      puts "export PROXY_RETRIEVAL_URL='https://localhost:#{CALLBACK_PORT}/retrieve_pgt'"
     end
 
     task :start do

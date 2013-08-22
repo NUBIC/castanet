@@ -18,11 +18,22 @@ The specs have no external dependencies and can be run directly.
 
     $ rake spec
 
-The integration tests, however, use a CAS server and proxy callback.
+The integration tests, however, use a CAS server and proxy callback.  They
+default to the Jasig CAS Server:
 
     $ rake servers:jasig:prep   # Downloads and configures Jasig CAS Server
     $ rake servers:jasig:start &
     $ rake servers:callback:start &
+    $ eval `rake servers:jasig:endpoints`
+    $ eval `rake servers:callback:endpoints`
+    $ rake cucumber:all
+
+You can test against your own CAS server and proxy callback by setting up
+appropriate URLs in the test environment:
+
+    $ export CAS_URL=https://localhost:1234/cas
+    $ export CALLBACK_URL=https://localhost:1234/callback/receive_pgt
+    $ export RETRIEVAL_URL=https://localhost:1234/callback/retrieve_pgt
     $ rake cucumber:all
 
 Finally, there's a task to rebuild the CAS response parsers.
