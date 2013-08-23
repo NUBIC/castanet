@@ -80,6 +80,30 @@ module Castanet::Responses
             response.proxies.should == ['https://proxy2/pgtUrl', 'https://proxy1/pgtUrl']
           end
         end
+
+        describe 'with an empty proxy list' do
+          let(:response) do
+            TicketValidate.from_cas(%Q{
+              <cas:serviceResponse xmlns:cas="http://www.yale.edu/tp/cas">
+                <cas:authenticationSuccess>
+                  <cas:user>right</cas:user>
+                  <cas:proxyGrantingTicket>PGTIOU-fcfe863190d09e65eddaf6e90c3d99fe05aa6e84</cas:proxyGrantingTicket>
+                  <cas:proxies>
+
+                  </cas:proxies>
+                </cas:authenticationSuccess>
+              </cas:serviceResponse>
+            })
+          end
+
+          it 'returns authentication success' do
+            response.should be_ok
+          end
+
+          it 'returns an empty array for proxies' do
+            response.proxies.should be_empty
+          end
+        end
       end
 
       describe 'on failure' do

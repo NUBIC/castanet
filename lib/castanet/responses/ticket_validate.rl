@@ -36,7 +36,7 @@
   authentication_success_start    = "<cas:authenticationSuccess>";
   authentication_success_end      = "</cas:authenticationSuccess>";
   proxies                         = "<cas:proxies>"
-                                    ( space* proxy space* )*
+                                    (space* | ( space* proxy space* )*)
                                     "</cas:proxies>";
 
   # Top-level elements
